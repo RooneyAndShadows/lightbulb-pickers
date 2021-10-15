@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="DP_InputLayoutTag" type="string">DPInputLayout</item>
+    <item name="DP_InputEditTextTag" type="string">DPEditText</item>
+    <item name="DP_ButtonTag" type="string">DPButton</item>
+    <item name="DP_ImageButtonTag" type="string">DPImageButton</item>
+    <item name="DP_ErrorTextTag" type="string">DPErrorText</item>
+    <item name="CP_GroupTag" type="string">CPGroup</item>
+    <item name="CP_ChipItemRemoveTag" type="string">CPChipButtonRemoveTag</item>
+    <item name="CP_ChipItemTextTag" type="string">CPChipTextTag</item>
+    <item name="CP_FilterTag" type="string">CPHeader</item>
+    <item name="CP_InputEditTextTag" type="string">CPInputEditText</item>
+    <item name="CP_OptionsRecyclerTag" type="string">CPOptionsRecycler</item>
+</resources>

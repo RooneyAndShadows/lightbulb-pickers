@@ -1,0 +1,26 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="@string/DP_InputLayoutTag"
+        app:boxStrokeWidth="1dp"
+        app:errorTextAppearance="@style/PickerViewErrorTextAppearance"
+        app:hintTextAppearance="@style/PickerViewHintTextAppearance">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            style="@style/PickerViewEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:tag="@string/DP_InputEditTextTag" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+</merge>

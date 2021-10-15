@@ -1,0 +1,23 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <com.nex3z.flowlayout.FlowLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="@string/CP_GroupTag"
+        app:flChildSpacing="@dimen/chips_picker_spacing_size"
+        app:flRowSpacing="@dimen/chips_picker_spacing_size">
+
+    </com.nex3z.flowlayout.FlowLayout>
+
+    <com.rands.android.textinputview.TextInputView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="@string/CP_InputEditTextTag"
+        app:textInputImeOptions="flagNoExtractUi"
+        app:textInputType="text"
+        app:textInputViewType="boxed" />
+</merge>
