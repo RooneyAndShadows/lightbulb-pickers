@@ -13,7 +13,7 @@ buildscript {
                 material                 : "1.4.0",
                 lightbulb_commons        : "1.0.2",
                 lightbulb_text_input_view: "1.0.1",
-                lightbulb_dialogs        : "1.0.1",
+                lightbulb_dialogs        : "1.0.2",
                 java_commons             : "1.0.0"
 
         ]
