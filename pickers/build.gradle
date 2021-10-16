@@ -6,7 +6,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -25,7 +25,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
@@ -55,9 +54,9 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$versions.android_appcompat"
     implementation "androidx.annotation:annotation:$versions.android_annotation"
     implementation "com.rands.java:commons:$versions.java_commons"
-    implementation "com.rands.lightbulb:commons:$versions.lightbulb_commons"
-    implementation "com.rands.lightbulb:textinputview:$versions.lightbulb_text_input_view"
+    implementation "com.github.RooneyAndShadows:lightbulb-commons:$versions.lightbulb_commons"
+    implementation "com.github.RooneyAndShadows:lightbulb-textinputview:$versions.lightbulb_text_input_view"
     api 'com.nex3z:flow-layout:1.3.3'
-    api "com.rands.lightbulb:dialogs:$versions.lightbulb_dialogs"
+    api "com.github.RooneyAndShadows:lightbulb-dialogs:$versions.lightbulb_dialogs"
     api "com.google.android.material:material:$versions.material"
 }
