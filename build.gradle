@@ -3,22 +3,27 @@
 buildscript {
     ext {
         versions = [
-                kotlin                   : "1.5.31",
-                ktx                      : [
+                kotlin              : "1.5.31",
+                ktx                 : [
                         core: "1.6.0"
                 ],
-                android_annotation       : "1.1.0",
-                android_appcompat        : "1.3.1",
-                android_recyclerview     : "1.2.1",
-                material                 : "1.4.0",
-                lightbulb_commons        : "1.0.2",
-                lightbulb_text_input_view: "1.0.1",
-                lightbulb_dialogs        : "1.0.2",
-                java_commons             : "1.0.0"
+                android_annotation  : "1.1.0",
+                android_appcompat   : "1.3.1",
+                android_recyclerview: "1.2.1",
+                material            : "1.4.0",
+                java                : [
+                        commons: "1.0.2"
+                ],
+                lightbulb           : [
+                        commons         : "1.0.5",
+                        textinputview   : "1.0.2",
+                        recycleradapters: "1.0.3",
+                        dialogs         : "1.0.3"
+                ]
 
         ]
         environment = [
-                "group_id"       : "com.rands.lightbulb"
+                "group_id": "com.github.RooneyAndShadows"
         ]
     }
     repositories {

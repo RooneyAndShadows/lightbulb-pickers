@@ -1,3 +1,3 @@
 rootProject.name = "Pickers"
 include ':app'
-include ':pickers'
+include ':lightbulb-pickers'
