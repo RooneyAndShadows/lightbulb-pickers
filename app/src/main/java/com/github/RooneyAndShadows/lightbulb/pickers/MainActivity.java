@@ -1,10 +1,10 @@
-package com.github.RooneyAndShadows.lightbulb.pickers;
+package com.github.rooneyandshadows.lightbulb.pickers;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.rands.lightbulb.pickers.R;
+import com.github.rooneyandshadows.lightbulb.pickers.R;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.dialog.base;
+package com.github.rooneyandshadows.lightbulb.pickers.dialog.base;
 
 import android.graphics.drawable.Drawable;
 

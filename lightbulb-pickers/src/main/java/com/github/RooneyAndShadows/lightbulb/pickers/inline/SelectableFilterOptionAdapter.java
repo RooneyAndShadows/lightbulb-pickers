@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.inline;
+package com.github.rooneyandshadows.lightbulb.pickers.inline;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -10,12 +10,12 @@ import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.github.RooneyAndShadows.commons.string.StringUtils;
-import com.github.RooneyAndShadows.lightbulb.recycleradapters.EasyAdapterConfiguration;
-import com.github.RooneyAndShadows.lightbulb.recycleradapters.EasyAdapterDataModel;
-import com.github.RooneyAndShadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
-import com.github.RooneyAndShadows.lightbulb.recycleradapters.EasyRecyclerAdapter;
-import com.rands.lightbulb.pickers.R;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterConfiguration;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyRecyclerAdapter;
+import com.github.rooneyandshadows.commons.string.StringUtils;
+import com.github.rooneyandshadows.lightbulb.pickers.R;
 
 import java.util.ArrayList;
 import java.util.List;

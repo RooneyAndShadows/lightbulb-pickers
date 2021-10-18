@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.dialog;
+package com.github.rooneyandshadows.lightbulb.pickers.dialog;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,15 +9,15 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.github.RooneyAndShadows.commons.string.StringUtils;
-import com.github.RooneyAndShadows.lightbulb.commons.utils.ResourceUtils;
-import com.github.RooneyAndShadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter;
-import com.github.RooneyAndShadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialog;
-import com.github.RooneyAndShadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder;
-import com.github.RooneyAndShadows.lightbulb.recycleradapters.EasyAdapterDataModel;
-import com.github.RooneyAndShadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
-import com.rands.lightbulb.pickers.R;
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
+import com.github.rooneyandshadows.commons.string.StringUtils;
+import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter;
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialog;
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
+import com.github.rooneyandshadows.lightbulb.pickers.R;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,8 +29,8 @@ import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingAdapter;
 import androidx.databinding.InverseBindingListener;
 
-import static com.github.RooneyAndShadows.lightbulb.dialogs.base.BaseDialogFragment.*;
-import static com.github.RooneyAndShadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter.*;
+import static com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.*;
+import static com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter.*;
 
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})

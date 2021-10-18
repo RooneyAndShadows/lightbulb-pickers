@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger;
+package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -10,12 +10,12 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.widget.LinearLayout;
 
-import com.github.RooneyAndShadows.commons.string.StringUtils;
-import com.github.RooneyAndShadows.lightbulb.commons.utils.ResourceUtils;
+import com.github.rooneyandshadows.commons.string.StringUtils;
+import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
 import com.google.android.material.button.MaterialButton;
-import com.rands.lightbulb.pickers.R;
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.DialogPickerTriggerLayout;
+import com.github.rooneyandshadows.lightbulb.pickers.R;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogPickerTriggerLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

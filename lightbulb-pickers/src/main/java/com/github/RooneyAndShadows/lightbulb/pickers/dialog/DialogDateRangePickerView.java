@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.dialog;
+package com.github.rooneyandshadows.lightbulb.pickers.dialog;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,12 +8,12 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.github.RooneyAndShadows.commons.date.DateUtils;
-import com.github.RooneyAndShadows.lightbulb.commons.utils.ResourceUtils;
-import com.github.RooneyAndShadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog;
-import com.github.RooneyAndShadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialogBuilder;
-import com.rands.lightbulb.pickers.R;
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
+import com.github.rooneyandshadows.commons.date.DateUtils;
+import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog;
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialogBuilder;
+import com.github.rooneyandshadows.lightbulb.pickers.R;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +21,7 @@ import java.util.Date;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import static com.github.RooneyAndShadows.lightbulb.dialogs.base.BaseDialogFragment.*;
+import static com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.*;
 
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})

@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.dialog;
+package com.github.rooneyandshadows.lightbulb.pickers.dialog;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,18 +11,18 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.github.RooneyAndShadows.commons.string.StringUtils;
-import com.github.RooneyAndShadows.lightbulb.commons.utils.ResourceUtils;
-import com.github.RooneyAndShadows.lightbulb.dialogs.base.BaseDialogFragment;
-import com.github.RooneyAndShadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter;
-import com.github.RooneyAndShadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.ColorModel;
-import com.github.RooneyAndShadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialog;
-import com.github.RooneyAndShadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder;
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
-import com.github.RooneyAndShadows.lightbulb.recycleradapters.EasyAdapterDataModel;
-import com.github.RooneyAndShadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
-import com.github.RooneyAndShadows.lightbulb.recycleradapters.EasyRecyclerAdapter;
-import com.rands.lightbulb.pickers.R;
+import com.github.rooneyandshadows.commons.string.StringUtils;
+import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment;
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter;
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.ColorModel;
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialog;
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyRecyclerAdapter;
+import com.github.rooneyandshadows.lightbulb.pickers.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;

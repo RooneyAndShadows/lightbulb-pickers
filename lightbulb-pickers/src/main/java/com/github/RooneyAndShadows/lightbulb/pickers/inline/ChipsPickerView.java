@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.inline;
+package com.github.rooneyandshadows.lightbulb.pickers.inline;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,13 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.github.RooneyAndShadows.commons.string.StringUtils;
-import com.github.RooneyAndShadows.lightbulb.commons.utils.DrawableUtils;
-import com.github.RooneyAndShadows.lightbulb.commons.utils.ResourceUtils;
-import com.github.RooneyAndShadows.lightbulb.recycleradapters.EasyAdapterDataModel;
-import com.github.RooneyAndShadows.lightbulb.textinputview.TextInputView;
+import com.github.rooneyandshadows.commons.string.StringUtils;
+import com.github.rooneyandshadows.lightbulb.commons.utils.DrawableUtils;
+import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.textinputview.TextInputView;
 import com.nex3z.flowlayout.FlowLayout;
-import com.rands.lightbulb.pickers.R;
+import com.github.rooneyandshadows.lightbulb.pickers.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
