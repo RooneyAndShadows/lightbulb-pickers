@@ -12,13 +12,13 @@ buildscript {
                 android_recyclerview: "1.2.1",
                 material            : "1.4.0",
                 java                : [
-                        commons: "1.0.3"
+                        commons: "1.0.0"
                 ],
                 lightbulb           : [
-                        commons         : "1.0.6",
-                        textinputview   : "1.0.3",
-                        recycleradapters: "1.0.4",
-                        dialogs         : "1.0.6"
+                        commons         : "1.0.0",
+                        textinputview   : "1.0.0",
+                        recycleradapters: "1.0.0",
+                        dialogs         : "1.0.0"
                 ]
 
         ]
