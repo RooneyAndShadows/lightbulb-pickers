@@ -19,6 +19,7 @@ import com.github.rooneyandshadows.lightbulb.pickers.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -104,7 +105,8 @@ public class SelectableFilterOptionAdapter<ItemType extends EasyAdapterDataModel
                 } else {
                     List<ItemType> filteredList = new ArrayList<>();
                     for (ItemType row : items)
-                        if (row.getItemName().toLowerCase().contains(charString.toLowerCase()))
+                        if (row.getItemName().toLowerCase(Locale.getDefault())
+                                .contains(charString.toLowerCase(Locale.getDefault())))
                             filteredList.add(row);
                     filteredItems = new ArrayList<>(filteredList);
                 }
