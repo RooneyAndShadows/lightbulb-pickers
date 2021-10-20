@@ -13,7 +13,7 @@
 
     </com.nex3z.flowlayout.FlowLayout>
 
-    <com.github.RooneyAndShadows.lightbulb.textinputview.TextInputView
+    <com.github.rooneyandshadows.lightbulb.textinputview.TextInputView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:tag="@string/CP_InputEditTextTag"
