@@ -58,10 +58,10 @@ dependencies {
     implementation "androidx.annotation:annotation:$versions.android_annotation"
     implementation "com.google.android.material:material:$versions.material"
     implementation 'com.nex3z:flow-layout:1.3.3'
-    implementation "com.github.RooneyAndShadows:java-commons:$versions.java.commons"
-    implementation "com.github.RooneyAndShadows:lightbulb-commons:$versions.lightbulb.commons"
-    implementation "com.github.RooneyAndShadows:lightbulb-textinputview:$versions.lightbulb.textinputview"
-    implementation "com.github.RooneyAndShadows:lightbulb-dialogs:$versions.lightbulb.dialogs"
-    implementation "com.github.RooneyAndShadows:lightbulb-recycleradapters:$versions.lightbulb.recycleradapters"
+    implementation "com.github.rooneyandshadows:java-commons:$versions.java.commons"
+    implementation "com.github.rooneyandshadows:lightbulb-commons:$versions.lightbulb.commons"
+    implementation "com.github.rooneyandshadows:lightbulb-textinputview:$versions.lightbulb.textinputview"
+    implementation "com.github.rooneyandshadows:lightbulb-dialogs:$versions.lightbulb.dialogs"
+    implementation "com.github.rooneyandshadows:lightbulb-recycleradapters:$versions.lightbulb.recycleradapters"
 
 }

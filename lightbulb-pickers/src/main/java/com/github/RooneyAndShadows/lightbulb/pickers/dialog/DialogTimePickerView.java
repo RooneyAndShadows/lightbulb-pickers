@@ -7,8 +7,8 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.github.rooneyandshadows.commons.date.DateUtils;
-import com.github.rooneyandshadows.commons.string.StringUtils;
+import com.github.rooneyandshadows.java.commons.date.DateUtils;
+import com.github.rooneyandshadows.java.commons.string.StringUtils;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialogBuilder;
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.github.RooneyAndShadows.lightbulb.pickers.MainActivity">
+    tools:context="com.github.rooneyandshadows.lightbulb.pickers.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"

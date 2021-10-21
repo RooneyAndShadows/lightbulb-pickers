@@ -11,7 +11,7 @@ import android.view.View;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialogBuilder;
-import com.github.rooneyandshadows.commons.date.DateUtils;
+import com.github.rooneyandshadows.java.commons.date.DateUtils;
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
 

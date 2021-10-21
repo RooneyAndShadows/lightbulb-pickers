@@ -14,7 +14,7 @@ import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterConfigu
 import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
 import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
 import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyRecyclerAdapter;
-import com.github.rooneyandshadows.commons.string.StringUtils;
+import com.github.rooneyandshadows.java.commons.string.StringUtils;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
 
 import java.util.ArrayList;
