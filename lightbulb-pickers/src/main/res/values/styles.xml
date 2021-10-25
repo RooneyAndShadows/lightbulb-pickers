@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="PickerViewButton" parent="Widget.MaterialComponents.Button">
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
@@ -35,7 +36,7 @@
 
     <style name="PickerViewErrorTextAppearance" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">?android:attr/colorError</item>
+        <item name="android:textColor">?colorError</item>
     </style>
 
     <style name="PickerViewHintTextAppearance" parent="@android:style/TextAppearance.Small">
