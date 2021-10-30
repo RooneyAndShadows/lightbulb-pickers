@@ -15,10 +15,10 @@ buildscript {
                         commons: "1.0.0"
                 ],
                 lightbulb           : [
-                        commons         : "1.0.0",
-                        textinputview   : "1.0.0",
-                        recycleradapters: "1.0.0",
-                        dialogs         : "1.0.0"
+                        commons         : "1.0.1",
+                        textinputview   : "1.0.1",
+                        recycleradapters: "1.0.1",
+                        dialogs         : "1.0.1"
                 ]
 
         ]
