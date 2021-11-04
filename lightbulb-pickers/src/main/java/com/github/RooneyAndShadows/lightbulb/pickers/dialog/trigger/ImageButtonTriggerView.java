@@ -12,18 +12,18 @@ import android.widget.LinearLayout;
 
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogPickerTriggerLayout;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.LightBulbDialogPickerTriggerLayout;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.LightBulbDialogPickerView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
 
-public class ImageButtonTriggerView extends LinearLayout implements DialogPickerTriggerLayout {
+public class ImageButtonTriggerView extends LinearLayout implements LightBulbDialogPickerTriggerLayout {
     private final String IMAGE_BUTTON_TAG = ResourceUtils.getPhrase(getContext(), R.string.DP_ImageButtonTag);
     private final String IMAGE_BUTTON_ERROR_TEXT_TAG = ResourceUtils.getPhrase(getContext(), R.string.DP_ErrorTextTag);
-    private BaseDialogPickerView pickerView;
+    private LightBulbDialogPickerView pickerView;
     private LinearLayout rootView;
     protected AppCompatImageButton iconButtonView;
     protected AppCompatTextView errorTextView;
@@ -45,7 +45,7 @@ public class ImageButtonTriggerView extends LinearLayout implements DialogPicker
     }
 
     @Override
-    public void attachTo(@NonNull BaseDialogPickerView pickerView) {
+    public void attachTo(@NonNull LightBulbDialogPickerView pickerView) {
         this.pickerView = pickerView;
         iconButtonView.setOnClickListener(v -> pickerView.showPickerDialog());
         boolean errorEnabled = pickerView.isErrorEnabled();

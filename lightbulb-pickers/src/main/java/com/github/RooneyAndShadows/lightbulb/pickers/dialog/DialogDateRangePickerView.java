@@ -10,10 +10,11 @@ import android.view.View;
 
 import com.github.rooneyandshadows.java.commons.date.DateUtils;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
+import com.github.rooneyandshadows.lightbulb.dialogs.base.LightBulbDialogFragment.DialogButtonConfiguration;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialogBuilder;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.LightBulbDialogPickerView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,11 +22,9 @@ import java.util.Date;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import static com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.*;
-
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})
-public class DialogDateRangePickerView extends BaseDialogPickerView {
+public class DialogDateRangePickerView extends LightBulbDialogPickerView {
     private String datePickerFormat;
     private String datePickerFromText;
     private String datePickerToText;

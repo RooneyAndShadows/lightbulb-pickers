@@ -12,8 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment;
-import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment;
+import com.github.rooneyandshadows.lightbulb.dialogs.base.LightBulbDialogFragment;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
 
 import java.util.ArrayList;
@@ -21,10 +20,12 @@ import java.util.ArrayList;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import static com.github.rooneyandshadows.lightbulb.dialogs.base.LightBulbDialogFragment.*;
+
 
 @SuppressWarnings({"unused", "UnusedReturnValue", "rawtypes"})
-public abstract class BaseDialogPickerView extends LinearLayout {
-    protected DialogPickerTriggerLayout triggerView;
+public abstract class LightBulbDialogPickerView extends LinearLayout {
+    protected LightBulbDialogPickerTriggerLayout triggerView;
     protected String DIALOG_TAG;
     protected String pickerHintText;
     protected String errorText;
@@ -37,16 +38,16 @@ public abstract class BaseDialogPickerView extends LinearLayout {
     protected boolean showSelectedTextValue;
     protected boolean pickerDialogCancelable;
     protected Drawable pickerIcon;
-    protected BaseDialogFragment.DialogAnimationTypes pickerDialogAnimationType;
+    protected DialogAnimationTypes pickerDialogAnimationType;
     protected FragmentManager manager;
-    protected BasePickerDialogFragment pickerDialog;
+    protected LightBulbDialogFragment pickerDialog;
     private final ArrayList<TriggerAttachedCallback> triggerAttachedCallback = new ArrayList<>();
 
-    public BaseDialogPickerView(Context context) {
+    public LightBulbDialogPickerView(Context context) {
         this(context, null);
     }
 
-    public BaseDialogPickerView(Context context, AttributeSet attrs) {
+    public LightBulbDialogPickerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setSaveEnabled(true);
         readBaseAttributes(context, attrs);
@@ -58,9 +59,9 @@ public abstract class BaseDialogPickerView extends LinearLayout {
 
     public abstract boolean validate();
 
-    protected abstract BasePickerDialogFragment initializeDialog();
+    protected abstract LightBulbDialogFragment initializeDialog();
 
-    protected abstract BasePickerDialogFragment getDialog();
+    protected abstract LightBulbDialogFragment getDialog();
 
     protected abstract String getViewText();
 
@@ -68,16 +69,16 @@ public abstract class BaseDialogPickerView extends LinearLayout {
 
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
-        if (!(child instanceof DialogPickerTriggerLayout)) {
-            Log.w(BaseDialogPickerView.class.getName(), "Picker view child is ignored. All child views must implement com.rands.lightbulb.pickers.dialog.base.TriggerView");
+        if (!(child instanceof LightBulbDialogPickerTriggerLayout)) {
+            Log.w(LightBulbDialogPickerView.class.getName(), "Picker view child is ignored. All child views must implement com.rands.lightbulb.pickers.dialog.base.TriggerView");
             return;
         }
         if (getChildCount() > 0) {
-            Log.w(BaseDialogPickerView.class.getName(), "Picker can have only one trigger view.");
+            Log.w(LightBulbDialogPickerView.class.getName(), "Picker can have only one trigger view.");
             return;
         }
         super.addView(child, index, params);
-        triggerView = (DialogPickerTriggerLayout) child;
+        triggerView = (LightBulbDialogPickerTriggerLayout) child;
         triggerView.attachTo(this);
         for (TriggerAttachedCallback callback : triggerAttachedCallback)
             callback.onAttached(this.triggerView, this);
@@ -104,7 +105,7 @@ public abstract class BaseDialogPickerView extends LinearLayout {
                 pickerRequiredText = "Field is required";
             if (DIALOG_TAG == null || DIALOG_TAG.equals(""))
                 DIALOG_TAG = "DEFAULT_PICKER_DIALOG_TAG";
-            pickerDialogAnimationType = BaseDialogFragment.DialogAnimationTypes.valueOf(a.getInt(R.styleable.PickerView_PV_DialogAnimation, 1));
+            pickerDialogAnimationType = DialogAnimationTypes.valueOf(a.getInt(R.styleable.PickerView_PV_DialogAnimation, 1));
             errorEnabled = a.getBoolean(R.styleable.PickerView_PV_ErrorEnabled, false);
             required = a.getBoolean(R.styleable.PickerView_PV_Required, false);
             validationEnabled = a.getBoolean(R.styleable.PickerView_PV_ValidationEnabled, false);
@@ -138,13 +139,13 @@ public abstract class BaseDialogPickerView extends LinearLayout {
     }
 
     public final void setTriggerView(View triggerView) {
-        if (!(triggerView instanceof DialogPickerTriggerLayout)) {
-            Log.w(BaseDialogPickerView.class.getName(), "Trigger view must implement com.rands.lightbulb.pickers.dialog.base.TriggerView");
+        if (!(triggerView instanceof LightBulbDialogPickerTriggerLayout)) {
+            Log.w(LightBulbDialogPickerView.class.getName(), "Trigger view must implement com.rands.lightbulb.pickers.dialog.base.TriggerView");
             return;
         }
         removeAllViews();
         addView(triggerView);
-        this.triggerView = (DialogPickerTriggerLayout) triggerView;
+        this.triggerView = (LightBulbDialogPickerTriggerLayout) triggerView;
         this.triggerView.attachTo(this);
         for (TriggerAttachedCallback callback : triggerAttachedCallback)
             callback.onAttached(this.triggerView, this);
@@ -159,7 +160,7 @@ public abstract class BaseDialogPickerView extends LinearLayout {
             this.DIALOG_TAG = dialogTag;
     }
 
-    public final void setDialogAnimation(BaseDialogFragment.DialogAnimationTypes animation) {
+    public final void setDialogAnimation(DialogAnimationTypes animation) {
         this.pickerDialogAnimationType = animation;
     }
 
@@ -230,7 +231,7 @@ public abstract class BaseDialogPickerView extends LinearLayout {
         return triggerView.getTriggerText();
     }
 
-    public final DialogPickerTriggerLayout getTriggerView() {
+    public final LightBulbDialogPickerTriggerLayout getTriggerView() {
         return triggerView;
     }
 
@@ -275,7 +276,7 @@ public abstract class BaseDialogPickerView extends LinearLayout {
         errorEnabled = savedState.pickerIsErrorEnabled;
         validationEnabled = savedState.pickerIsValidationEnabled;
         showSelectedTextValue = savedState.pickerShowSelectedTextValue;
-        pickerDialogAnimationType = BaseDialogFragment.DialogAnimationTypes.valueOf(savedState.pickerDialogAnimationType);
+        pickerDialogAnimationType = DialogAnimationTypes.valueOf(savedState.pickerDialogAnimationType);
         pickerDialogPositiveButtonText = savedState.pickerDialogPositiveButtonText;
         pickerDialogNegativeButtonText = savedState.pickerDialogNegativeButtonText;
         pickerDialogCancelable = savedState.pickerDialogCancelable;
@@ -351,6 +352,6 @@ public abstract class BaseDialogPickerView extends LinearLayout {
     }
 
     public interface TriggerAttachedCallback {
-        void onAttached(DialogPickerTriggerLayout triggerView, BaseDialogPickerView pickerView);
+        void onAttached(LightBulbDialogPickerTriggerLayout triggerView, LightBulbDialogPickerView pickerView);
     }
 }
