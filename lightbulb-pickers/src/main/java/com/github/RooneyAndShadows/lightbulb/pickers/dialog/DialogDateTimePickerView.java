@@ -9,11 +9,10 @@ import android.util.SparseArray;
 import android.view.View;
 
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
-import com.github.rooneyandshadows.lightbulb.dialogs.base.LightBulbDialogFragment.DialogButtonConfiguration;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialogBuilder;
 import com.github.rooneyandshadows.java.commons.date.DateUtils;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.LightBulbDialogPickerView;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
 
 import java.util.ArrayList;
@@ -25,8 +24,11 @@ import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingAdapter;
 import androidx.databinding.InverseBindingListener;
 
+import static com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.*;
+
+
 @SuppressWarnings({"unused", "UnusedReturnValue"})
-public class DialogDateTimePickerView extends LightBulbDialogPickerView {
+public class DialogDateTimePickerView extends BaseDialogPickerView {
     private Date selection;
     private String datePickerFormat;
     private SelectionChangedListener dataBindingListener;

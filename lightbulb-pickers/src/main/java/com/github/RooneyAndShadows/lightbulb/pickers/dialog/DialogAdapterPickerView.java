@@ -8,14 +8,13 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.github.rooneyandshadows.lightbulb.dialogs.base.LightBulbDialogFragment;
-import com.github.rooneyandshadows.lightbulb.dialogs.base.LightBulbDialogFragment.DialogButtonConfiguration;
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialogBuilder;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.LightBulbDialogPickerView;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyRecyclerAdapter;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.LightBulbAdapter;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.LightBulbAdapterDataModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,14 +25,14 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
 
 @SuppressWarnings({"unused", "UnusedReturnValue", "unchecked"})
-public class DialogAdapterPickerView<ModelType extends LightBulbAdapterDataModel> extends LightBulbDialogPickerView {
+public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> extends BaseDialogPickerView {
     private final ArrayList<ValidationCheck<ModelType>> validationCallbacks = new ArrayList<>();
     private final ArrayList<SelectionChangedListener> selectionChangedListeners = new ArrayList<>();
-    private LightBulbAdapter<ModelType> adapter;
+    private EasyRecyclerAdapter<ModelType> adapter;
     private ItemDecoration itemDecoration;
     private String dialogTitle;
     private String dialogMessage;
-    private LightBulbDialogFragment.DialogTypes pickerDialogType;
+    private BaseDialogFragment.DialogTypes pickerDialogType;
     private int[] selection;
 
     public DialogAdapterPickerView(Context context) {
@@ -50,7 +49,7 @@ public class DialogAdapterPickerView<ModelType extends LightBulbAdapterDataModel
         try {
             dialogTitle = a.getString(R.styleable.DialogAdapterPickerView_APV_DialogTitle);
             dialogMessage = a.getString(R.styleable.DialogAdapterPickerView_APV_DialogMessage);
-            pickerDialogType = LightBulbDialogFragment.DialogTypes.valueOf(a.getInt(R.styleable.DialogAdapterPickerView_APV_DialogMode, 1));
+            pickerDialogType = BaseDialogFragment.DialogTypes.valueOf(a.getInt(R.styleable.DialogAdapterPickerView_APV_DialogMode, 1));
             if (dialogTitle == null || dialogTitle.equals(""))
                 dialogTitle = "";
             if (dialogMessage == null || dialogMessage.equals(""))
@@ -104,8 +103,8 @@ public class DialogAdapterPickerView<ModelType extends LightBulbAdapterDataModel
                 .withMessage(dialogMessage)
                 .withTitle(dialogTitle)
                 .withItemDecoration(itemDecoration)
-                .withPositiveButton(new DialogButtonConfiguration(pickerDialogPositiveButtonText), (view, dialog) -> updateTextAndValidate())
-                .withNegativeButton(new DialogButtonConfiguration(pickerDialogNegativeButtonText), (view, dialog) -> updateTextAndValidate())
+                .withPositiveButton(new BaseDialogFragment.DialogButtonConfiguration(pickerDialogPositiveButtonText), (view, dialog) -> updateTextAndValidate())
+                .withNegativeButton(new BaseDialogFragment.DialogButtonConfiguration(pickerDialogNegativeButtonText), (view, dialog) -> updateTextAndValidate())
                 .withOnCancelListener(dialogFragment -> updateTextAndValidate())
                 .withSelectionCallback((oldValue, newValue) -> selectInternally(newValue, false))
                 .buildDialog();
@@ -150,7 +149,7 @@ public class DialogAdapterPickerView<ModelType extends LightBulbAdapterDataModel
         validationCallbacks.add(validationCallback);
     }
 
-    public void setAdapter(LightBulbAdapter<ModelType> adapter) {
+    public void setAdapter(EasyRecyclerAdapter<ModelType> adapter) {
         this.adapter = adapter;
     }
 
@@ -186,7 +185,7 @@ public class DialogAdapterPickerView<ModelType extends LightBulbAdapterDataModel
         dispatchSelectionChangedEvents(oldSelection, newSelection);
     }
 
-    public LightBulbAdapter<ModelType> getAdapter() {
+    public EasyRecyclerAdapter<ModelType> getAdapter() {
         return adapter;
     }
 
@@ -239,7 +238,7 @@ public class DialogAdapterPickerView<ModelType extends LightBulbAdapterDataModel
         void execute(int[] newPositions, int[] oldPositions);
     }
 
-    public interface ValidationCheck<ModelType extends LightBulbAdapterDataModel> {
+    public interface ValidationCheck<ModelType extends EasyAdapterDataModel> {
         boolean validate(List<ModelType> selectedItems);
     }
 

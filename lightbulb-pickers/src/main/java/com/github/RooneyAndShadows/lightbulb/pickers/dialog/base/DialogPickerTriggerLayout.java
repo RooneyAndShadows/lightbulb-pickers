@@ -2,9 +2,9 @@ package com.github.rooneyandshadows.lightbulb.pickers.dialog.base;
 
 import android.graphics.drawable.Drawable;
 
-public interface LightBulbDialogPickerTriggerLayout {
+public interface DialogPickerTriggerLayout {
 
-    void attachTo(LightBulbDialogPickerView pickerView);
+    void attachTo(BaseDialogPickerView pickerView);
 
     void setTriggerIcon(Drawable icon, Integer color);
 

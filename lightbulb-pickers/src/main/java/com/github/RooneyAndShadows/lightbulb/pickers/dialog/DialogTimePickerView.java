@@ -9,10 +9,9 @@ import android.view.View;
 
 import com.github.rooneyandshadows.java.commons.date.DateUtils;
 import com.github.rooneyandshadows.java.commons.string.StringUtils;
-import com.github.rooneyandshadows.lightbulb.dialogs.base.LightBulbDialogFragment.DialogButtonConfiguration;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialogBuilder;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.LightBulbDialogPickerView;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,8 +23,11 @@ import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingAdapter;
 import androidx.databinding.InverseBindingListener;
 
+import static com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.*;
+
+
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
-public class DialogTimePickerView extends LightBulbDialogPickerView {
+public class DialogTimePickerView extends BaseDialogPickerView {
     private Date cachedDate;
     private int[] selection;
     private String datePickerFormat;

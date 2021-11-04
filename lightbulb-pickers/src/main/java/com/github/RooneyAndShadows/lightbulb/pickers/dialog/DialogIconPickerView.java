@@ -11,15 +11,13 @@ import android.view.View;
 
 import com.github.rooneyandshadows.java.commons.string.StringUtils;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
-import com.github.rooneyandshadows.lightbulb.dialogs.base.LightBulbDialogFragment.DialogButtonConfiguration;
-import com.github.rooneyandshadows.lightbulb.dialogs.base.LightBulbDialogFragment.DialogTypes;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.LightBulbDialogPickerView;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.LightBulbAdapterDataModel;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.LightBulbAdapterSelectableModes;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,11 +29,12 @@ import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingAdapter;
 import androidx.databinding.InverseBindingListener;
 
+import static com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.*;
 import static com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter.*;
 
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})
-public class DialogIconPickerView extends LightBulbDialogPickerView {
+public class DialogIconPickerView extends BaseDialogPickerView {
     private final ArrayList<ValidationCheck<IconModel>> validationCallbacks = new ArrayList<>();
     private final ArrayList<SelectionChangedListener> selectionChangedListeners = new ArrayList<>();
     private final IconPickerAdapter adapter;
@@ -51,7 +50,7 @@ public class DialogIconPickerView extends LightBulbDialogPickerView {
 
     public DialogIconPickerView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        adapter = new IconPickerAdapter(getContext(), LightBulbAdapterSelectableModes.SELECT_SINGLE);
+        adapter = new IconPickerAdapter(getContext(), EasyAdapterSelectableModes.SELECT_SINGLE);
         addSelectionChangedListener((oldPositions, newPositions) -> {
             if (newPositions != null && newPositions.length > 0)
                 setPickerIcon(adapter.getDrawable(adapter.getSelectedItems().get(0), selectedIconSize));
@@ -285,7 +284,7 @@ public class DialogIconPickerView extends LightBulbDialogPickerView {
         void execute(int[] oldPositions, int[] newPositions);
     }
 
-    public interface ValidationCheck<ModelType extends LightBulbAdapterDataModel> {
+    public interface ValidationCheck<ModelType extends EasyAdapterDataModel> {
         boolean validate(List<ModelType> selectedItems);
     }
 

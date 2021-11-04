@@ -10,12 +10,12 @@ import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterConfiguration;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyRecyclerAdapter;
 import com.github.rooneyandshadows.java.commons.string.StringUtils;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.LightBulbAdapter;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.LightBulbAdapterConfiguration;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.LightBulbAdapterDataModel;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.LightBulbAdapterSelectableModes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +25,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 @SuppressWarnings("unchecked")
-public class SelectableFilterOptionAdapter<ItemType extends LightBulbAdapterDataModel> extends LightBulbAdapter<ItemType> implements Filterable {
+public class SelectableFilterOptionAdapter<ItemType extends EasyAdapterDataModel> extends EasyRecyclerAdapter<ItemType> implements Filterable {
     private ArrayList<ItemType> filteredItems = new ArrayList<>();
 
     public SelectableFilterOptionAdapter() {
-        super(new LightBulbAdapterConfiguration<ItemType>().withSelectMode(LightBulbAdapterSelectableModes.SELECT_MULTIPLE));
+        super(new EasyAdapterConfiguration<ItemType>().withSelectMode(EasyAdapterSelectableModes.SELECT_MULTIPLE));
     }
 
     @Override

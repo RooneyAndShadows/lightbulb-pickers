@@ -13,18 +13,18 @@ import android.widget.LinearLayout;
 
 import com.github.rooneyandshadows.java.commons.string.StringUtils;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.LightBulbDialogPickerView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.LightBulbDialogPickerTriggerLayout;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogPickerTriggerLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 
 @SuppressWarnings("unused")
-public class InputTriggerView extends LinearLayout implements LightBulbDialogPickerTriggerLayout {
+public class InputTriggerView extends LinearLayout implements DialogPickerTriggerLayout {
     private final String INPUT_LAYOUT_TAG = ResourceUtils.getPhrase(getContext(), R.string.DP_InputLayoutTag);
     private final String INPUT_EDIT_TEXT_TAG = ResourceUtils.getPhrase(getContext(), R.string.DP_InputEditTextTag);
     private LinearLayout rootView;
@@ -52,7 +52,7 @@ public class InputTriggerView extends LinearLayout implements LightBulbDialogPic
     }
 
     @Override
-    public void attachTo(@NonNull LightBulbDialogPickerView pickerView) {
+    public void attachTo(@NonNull BaseDialogPickerView pickerView) {
         textInputLayout.setEndIconOnClickListener(v -> pickerView.showPickerDialog());
         textInputLayout.setErrorEnabled(pickerView.isErrorEnabled());
         if (textInputLayout.isErrorEnabled())

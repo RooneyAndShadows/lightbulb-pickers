@@ -13,17 +13,16 @@ import android.view.View;
 
 import com.github.rooneyandshadows.java.commons.string.StringUtils;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
-import com.github.rooneyandshadows.lightbulb.dialogs.base.LightBulbDialogFragment;
-import com.github.rooneyandshadows.lightbulb.dialogs.base.LightBulbDialogFragment.DialogButtonConfiguration;
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.ColorModel;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.LightBulbDialogPickerView;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyRecyclerAdapter;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.LightBulbAdapter;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.LightBulbAdapterDataModel;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.LightBulbAdapterSelectableModes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,13 +36,13 @@ import androidx.databinding.InverseBindingListener;
 
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})
-public class DialogColorPickerView extends LightBulbDialogPickerView {
+public class DialogColorPickerView extends BaseDialogPickerView {
     private final ArrayList<ValidationCheck<ColorModel>> validationCallbacks = new ArrayList<>();
     private final ArrayList<SelectionChangedListener> selectionChangedListeners = new ArrayList<>();
     private final ColorPickerAdapter adapter;
     private String dialogTitle;
     private String dialogMessage;
-    private LightBulbDialogFragment.DialogTypes pickerDialogType;
+    private BaseDialogFragment.DialogTypes pickerDialogType;
     private int[] selection;
 
     public DialogColorPickerView(Context context) {
@@ -52,7 +51,7 @@ public class DialogColorPickerView extends LightBulbDialogPickerView {
 
     public DialogColorPickerView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        adapter = new ColorPickerAdapter(getContext(), LightBulbAdapterSelectableModes.SELECT_SINGLE);
+        adapter = new ColorPickerAdapter(getContext(), EasyAdapterSelectableModes.SELECT_SINGLE);
         addSelectionChangedListener((oldPositions, newPositions) -> updatePickerIcon(newPositions));
         addOnTriggerAttachedCallback((triggerView1, pickerView) -> updatePickerIcon(null));
     }
@@ -116,8 +115,8 @@ public class DialogColorPickerView extends LightBulbDialogPickerView {
                 .withCancelOnClickOutsude(pickerDialogCancelable)
                 .withMessage(dialogMessage)
                 .withTitle(dialogTitle)
-                .withPositiveButton(new DialogButtonConfiguration(pickerDialogPositiveButtonText), (view, dialog) -> updateTextAndValidate())
-                .withNegativeButton(new DialogButtonConfiguration(pickerDialogNegativeButtonText), (view, dialog) -> updateTextAndValidate())
+                .withPositiveButton(new BaseDialogFragment.DialogButtonConfiguration(pickerDialogPositiveButtonText), (view, dialog) -> updateTextAndValidate())
+                .withNegativeButton(new BaseDialogFragment.DialogButtonConfiguration(pickerDialogNegativeButtonText), (view, dialog) -> updateTextAndValidate())
                 .withOnCancelListener(dialogFragment -> updateTextAndValidate())
                 .withSelectionCallback((oldValue, newValue) -> selectInternally(newValue, false))
                 .buildDialog();
@@ -206,7 +205,7 @@ public class DialogColorPickerView extends LightBulbDialogPickerView {
         }
     }
 
-    public LightBulbAdapter<ColorModel> getAdapter() {
+    public EasyRecyclerAdapter<ColorModel> getAdapter() {
         return adapter;
     }
 
@@ -281,7 +280,7 @@ public class DialogColorPickerView extends LightBulbDialogPickerView {
         void execute(int[] oldPositions, int[] newPositions);
     }
 
-    public interface ValidationCheck<ModelType extends LightBulbAdapterDataModel> {
+    public interface ValidationCheck<ModelType extends EasyAdapterDataModel> {
         boolean validate(List<ModelType> selectedItems);
     }
 

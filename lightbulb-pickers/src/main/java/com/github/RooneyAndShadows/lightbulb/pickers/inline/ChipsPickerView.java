@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.github.rooneyandshadows.java.commons.string.StringUtils;
 import com.github.rooneyandshadows.lightbulb.commons.utils.DrawableUtils;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.LightBulbAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
 import com.github.rooneyandshadows.lightbulb.textinputview.TextInputView;
 import com.nex3z.flowlayout.FlowLayout;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
@@ -34,7 +34,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})
-public class ChipsPickerView<ModelType extends LightBulbAdapterDataModel> extends LinearLayoutCompat {
+public class ChipsPickerView<ModelType extends EasyAdapterDataModel> extends LinearLayoutCompat {
     private final String CHIPS_GROUP_TAG = ResourceUtils.getPhrase(getContext(), R.string.CP_GroupTag);
     private final String CHIPS_FILTER_CONTAINER_TAG = ResourceUtils.getPhrase(getContext(), R.string.CP_FilterTag);
     private final String CHIPS_FILTER_INPUT_TAG = ResourceUtils.getPhrase(getContext(), R.string.CP_InputEditTextTag);
@@ -603,7 +603,7 @@ public class ChipsPickerView<ModelType extends LightBulbAdapterDataModel> extend
         void execute(int[] oldSelection, int[] newSelection);
     }
 
-    public interface ValidationCheck<ModelType extends LightBulbAdapterDataModel> {
+    public interface ValidationCheck<ModelType extends EasyAdapterDataModel> {
         boolean validate(List<ModelType> selectedItems);
     }
 

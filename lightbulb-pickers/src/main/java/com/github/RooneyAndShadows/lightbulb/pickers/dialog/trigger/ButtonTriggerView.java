@@ -12,19 +12,19 @@ import android.widget.LinearLayout;
 
 import com.github.rooneyandshadows.java.commons.string.StringUtils;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.LightBulbDialogPickerView;
 import com.google.android.material.button.MaterialButton;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.LightBulbDialogPickerTriggerLayout;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogPickerTriggerLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
-public class ButtonTriggerView extends LinearLayout implements LightBulbDialogPickerTriggerLayout {
+public class ButtonTriggerView extends LinearLayout implements DialogPickerTriggerLayout {
     private final String BUTTON_TAG = ResourceUtils.getPhrase(getContext(), R.string.DP_ButtonTag);
     private final String BUTTON_ERROR_TEXT_TAG = ResourceUtils.getPhrase(getContext(), R.string.DP_ErrorTextTag);
-    private LightBulbDialogPickerView pickerView;
+    private BaseDialogPickerView pickerView;
     private LinearLayout rootView;
     private MaterialButton buttonView;
     protected AppCompatTextView errorTextView;
@@ -47,7 +47,7 @@ public class ButtonTriggerView extends LinearLayout implements LightBulbDialogPi
     }
 
     @Override
-    public void attachTo(@NonNull LightBulbDialogPickerView pickerView) {
+    public void attachTo(@NonNull BaseDialogPickerView pickerView) {
         this.pickerView = pickerView;
         buttonView.setOnClickListener(v -> pickerView.showPickerDialog());
         boolean errorEnabled = pickerView.isErrorEnabled();
