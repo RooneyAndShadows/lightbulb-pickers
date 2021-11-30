@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
@@ -187,19 +188,10 @@ public class ChipsPickerView<ModelType extends EasyAdapterDataModel> extends Lin
             hidePicker();
         });
         recyclerView = findViewWithTag(CHIPS_OPTIONS_RECYCLER_TAG);
-        if (recyclerView == null) {
-            recyclerView = new RecyclerView(getContext());
-            recyclerView.setTag(CHIPS_OPTIONS_RECYCLER_TAG);
-            recyclerView.setOverScrollMode(OVER_SCROLL_NEVER);
-            recyclerView.setPadding(chipsGroupPadding, chipsGroupPadding, chipsGroupPadding, chipsGroupPadding);
-            recyclerView.setItemAnimator(null);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ResourceUtils.dpToPx(300)));
-            recyclerView.setAdapter(recyclerAdapter);
-            addView(recyclerView);
-        } else {
-            recyclerView.setAdapter(recyclerAdapter);
-        }
+        recyclerView.setPadding(chipsGroupPadding, chipsGroupPadding, chipsGroupPadding, chipsGroupPadding);
+        recyclerView.setItemAnimator(null);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(recyclerAdapter);
         hidePicker();
     }
 
@@ -271,8 +263,10 @@ public class ChipsPickerView<ModelType extends EasyAdapterDataModel> extends Lin
     }*/
 
     public void showPicker() {
-        if (recyclerView == null)
+        if (isPickerShown())
             return;
+        if (!chipGroupInput.hasFocus())
+            chipGroupInput.requestFocus();
         recyclerView.setVisibility(VISIBLE);
         if (internalOnShowListener != null)
             internalOnShowListener.execute();
@@ -280,8 +274,10 @@ public class ChipsPickerView<ModelType extends EasyAdapterDataModel> extends Lin
     }
 
     public void hidePicker() {
-        if (recyclerView == null)
+        if (!isPickerShown())
             return;
+        if (chipGroupInput.hasFocus())
+            chipGroupInput.clearFocus();
         recyclerView.setVisibility(GONE);
         for (OnHideListener onHideListener : onHideListeners) onHideListener.execute();
     }
@@ -497,7 +493,7 @@ public class ChipsPickerView<ModelType extends EasyAdapterDataModel> extends Lin
     public void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
-        boolean isPickerDialogShowing = savedState.pickerIsShowing;
+        boolean isPickerShowing = savedState.pickerIsShowing;
         selection = savedState.selection;
         pickerHintText = savedState.pickerHintText;
         errorText = savedState.pickerErrorText;
@@ -511,7 +507,7 @@ public class ChipsPickerView<ModelType extends EasyAdapterDataModel> extends Lin
         allowToAddNewOptions = savedState.pickerAllowToAddNewOptions;
         chipGroupInput.onRestoreInstanceState(savedState.pickerInputState);
         setupViews();
-        if (isPickerDialogShowing)
+        if (isPickerShowing)
             showPicker();
     }
 

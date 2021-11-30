@@ -20,4 +20,13 @@
         app:textInputImeOptions="flagNoExtractUi"
         app:textInputType="text"
         app:textInputViewType="boxed" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/chips_picker_recycler_height"
+        android:visibility="gone"
+        android:overScrollMode="never"
+        android:tag="@string/CP_OptionsRecyclerTag">
+
+    </androidx.recyclerview.widget.RecyclerView>
 </merge>
