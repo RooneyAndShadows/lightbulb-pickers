@@ -293,7 +293,7 @@ public class ChipsPickerView<ModelType extends EasyAdapterDataModel> extends Lin
             pickerRequiredText = a.getString(R.styleable.ChipsPickerView_CPV_RequiredText);
             pickerHintText = StringUtils.getOrDefault(pickerHintText, "...");
             pickerRequiredText = StringUtils.getOrDefault(pickerRequiredText, "Field is required");
-            backgroundColor = a.getColor(R.styleable.ChipsPickerView_CPV_BackgroundColor, ResourceUtils.getColorByAttribute(getContext(), R.attr.colorSurface));
+            backgroundColor = a.getColor(R.styleable.ChipsPickerView_CPV_BackgroundColor, ColorUtils.setAlphaComponent(ResourceUtils.getColorByAttribute(getContext(), R.attr.colorOnSurface), 30));
             backgroundCornerRadius = a.getDimensionPixelSize(R.styleable.ChipsPickerView_CPV_BackgroundCornerRadius, ResourceUtils.getDimenPxById(getContext(), com.google.android.material.R.dimen.mtrl_textinput_box_corner_radius_medium));
             backgroundCornerRadius = a.getDimensionPixelSize(R.styleable.ChipsPickerView_CPV_BackgroundCornerRadius, ResourceUtils.getDimenPxById(getContext(), com.google.android.material.R.dimen.mtrl_textinput_box_corner_radius_medium));
             chipsGroupPadding = a.getDimensionPixelSize(R.styleable.ChipsPickerView_CPV_ChipGroupPadding, ResourceUtils.getDimenPxById(getContext(), R.dimen.chips_picker_chip_group_padding));
@@ -353,7 +353,7 @@ public class ChipsPickerView<ModelType extends EasyAdapterDataModel> extends Lin
 
     private void setupBackground(int newColor) {
         this.backgroundColor = newColor;
-        Drawable backgroundDrawable = DrawableUtils.getRoundedShapeWithColor(backgroundColor, backgroundCornerRadius);
+        Drawable backgroundDrawable = DrawableUtils.getLayeredRoundedCornersDrawable(ResourceUtils.getColorByAttribute(getContext(), R.attr.colorSurface), backgroundColor, backgroundCornerRadius);
         setBackground(backgroundDrawable);
     }
 
@@ -404,7 +404,7 @@ public class ChipsPickerView<ModelType extends EasyAdapterDataModel> extends Lin
         LinearLayoutCompat chipLayout = (LinearLayoutCompat) LayoutInflater.from(getContext()).inflate(R.layout.chips_picker_chip, this, false);
         TextView chipTextView = chipLayout.findViewWithTag(CHIPS_CHIP_ITEM_TEXT_TAG);
         AppCompatImageButton chipRemoveButton = chipLayout.findViewWithTag(CHIPS_CHIP_ITEM_REMOVE_TAG);
-        Drawable chipBackground = DrawableUtils.getRoundedShapeWithColor(ResourceUtils.getColorByAttribute(getContext(), R.attr.colorOnSurface), ResourceUtils.getDimenPxById(getContext(), R.dimen.chips_picker_chip_height));
+        Drawable chipBackground = DrawableUtils.getRoundedCornersDrawable(ResourceUtils.getColorByAttribute(getContext(), R.attr.colorOnSurface), ResourceUtils.getDimenPxById(getContext(), R.dimen.chips_picker_chip_height));
         Drawable chipRemoveIcon = ResourceUtils.getDrawable(getContext(), R.drawable.chip_picker_remove_icon);
         chipRemoveIcon.setTint(ResourceUtils.getColorByAttribute(getContext(), R.attr.colorPrimary));
         chipLayout.setBackground(ResourceUtils.getDrawable(getContext(), R.drawable.bg_chip_picker_item));

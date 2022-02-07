@@ -39,7 +39,6 @@ public class InputTriggerView extends LinearLayout implements DialogPickerTrigge
     protected int hintAppearance;
     protected int errorAppearance;
     protected boolean startIconUseAlpha;
-    private boolean hasDefinedBoxBackgroundAttribute;
 
     public InputTriggerView(@NonNull Context context) {
         this(context, null);
@@ -152,10 +151,7 @@ public class InputTriggerView extends LinearLayout implements DialogPickerTrigge
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.InputTriggerView, 0, 0);
         try {
             pickerInputBoxStrokeColor = ColorUtils.setAlphaComponent(a.getColor(R.styleable.InputTriggerView_ITV_StrokeColor, ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface)), 140);
-            pickerBackgroundColor = ResourceUtils.readNullableColorAttributeFromTypedArray(getContext(), a, R.styleable.InputTriggerView_ITV_BackgroundColor);
-            hasDefinedBoxBackgroundAttribute = a.hasValue(R.styleable.InputTriggerView_ITV_BackgroundColor);
-            if (pickerBackgroundColor == null)
-                pickerBackgroundColor = Color.TRANSPARENT;
+            pickerBackgroundColor = ColorUtils.setAlphaComponent(a.getColor(R.styleable.InputTriggerView_ITV_BackgroundColor, ResourceUtils.getColorByAttribute(getContext(), R.attr.colorOnSurface)), 30);
             inputType = InputTypes.valueOf(a.getInt(R.styleable.InputTriggerView_ITV_LayoutType, 1));
             errorAppearance = a.getResourceId(R.styleable.InputTriggerView_ITV_ErrorTextAppearance, R.style.PickerViewErrorTextAppearance);
             hintAppearance = a.getResourceId(R.styleable.InputTriggerView_ITV_HintTextAppearance, R.style.PickerViewHintTextAppearance);
@@ -225,8 +221,6 @@ public class InputTriggerView extends LinearLayout implements DialogPickerTrigge
     }
 
     private void setupBackground() {
-        if (hasDefinedBoxBackgroundAttribute && pickerBackgroundColor == Color.TRANSPARENT)
-            textInputEditText.setBackgroundColor(Color.TRANSPARENT);
         textInputLayout.setBoxBackgroundColor(pickerBackgroundColor);
     }
 
