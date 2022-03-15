@@ -9,6 +9,7 @@ import android.util.SparseArray;
 import android.view.View;
 
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment;
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.DialogButtonConfiguration;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialogBuilder;
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
@@ -103,8 +104,8 @@ public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> ext
                 .withMessage(dialogMessage)
                 .withTitle(dialogTitle)
                 .withItemDecoration(itemDecoration)
-                .withPositiveButton(new BaseDialogFragment.DialogButtonConfiguration(pickerDialogPositiveButtonText), (view, dialog) -> updateTextAndValidate())
-                .withNegativeButton(new BaseDialogFragment.DialogButtonConfiguration(pickerDialogNegativeButtonText), (view, dialog) -> updateTextAndValidate())
+                .withPositiveButton(new DialogButtonConfiguration(pickerDialogPositiveButtonText), (view, dialog) -> updateTextAndValidate())
+                .withNegativeButton(new DialogButtonConfiguration(pickerDialogNegativeButtonText), (view, dialog) -> updateTextAndValidate())
                 .withOnCancelListener(dialogFragment -> updateTextAndValidate())
                 .withSelectionCallback((oldValue, newValue) -> selectInternally(newValue, false))
                 .buildDialog();

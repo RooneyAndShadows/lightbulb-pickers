@@ -256,10 +256,6 @@ public abstract class BaseDialogPickerView extends LinearLayout {
         myState.pickerIsErrorEnabled = errorEnabled;
         myState.pickerIsValidationEnabled = validationEnabled;
         myState.pickerShowSelectedTextValue = showSelectedTextValue;
-        myState.pickerDialogAnimationType = pickerDialogAnimationType.getValue();
-        myState.pickerDialogPositiveButtonText = pickerDialogPositiveButtonText;
-        myState.pickerDialogNegativeButtonText = pickerDialogNegativeButtonText;
-        myState.pickerDialogCancelable = pickerDialogCancelable;
         return myState;
     }
 
@@ -275,10 +271,6 @@ public abstract class BaseDialogPickerView extends LinearLayout {
         errorEnabled = savedState.pickerIsErrorEnabled;
         validationEnabled = savedState.pickerIsValidationEnabled;
         showSelectedTextValue = savedState.pickerShowSelectedTextValue;
-        pickerDialogAnimationType = BaseDialogFragment.DialogAnimationTypes.valueOf(savedState.pickerDialogAnimationType);
-        pickerDialogPositiveButtonText = savedState.pickerDialogPositiveButtonText;
-        pickerDialogNegativeButtonText = savedState.pickerDialogNegativeButtonText;
-        pickerDialogCancelable = savedState.pickerDialogCancelable;
         updateTextAndValidate();
         if (isPickerDialogShowing)
             showPickerDialog();
@@ -293,11 +285,6 @@ public abstract class BaseDialogPickerView extends LinearLayout {
         private boolean pickerIsErrorEnabled;
         private boolean pickerIsValidationEnabled;
         private boolean pickerShowSelectedTextValue;
-        private int pickerDialogAnimationType;
-        private int pickerDialogAnimationDuration;
-        private String pickerDialogPositiveButtonText;
-        private String pickerDialogNegativeButtonText;
-        private boolean pickerDialogCancelable;
 
         SavedState(Parcelable superState) {
             super(superState);
@@ -313,11 +300,6 @@ public abstract class BaseDialogPickerView extends LinearLayout {
             pickerIsErrorEnabled = in.readByte() != 0;
             pickerIsValidationEnabled = in.readByte() != 0;
             pickerShowSelectedTextValue = in.readByte() != 0;
-            pickerDialogAnimationType = in.readInt();
-            pickerDialogAnimationDuration = in.readInt();
-            pickerDialogPositiveButtonText = in.readString();
-            pickerDialogNegativeButtonText = in.readString();
-            pickerDialogCancelable = in.readByte() != 0;
         }
 
         @Override
@@ -331,11 +313,6 @@ public abstract class BaseDialogPickerView extends LinearLayout {
             out.writeByte((byte) (pickerIsErrorEnabled ? 1 : 0));
             out.writeByte((byte) (pickerIsValidationEnabled ? 1 : 0));
             out.writeByte((byte) (pickerShowSelectedTextValue ? 1 : 0));
-            out.writeInt(pickerDialogAnimationType);
-            out.writeInt(pickerDialogAnimationDuration);
-            out.writeString(pickerDialogPositiveButtonText);
-            out.writeString(pickerDialogNegativeButtonText);
-            out.writeByte((byte) (pickerDialogCancelable ? 1 : 0));
         }
 
         public static final Creator<SavedState> CREATOR
