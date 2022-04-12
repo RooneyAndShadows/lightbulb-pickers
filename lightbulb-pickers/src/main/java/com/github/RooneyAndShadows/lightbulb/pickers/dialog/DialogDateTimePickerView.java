@@ -172,7 +172,7 @@ public class DialogDateTimePickerView extends BaseDialogPickerView {
     }
 
     private boolean compareValues(Date v1, Date v2) {
-        return DateUtils.isDateEqual(v1, v2, false);
+        return DateUtils.isDateEqual(v1, v2, true);
     }
 
     private void selectInternally(Date newSelection) {
