@@ -8,15 +8,15 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.github.rooneyandshadows.java.commons.date.DateUtils;
+import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialogBuilder;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +29,7 @@ public class DialogDateRangePickerView extends BaseDialogPickerView {
     private String datePickerFormat;
     private String datePickerFromText;
     private String datePickerToText;
-    private Date[] selection;
+    private OffsetDateTime[] selection;
     private SelectionChangedListener internalSelectionChangedListeners;
     protected final ArrayList<ValidationCheck> validationCallbacks = new ArrayList<>();
     private final ArrayList<SelectionChangedListener> selectionChangedListeners = new ArrayList<>();
@@ -58,13 +58,13 @@ public class DialogDateRangePickerView extends BaseDialogPickerView {
         this.datePickerToText = datePickerToText;
     }
 
-    public void setPickerRange(Date dateFrom, Date dateTo) {
+    public void setPickerRange(OffsetDateTime dateFrom, OffsetDateTime dateTo) {
         if (dateFrom == null || dateTo == null) {
             dateFrom = null;
             dateTo = null;
         } else {
-            if (DateUtils.isDateBefore(dateTo, dateFrom)) {
-                Date temp = dateFrom;
+            if (DateUtilsOffsetDate.isDateBefore(dateTo, dateFrom)) {
+                OffsetDateTime temp = dateFrom;
                 dateFrom = dateTo;
                 dateTo = temp;
             }
@@ -73,7 +73,7 @@ public class DialogDateRangePickerView extends BaseDialogPickerView {
         else getDialog().setSelection(dateFrom, dateTo);
     }
 
-    public Date[] getPickerRange() {
+    public OffsetDateTime[] getPickerRange() {
         return selection;
     }
 
@@ -85,8 +85,8 @@ public class DialogDateRangePickerView extends BaseDialogPickerView {
     protected String getViewText() {
         if (selection == null || !hasSelection())
             return ResourceUtils.getPhrase(getContext(), R.string.dialog_date_picker_empty_text);
-        String from = DateUtils.getDateString(datePickerFormat, selection[0]);
-        String to = DateUtils.getDateString(datePickerFormat, selection[1]);
+        String from = DateUtilsOffsetDate.getDateString(datePickerFormat, selection[0]);
+        String to = DateUtilsOffsetDate.getDateString(datePickerFormat, selection[1]);
         String viewTextFormat = "{from} - {to}";
         return viewTextFormat.replace("{from}", from).replace("{to}", to);
     }
@@ -117,7 +117,7 @@ public class DialogDateRangePickerView extends BaseDialogPickerView {
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.DialogDateRangePickerView, 0, 0);
         try {
             if (selection == null)
-                selection = new Date[2];
+                selection = new OffsetDateTime[2];
             datePickerFormat = a.getString(R.styleable.DialogDateRangePickerView_DRPV_DateFormat);
             datePickerFromText = a.getString(R.styleable.DialogDateRangePickerView_DRPV_TextFrom);
             datePickerToText = a.getString(R.styleable.DialogDateRangePickerView_DRPV_TextTo);
@@ -166,22 +166,22 @@ public class DialogDateRangePickerView extends BaseDialogPickerView {
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         SavedState myState = new SavedState(superState);
-        myState.selectionFrom = DateUtils.getDateStringInDefaultFormat(selection[0]);
-        myState.selectionTo = DateUtils.getDateStringInDefaultFormat(selection[1]);
+        myState.selectionFrom = DateUtilsOffsetDate.getDateString(DateUtilsOffsetDate.defaultFormatWithTimeZone, selection[0]);
+        myState.selectionTo = DateUtilsOffsetDate.getDateString(DateUtilsOffsetDate.defaultFormatWithTimeZone, selection[1]);
         return myState;
     }
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
-        Date currentFrom = DateUtils.getDateFromStringInDefaultFormat(savedState.selectionFrom);
-        Date currentTo = DateUtils.getDateFromStringInDefaultFormat(savedState.selectionTo);
-        selection = new Date[]{currentFrom, currentTo};
+        OffsetDateTime currentFrom = DateUtilsOffsetDate.getDateFromString(DateUtilsOffsetDate.defaultFormatWithTimeZone, savedState.selectionFrom);
+        OffsetDateTime currentTo = DateUtilsOffsetDate.getDateFromString(DateUtilsOffsetDate.defaultFormatWithTimeZone, savedState.selectionTo);
+        selection = new OffsetDateTime[]{currentFrom, currentTo};
         super.onRestoreInstanceState(savedState.getSuperState());
     }
 
-    private void selectInternally(Date dateFrom, Date dateTo) {
-        selection = new Date[]{dateFrom, dateTo};
+    private void selectInternally(OffsetDateTime dateFrom, OffsetDateTime dateTo) {
+        selection = new OffsetDateTime[]{dateFrom, dateTo};
         updateTextAndValidate();
         dispatchRangeSelectionChangedEvent();
     }
@@ -225,10 +225,10 @@ public class DialogDateRangePickerView extends BaseDialogPickerView {
     }
 
     public interface SelectionChangedListener {
-        void onSelectionChanged(DialogDateRangePickerView view, Date[] newRange);
+        void onSelectionChanged(DialogDateRangePickerView view, OffsetDateTime[] newRange);
     }
 
     public interface ValidationCheck {
-        boolean validate(Date[] currentSelection);
+        boolean validate(OffsetDateTime[] currentSelection);
     }
 }

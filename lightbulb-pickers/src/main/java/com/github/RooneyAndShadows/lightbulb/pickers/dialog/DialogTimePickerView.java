@@ -7,15 +7,15 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.github.rooneyandshadows.java.commons.date.DateUtils;
+import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate;
 import com.github.rooneyandshadows.java.commons.string.StringUtils;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialogBuilder;
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +28,7 @@ import static com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragm
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 public class DialogTimePickerView extends BaseDialogPickerView {
-    private Date cachedDate;
+    private OffsetDateTime cachedDate;
     private int[] selection;
     private String datePickerFormat;
     private SelectionChangedListener dataBindingListener;
@@ -47,7 +47,7 @@ public class DialogTimePickerView extends BaseDialogPickerView {
     protected String getViewText() {
         if (selection == null)
             return "";
-        return DateUtils.getDateString(datePickerFormat, getSelectionAsDate());
+        return DateUtilsOffsetDate.getDateString(datePickerFormat, getSelectionAsDate());
     }
 
     @Override
@@ -55,8 +55,8 @@ public class DialogTimePickerView extends BaseDialogPickerView {
         if (StringUtils.isNullOrEmptyString(datePickerFormat))
             datePickerFormat = "HH:mm";
         if (!hasSelection()) {
-            Date now = DateUtils.now();
-            selection = new int[]{DateUtils.getHourOfDay(now), DateUtils.getMinuteOfHour(now)};
+            OffsetDateTime now = DateUtilsOffsetDate.nowLocal();
+            selection = new int[]{DateUtilsOffsetDate.getHourOfDay(now), DateUtilsOffsetDate.getMinuteOfHour(now)};
         }
     }
 
@@ -112,12 +112,12 @@ public class DialogTimePickerView extends BaseDialogPickerView {
     }
 
     @BindingAdapter("timePickerSelection")
-    public static void updatePickerSelectionBinding(DialogTimePickerView view, Date selectedDate) {
+    public static void updatePickerSelectionBinding(DialogTimePickerView view, OffsetDateTime selectedDate) {
         view.setSelectionFromDate(selectedDate);
     }
 
     @InverseBindingAdapter(attribute = "timePickerSelection", event = "timePickerSelectionChanged")
-    public static Date getText(DialogTimePickerView view) {
+    public static OffsetDateTime getText(DialogTimePickerView view) {
         return view.getSelectionAsDate();
     }
 
@@ -130,14 +130,13 @@ public class DialogTimePickerView extends BaseDialogPickerView {
         };
     }
 
-    public Date getSelectionAsDate() {
+    public OffsetDateTime getSelectionAsDate() {
         if (hasSelection()) {
-
             // Used to keep day of previously set date
             if (cachedDate != null)
-                cachedDate = DateUtils.setTimeToDate(cachedDate, selection[0], selection[1], DateUtils.getSecondOfMinute(cachedDate));
-            Date now = DateUtils.now();
-            return cachedDate == null ? DateUtils.setTimeToDate(now, selection[0], selection[1], DateUtils.getSecondOfMinute(now)) : cachedDate;
+                cachedDate = DateUtilsOffsetDate.setTimeToDate(cachedDate, selection[0], selection[1], DateUtilsOffsetDate.getSecondOfMinute(cachedDate));
+            OffsetDateTime now = DateUtilsOffsetDate.nowLocal();
+            return cachedDate == null ? DateUtilsOffsetDate.setTimeToDate(now, selection[0], selection[1], DateUtilsOffsetDate.getSecondOfMinute(now)) : cachedDate;
         }
         return null;
     }
@@ -173,10 +172,10 @@ public class DialogTimePickerView extends BaseDialogPickerView {
         else getDialog().setSelection(time);
     }
 
-    public void setSelectionFromDate(Date newDate) {
+    public void setSelectionFromDate(OffsetDateTime newDate) {
         int[] newSelection = null;
         if (newDate != null)
-            newSelection = new int[]{DateUtils.getHourOfDay(newDate), DateUtils.getMinuteOfHour(newDate)};
+            newSelection = new int[]{DateUtilsOffsetDate.getHourOfDay(newDate), DateUtilsOffsetDate.getMinuteOfHour(newDate)};
         cachedDate = newDate;
         setSelection(newSelection);
     }
@@ -231,7 +230,7 @@ public class DialogTimePickerView extends BaseDialogPickerView {
         Parcelable superState = super.onSaveInstanceState();
         SavedState myState = new SavedState(superState);
         myState.selection = selection;
-        myState.cachedDate = DateUtils.getDateStringInDefaultFormat(cachedDate);
+        myState.cachedDate = DateUtilsOffsetDate.getDateString(DateUtilsOffsetDate.defaultFormatWithTimeZone, cachedDate);
         return myState;
     }
 
@@ -239,7 +238,7 @@ public class DialogTimePickerView extends BaseDialogPickerView {
     public void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         selection = savedState.selection;
-        cachedDate = DateUtils.getDateFromStringInDefaultFormat(savedState.cachedDate);
+        cachedDate = DateUtilsOffsetDate.getDateFromString(DateUtilsOffsetDate.defaultFormatWithTimeZone, savedState.cachedDate);
         super.onRestoreInstanceState(savedState.getSuperState());
     }
 

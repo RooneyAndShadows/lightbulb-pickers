@@ -6,17 +6,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
-import android.view.View;
 
+import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialogBuilder;
-import com.github.rooneyandshadows.java.commons.date.DateUtils;
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,12 +23,12 @@ import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingAdapter;
 import androidx.databinding.InverseBindingListener;
 
-import static com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.*;
+import static com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.DialogButtonConfiguration;
 
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public class DialogDateTimePickerView extends BaseDialogPickerView {
-    private Date selection;
+    private OffsetDateTime selection;
     private String datePickerFormat;
     private SelectionChangedListener dataBindingListener;
     protected ArrayList<ValidationCheck> validationCallbacks = new ArrayList<>();
@@ -106,16 +105,16 @@ public class DialogDateTimePickerView extends BaseDialogPickerView {
     protected String getViewText() {
         if (selection == null)
             return ResourceUtils.getPhrase(getContext(), R.string.dialog_date_picker_empty_text);
-        return DateUtils.getDateString(datePickerFormat, selection);
+        return DateUtilsOffsetDate.getDateString(datePickerFormat, selection);
     }
 
     @BindingAdapter("datePickerSelection")
-    public static void updatePickerSelectionBinding(DialogDateTimePickerView view, Date selectedDate) {
+    public static void updatePickerSelectionBinding(DialogDateTimePickerView view, OffsetDateTime selectedDate) {
         view.setSelection(selectedDate);
     }
 
     @InverseBindingAdapter(attribute = "datePickerSelection", event = "dateSelectionChanged")
-    public static Date getText(DialogDateTimePickerView view) {
+    public static OffsetDateTime getText(DialogDateTimePickerView view) {
         return view.getSelection();
     }
 
@@ -133,12 +132,12 @@ public class DialogDateTimePickerView extends BaseDialogPickerView {
         updateTextAndValidate();
     }
 
-    public void setSelection(Date date) {
+    public void setSelection(OffsetDateTime date) {
         if (getDialog() == null) selectInternally(date);
         else getDialog().setSelection(date);
     }
 
-    public Date getSelection() {
+    public OffsetDateTime getSelection() {
         return selection;
     }
 
@@ -150,14 +149,14 @@ public class DialogDateTimePickerView extends BaseDialogPickerView {
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         SavedState myState = new SavedState(superState);
-        myState.selection = DateUtils.getDateStringInDefaultFormat(selection);
+        myState.selection = DateUtilsOffsetDate.getDateString(DateUtilsOffsetDate.defaultFormatWithTimeZone, selection);
         return myState;
     }
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
-        selection = DateUtils.getDateFromStringInDefaultFormat(savedState.selection);
+        selection = DateUtilsOffsetDate.getDateFromString(DateUtilsOffsetDate.defaultFormatWithTimeZone, savedState.selection);
         super.onRestoreInstanceState(savedState.getSuperState());
     }
 
@@ -171,18 +170,18 @@ public class DialogDateTimePickerView extends BaseDialogPickerView {
         dispatchThawSelfOnly(container);
     }
 
-    private boolean compareValues(Date v1, Date v2) {
-        return DateUtils.isDateEqual(v1, v2, true);
+    private boolean compareValues(OffsetDateTime v1, OffsetDateTime v2) {
+        return DateUtilsOffsetDate.isDateEqual(v1, v2, true);
     }
 
-    private void selectInternally(Date newSelection) {
-        Date oldSelection = selection;
+    private void selectInternally(OffsetDateTime newSelection) {
+        OffsetDateTime oldSelection = selection;
         selection = newSelection;
         updateTextAndValidate();
         dispatchSelectionChangedEvents(oldSelection, newSelection);
     }
 
-    private void dispatchSelectionChangedEvents(Date oldValue, Date newValue) {
+    private void dispatchSelectionChangedEvents(OffsetDateTime oldValue, OffsetDateTime newValue) {
         if (compareValues(oldValue, newValue))
             return;
         for (SelectionChangedListener listener : selectionChangedListeners)
@@ -191,7 +190,7 @@ public class DialogDateTimePickerView extends BaseDialogPickerView {
             dataBindingListener.onSelectionChanged(DialogDateTimePickerView.this, oldValue, newValue);
     }
 
-    private static class SavedState extends View.BaseSavedState {
+    private static class SavedState extends BaseSavedState {
         private String selection;
 
         SavedState(Parcelable superState) {
@@ -210,22 +209,22 @@ public class DialogDateTimePickerView extends BaseDialogPickerView {
         }
 
         public static final Creator<SavedState> CREATOR
-                = new Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
+                = new Creator<DialogDateTimePickerView.SavedState>() {
+            public DialogDateTimePickerView.SavedState createFromParcel(Parcel in) {
+                return new DialogDateTimePickerView.SavedState(in);
             }
 
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
+            public DialogDateTimePickerView.SavedState[] newArray(int size) {
+                return new DialogDateTimePickerView.SavedState[size];
             }
         };
     }
 
     public interface ValidationCheck {
-        boolean validate(Date currentSelection);
+        boolean validate(OffsetDateTime currentSelection);
     }
 
     public interface SelectionChangedListener {
-        void onSelectionChanged(DialogDateTimePickerView view, Date oldValue, Date newValue);
+        void onSelectionChanged(DialogDateTimePickerView view, OffsetDateTime oldValue, OffsetDateTime newValue);
     }
 }
