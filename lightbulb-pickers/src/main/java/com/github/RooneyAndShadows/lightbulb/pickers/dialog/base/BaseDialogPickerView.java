@@ -67,6 +67,13 @@ public abstract class BaseDialogPickerView extends LinearLayout {
     protected abstract void readAttributes(Context context, AttributeSet attrs);
 
     @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (triggerView != null)
+            triggerView.setEnabled(enabled);
+    }
+
+    @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
         if (!(child instanceof DialogPickerTriggerLayout)) {
             Log.w(BaseDialogPickerView.class.getName(), "Picker view child is ignored. All child views must implement com.rands.lightbulb.pickers.dialog.base.TriggerView");
@@ -78,6 +85,7 @@ public abstract class BaseDialogPickerView extends LinearLayout {
         }
         super.addView(child, index, params);
         triggerView = (DialogPickerTriggerLayout) child;
+        triggerView.setEnabled(isEnabled());
         triggerView.attachTo(this);
         for (TriggerAttachedCallback callback : triggerAttachedCallback)
             callback.onAttached(this.triggerView, this);
@@ -145,6 +153,7 @@ public abstract class BaseDialogPickerView extends LinearLayout {
         removeAllViews();
         addView(triggerView);
         this.triggerView = (DialogPickerTriggerLayout) triggerView;
+        this.triggerView.setEnabled(isEnabled());
         this.triggerView.attachTo(this);
         for (TriggerAttachedCallback callback : triggerAttachedCallback)
             callback.onAttached(this.triggerView, this);

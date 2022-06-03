@@ -45,9 +45,17 @@ public class ImageButtonTriggerView extends LinearLayout implements DialogPicker
     }
 
     @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (iconButtonView != null)
+            iconButtonView.setEnabled(enabled);
+    }
+
+    @Override
     public void attachTo(@NonNull BaseDialogPickerView pickerView) {
         this.pickerView = pickerView;
         iconButtonView.setOnClickListener(v -> pickerView.showPickerDialog());
+        iconButtonView.setEnabled(isEnabled());
         boolean errorEnabled = pickerView.isErrorEnabled();
         setTriggerErrorEnabled(errorEnabled);
         if (errorEnabled)

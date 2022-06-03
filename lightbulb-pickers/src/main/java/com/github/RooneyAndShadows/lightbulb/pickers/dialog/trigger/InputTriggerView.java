@@ -51,6 +51,15 @@ public class InputTriggerView extends LinearLayout implements DialogPickerTrigge
     }
 
     @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (textInputEditText != null)
+            textInputEditText.setEnabled(enabled);
+        if (textInputLayout != null)
+            textInputLayout.setEnabled(enabled);
+    }
+
+    @Override
     public void attachTo(@NonNull BaseDialogPickerView pickerView) {
         textInputLayout.setEndIconOnClickListener(v -> pickerView.showPickerDialog());
         textInputLayout.setErrorEnabled(pickerView.isErrorEnabled());
@@ -61,6 +70,8 @@ public class InputTriggerView extends LinearLayout implements DialogPickerTrigge
             textInputEditText.setMinWidth(0);
             textInputEditText.setWidth(0);
         }
+        textInputLayout.setEnabled(isEnabled());
+        textInputEditText.setEnabled(isEnabled());
         setTriggerHintText(pickerView.getPickerHintText());
     }
 

@@ -47,6 +47,13 @@ public class ButtonTriggerView extends LinearLayout implements DialogPickerTrigg
     }
 
     @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (buttonView != null)
+            buttonView.setEnabled(enabled);
+    }
+
+    @Override
     public void attachTo(@NonNull BaseDialogPickerView pickerView) {
         this.pickerView = pickerView;
         buttonView.setOnClickListener(v -> pickerView.showPickerDialog());
@@ -54,6 +61,7 @@ public class ButtonTriggerView extends LinearLayout implements DialogPickerTrigg
         setTriggerErrorEnabled(errorEnabled);
         if (errorEnabled)
             buttonView.setError(pickerView.getErrorText());
+        buttonView.setEnabled(isEnabled());
         setTriggerHintText(pickerView.getPickerHintText());
     }
 

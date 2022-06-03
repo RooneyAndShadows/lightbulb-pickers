@@ -6,6 +6,8 @@ public interface DialogPickerTriggerLayout {
 
     void attachTo(BaseDialogPickerView pickerView);
 
+    void setEnabled(boolean enabled);
+
     void setTriggerIcon(Drawable icon, Integer color);
 
     void setTriggerText(String newText);
