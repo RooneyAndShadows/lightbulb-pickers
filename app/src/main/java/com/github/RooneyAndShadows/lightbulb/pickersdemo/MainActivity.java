@@ -14,7 +14,7 @@ import java.time.ZoneId;
 
 public class MainActivity extends AppCompatActivity {
 
-    @Override
+   /* @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -33,5 +33,5 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(DateUtilsOffsetDate.getDateString(DateUtilsOffsetDate.defaultFormatWithTimeZone, newValue));
                 })
                 .buildDialog().show();
-    }
+    }*/
 }
