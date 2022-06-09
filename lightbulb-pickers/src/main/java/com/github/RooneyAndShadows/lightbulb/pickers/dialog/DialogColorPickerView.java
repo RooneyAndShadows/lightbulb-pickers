@@ -19,9 +19,9 @@ import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPi
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder;
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyRecyclerAdapter;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterSelectableModes;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
 
 import java.util.ArrayList;

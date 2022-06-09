@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.github.rooneyandshadows.java.commons.string.StringUtils;
 import com.github.rooneyandshadows.lightbulb.commons.utils.DrawableUtils;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel;
 import com.github.rooneyandshadows.lightbulb.textinputview.TextInputView;
 import com.nex3z.flowlayout.FlowLayout;
 import com.github.rooneyandshadows.lightbulb.pickers.R;

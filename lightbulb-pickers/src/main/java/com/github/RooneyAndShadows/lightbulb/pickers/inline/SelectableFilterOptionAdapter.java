@@ -10,10 +10,10 @@ import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterConfiguration;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyRecyclerAdapter;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterConfiguration;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterSelectableModes;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter;
 import com.github.rooneyandshadows.java.commons.string.StringUtils;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
 

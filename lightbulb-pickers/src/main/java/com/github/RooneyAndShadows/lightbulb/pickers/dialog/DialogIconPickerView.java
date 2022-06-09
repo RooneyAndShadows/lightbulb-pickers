@@ -14,8 +14,8 @@ import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialog;
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterDataModel;
-import com.github.rooneyandshadows.lightbulb.recycleradapters.EasyAdapterSelectableModes;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel;
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterSelectableModes;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView;
 
