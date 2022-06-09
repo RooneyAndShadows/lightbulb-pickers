@@ -1,4 +1,4 @@
-package com.github.rooneyandshadows.lightbulb.pickers;
+package com.github.rooneyandshadows.lightbulb.pickersdemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
