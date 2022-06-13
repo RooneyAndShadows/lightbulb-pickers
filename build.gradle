@@ -16,9 +16,9 @@ buildscript {
                 ],
                 lightbulb           : [
                         commons         : "1.0.6",
-                        textinputview   : "1.0.7",
-                        recycleradapters: "1.0.10",
-                        dialogs         : "1.0.7"
+                        textinputview   : "1.0.8",
+                        recycleradapters: "1.0.11",
+                        dialogs         : "1.0.8"
                 ]
 
         ]
