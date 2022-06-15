@@ -172,10 +172,14 @@ public abstract class BaseDialogPickerView extends LinearLayout {
         this.pickerDialogAnimationType = animation;
     }
 
-    public final void setRequired(boolean required) {
+    public final void setRequired(boolean required, boolean validateOnCall) {
         this.required = required;
-        if (required)
+        if (validateOnCall)
             validate();
+    }
+
+    public final void setRequired(boolean required) {
+        setRequired(required, true);
     }
 
     public final void setErrorText(String error) {
