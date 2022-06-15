@@ -108,7 +108,7 @@ public class DialogTimePickerView extends BaseDialogPickerView {
     }
 
     public boolean hasSelection() {
-        return selection != null;
+        return selection != null && selection.length == 2;
     }
 
     @BindingAdapter("timePickerSelection")

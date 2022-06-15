@@ -69,7 +69,7 @@ public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> ext
     }
 
     public boolean hasSelection() {
-        return selection != null;
+        return selection != null && selection.length > 0;
     }
 
     @Override

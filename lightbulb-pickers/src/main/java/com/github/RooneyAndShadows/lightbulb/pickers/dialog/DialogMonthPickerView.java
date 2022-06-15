@@ -199,7 +199,7 @@ public class DialogMonthPickerView extends BaseDialogPickerView {
     }
 
     public boolean hasSelection() {
-        return selection != null;
+        return selection != null && selection.length == 2;
     }
 
     @BindingAdapter("monthPickerSelection")

@@ -78,7 +78,7 @@ public class DialogDateRangePickerView extends BaseDialogPickerView {
     }
 
     public boolean hasSelection() {
-        return selection != null && selection[0] != null && selection[1] != null;
+        return selection != null && selection.length == 2 && selection[0] != null && selection[1] != null;
     }
 
     @Override
