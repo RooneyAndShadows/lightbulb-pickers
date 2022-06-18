@@ -8,6 +8,8 @@ import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color.colors.Demo
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIcons;
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class DemoModel extends EasyAdapterDataModel {
@@ -78,5 +80,14 @@ public class DemoModel extends EasyAdapterDataModel {
 
     public DemoColors getIconBackgroundColor() {
         return iconBackgroundColor;
+    }
+
+    public static List<DemoModel> generateDemoCollection() {
+        List<DemoModel> models = new ArrayList<>();
+        for (int i = 0; i < 25; i++) {
+            String title = "Demo Model #".concat(String.valueOf(i + 1));
+            models.add(new DemoModel(UUID.randomUUID(), title, DemoIcons.getRandom(), DemoColors.getRandom()));
+        }
+        return models;
     }
 }

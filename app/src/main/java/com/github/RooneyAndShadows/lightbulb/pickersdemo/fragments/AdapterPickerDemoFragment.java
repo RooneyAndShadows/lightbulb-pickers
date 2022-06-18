@@ -13,14 +13,16 @@ import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.activity.MainActivity;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.activity.MenuConfigurations;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.github.rooneyandshadows.lightbulb.pickersdemo.models.DemoModel;
+import com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class AdapterPickerDemoFragment extends BaseFragment {
+    private DemoAdapterPickerView pickerViewBoxed;
+    private DemoAdapterPickerView pickerViewOutlined;
+    private DemoAdapterPickerView pickerViewButton;
 
     public static AdapterPickerDemoFragment getNewInstance() {
         return new AdapterPickerDemoFragment();
@@ -34,7 +36,7 @@ public class AdapterPickerDemoFragment extends BaseFragment {
                 .withActionBarConfiguration(new BaseFragmentConfiguration.ActionBarConfiguration(R.id.toolbar)
                         .withActionButtons(true)
                         .attachToDrawer(true)
-                        .withSubTitle(ResourceUtils.getPhrase(getContextActivity(), R.string.adapter_pickers_demo))
+                        .withSubTitle(ResourceUtils.getPhrase(getContextActivity(), R.string.adapter_picker_demo_text))
                         .withTitle(ResourceUtils.getPhrase(getContextActivity(), R.string.app_name))
                 );
     }
@@ -55,12 +57,18 @@ public class AdapterPickerDemoFragment extends BaseFragment {
             );
         }
         setupDrawerButton();
+        if (savedInstanceState == null)
+            setupCollection();
     }
 
     @Override
     protected void selectViews() {
         super.selectViews();
-        //recyclerView = getView().findViewById(R.id.recycler_view);
+        if (getView() == null)
+            return;
+        pickerViewBoxed = getView().findViewById(R.id.pickerViewBoxed);
+        pickerViewOutlined = getView().findViewById(R.id.pickerViewOutlined);
+        pickerViewButton = getView().findViewById(R.id.pickerViewButton);
     }
 
     private void setupDrawerButton() {
@@ -70,17 +78,9 @@ public class AdapterPickerDemoFragment extends BaseFragment {
         getActionBarManager().setHomeIcon(actionBarDrawable);
     }
 
-   /* private void setupRecycler(Bundle savedState) {
-        recyclerView.setAdapter(new SimpleAdapter());
-        recyclerView.addItemDecoration(new VerticalAndHorizontalSpaceItemDecoration(ResourceUtils.dpToPx(15)));
-        if (savedState == null)
-            recyclerView.getAdapter().setCollection(generateInitialData());
+    private void setupCollection() {
+        pickerViewBoxed.setData(DemoModel.generateDemoCollection());
+        pickerViewOutlined.setData(DemoModel.generateDemoCollection());
+        pickerViewButton.setData(DemoModel.generateDemoCollection());
     }
-
-    private List<DemoModel> generateInitialData() {
-        List<DemoModel> models = new ArrayList<>();
-        for (int i = 1; i <= 20; i++)
-            models.add(new DemoModel("Demo title " + i, "Demo subtitle " + i));
-        return models;
-    }*/
 }

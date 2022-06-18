@@ -7,6 +7,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.github.rooneyandshadows.lightbulb.commons.utils.DrawableUtils;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
@@ -36,6 +38,7 @@ public class DemoAdapterPickerView extends DialogAdapterPickerView<DemoModel> {
     public DemoAdapterPickerView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setupAdapter();
+        addOnTriggerAttachedCallback((triggerView1, pickerView) -> setupIcon());
         setItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
@@ -61,8 +64,8 @@ public class DemoAdapterPickerView extends DialogAdapterPickerView<DemoModel> {
     public void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         getAdapter().restoreAdapterState(savedState.adapterState);
-        setupIcon(getAdapter().getSelectedPositionsAsArray());
         super.onRestoreInstanceState(savedState.getSuperState());
+        setupIcon();
     }
 
     @InverseBindingAdapter(attribute = "categorySelection", event = "categorySelectionChanged")
@@ -107,21 +110,26 @@ public class DemoAdapterPickerView extends DialogAdapterPickerView<DemoModel> {
                 return DrawableUtils.getRoundedCornersDrawable(item.getIconBackgroundColor().getColor(), ResourceUtils.dpToPx(100));
             }
         });
-        addSelectionChangedListener((oldPositions, newPositions) -> setupIcon(newPositions));
+        addSelectionChangedListener((oldPositions, newPositions) -> setupIcon());
     }
 
-    private void setupIcon(int[] newPositions) {
-        if (newPositions.length <= 0) {
+    private void setupIcon() {
+        int[] selectedPositions = getAdapter().getPositions(getSelectedItems());
+        if (selectedPositions.length <= 0) {
             Drawable icon = AppIconUtils.getIconWithAttributeColor(getContext(), DemoIconsUi.ICON_CATEGORY, R.attr.colorOnSurface, R.dimen.ICON_SIZE_MEDIUM);
-            ((InputTriggerView) getTriggerView()).setStartIconUseAlpha(true);
+            if (getTriggerView() instanceof InputTriggerView) {
+                ((InputTriggerView) getTriggerView()).setStartIconUseAlpha(true);
+            }
             setPickerIcon(icon);
             return;
         }
-        DemoModel selectedItem = getAdapter().getItem(newPositions[0]);
+        DemoModel selectedItem = getAdapter().getItem(selectedPositions[0]);
         DemoIcons iconType = selectedItem.getIcon();
         Drawable icon = AppIconUtils.getIconWithAttributeColor(getContext(), iconType, R.attr.colorOnSurface, R.dimen.ICON_SIZE_RECYCLER_ITEM);
         int color = selectedItem.getIconBackgroundColor().getColor();
-        ((InputTriggerView) getTriggerView()).setStartIconUseAlpha(false);
+        if (getTriggerView() instanceof InputTriggerView) {
+            ((InputTriggerView) getTriggerView()).setStartIconUseAlpha(false);
+        }
         setPickerIcon(icon, color);
     }
 

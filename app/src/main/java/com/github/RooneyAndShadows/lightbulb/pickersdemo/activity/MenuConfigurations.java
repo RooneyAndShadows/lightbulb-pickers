@@ -22,7 +22,7 @@ public class MenuConfigurations {
         configuration.withHeaderView(headingView);
         configuration.addMenuItem(new PrimaryMenuItem(
                 -1,
-                ResourceUtils.getPhrase(activity, R.string.adapter_pickers_demo),
+                ResourceUtils.getPhrase(activity, R.string.adapter_picker_demo_text),
                 null,
                 null,
                 1,

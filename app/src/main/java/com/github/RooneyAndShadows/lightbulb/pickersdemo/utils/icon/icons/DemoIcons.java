@@ -7,6 +7,7 @@ import com.mikepenz.iconics.typeface.library.fontawesome.FontAwesome;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public enum DemoIcons implements IDemoIcon {
     DEFAULT_ICON_INCOME("DEFAULT_ICON_INCOME", FontAwesome.Icon.faw_angle_double_up),
@@ -101,6 +102,10 @@ public enum DemoIcons implements IDemoIcon {
 
     public static DemoIcons getByName(String iconName) {
         return values.get(iconName);
+    }
+
+    public static DemoIcons getRandom() {
+        return DemoIcons.values()[new Random().nextInt(DemoIcons.values().length)];
     }
 
     public String getName() {

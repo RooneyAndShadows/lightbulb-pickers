@@ -3,9 +3,11 @@ package com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color.colors;
 import android.graphics.Color;
 
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color.IDemoColor;
+import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIcons;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public enum DemoColors implements IDemoColor {
     BROWN("BROWN", "#795548"),
@@ -60,6 +62,10 @@ public enum DemoColors implements IDemoColor {
 
     public static DemoColors getByName(String colorName) {
         return values.get(colorName);
+    }
+
+    public static DemoColors getRandom() {
+        return DemoColors.values()[new Random().nextInt(DemoColors.values().length)];
     }
 
     public String getName() {
