@@ -8,10 +8,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Pickers">
+        android:theme="@style/DemoTheme">
         <activity
-            android:name="com.github.rooneyandshadows.lightbulb.pickersdemo.MainActivity"
-            android:exported="true">
+            android:name="com.github.rooneyandshadows.lightbulb.pickersdemo.activity.MainActivity"
+            android:exported="true"
+            android:theme="@style/SplashThemeLight">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

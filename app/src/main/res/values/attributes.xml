@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_delimiter_light">#e0e0e0</color>
+    <attr name="colorDelimiter" format="reference|color" />
 </resources>
