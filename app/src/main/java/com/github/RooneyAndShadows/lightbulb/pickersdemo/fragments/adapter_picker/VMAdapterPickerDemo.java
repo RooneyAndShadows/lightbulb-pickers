@@ -24,10 +24,10 @@ public class VMAdapterPickerDemo extends BaseObservableViewModel {
         dataSets.put(1, DemoModel.generateDemoCollection());
         dataSets.put(2, DemoModel.generateDemoCollection());
         dataSets.put(3, DemoModel.generateDemoCollection());
-        setBoxedSelection(dataSets.get(0).get(0).getId());
-        setOutlinedSelection(dataSets.get(1).get(0).getId());
-        setButtonSelection(dataSets.get(2).get(0).getId());
-        setImageButtonSelection(dataSets.get(3).get(0).getId());
+        boxedSelection = dataSets.get(0).get(0).getId();
+        outlinedSelection = dataSets.get(1).get(0).getId();
+        buttonSelection = dataSets.get(2).get(0).getId();
+        imageButtonSelection = dataSets.get(3).get(0).getId();
     }
 
     public void setBoxedSelection(UUID boxedSelection) {

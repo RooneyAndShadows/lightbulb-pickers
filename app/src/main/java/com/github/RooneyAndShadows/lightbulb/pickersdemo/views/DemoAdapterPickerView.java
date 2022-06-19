@@ -7,8 +7,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.github.rooneyandshadows.lightbulb.commons.utils.DrawableUtils;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
@@ -70,10 +68,7 @@ public class DemoAdapterPickerView extends DialogAdapterPickerView<DemoModel> {
 
     @InverseBindingAdapter(attribute = "pickerSelection", event = "pickerSelectionChanged")
     public static UUID getSelectedValue(DialogAdapterPickerView<DemoModel> view) {
-        if (view.hasSelection()) {
-            return view.getSelectedItems().get(0).getId();
-        } else
-            return null;
+        return view.hasSelection() ? view.getSelectedItems().get(0).getId() : null;
     }
 
     @BindingAdapter(value = {"pickerSelection"})
@@ -117,9 +112,8 @@ public class DemoAdapterPickerView extends DialogAdapterPickerView<DemoModel> {
         int[] selectedPositions = getAdapter().getPositions(getSelectedItems());
         if (selectedPositions.length <= 0) {
             Drawable icon = AppIconUtils.getIconWithAttributeColor(getContext(), DemoIconsUi.ICON_CATEGORY, R.attr.colorOnSurface, R.dimen.ICON_SIZE_MEDIUM);
-            if (getTriggerView() instanceof InputTriggerView) {
+            if (getTriggerView() instanceof InputTriggerView)
                 ((InputTriggerView) getTriggerView()).setStartIconUseAlpha(true);
-            }
             setPickerIcon(icon);
             return;
         }
@@ -127,9 +121,8 @@ public class DemoAdapterPickerView extends DialogAdapterPickerView<DemoModel> {
         DemoIcons iconType = selectedItem.getIcon();
         Drawable icon = AppIconUtils.getIconWithAttributeColor(getContext(), iconType, R.attr.colorOnSurface, R.dimen.ICON_SIZE_RECYCLER_ITEM);
         int color = selectedItem.getIconBackgroundColor().getColor();
-        if (getTriggerView() instanceof InputTriggerView) {
+        if (getTriggerView() instanceof InputTriggerView)
             ((InputTriggerView) getTriggerView()).setStartIconUseAlpha(false);
-        }
         setPickerIcon(icon, color);
     }
 

@@ -50,9 +50,8 @@ public class FragmentAdapterPickerDemo extends BaseFragment {
     protected void create(@Nullable Bundle savedInstanceState) {
         super.create(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(VMAdapterPickerDemo.class);
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null)
             viewModel.initialize();
-        }
     }
 
     @Override
