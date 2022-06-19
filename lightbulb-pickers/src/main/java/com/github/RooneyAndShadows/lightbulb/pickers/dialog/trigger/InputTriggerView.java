@@ -232,7 +232,8 @@ public class InputTriggerView extends LinearLayout implements DialogPickerTrigge
     }
 
     private void setupBackground() {
-        textInputLayout.setBoxBackgroundColor(pickerBackgroundColor);
+        if (inputType.equals(InputTypes.BOXED))
+            textInputLayout.setBoxBackgroundColor(pickerBackgroundColor);
     }
 
     private void setupStroke() {

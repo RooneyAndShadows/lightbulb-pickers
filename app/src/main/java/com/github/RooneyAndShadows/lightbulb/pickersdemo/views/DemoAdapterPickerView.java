@@ -68,7 +68,7 @@ public class DemoAdapterPickerView extends DialogAdapterPickerView<DemoModel> {
         setupIcon();
     }
 
-    @InverseBindingAdapter(attribute = "categorySelection", event = "categorySelectionChanged")
+    @InverseBindingAdapter(attribute = "pickerSelection", event = "pickerSelectionChanged")
     public static UUID getSelectedValue(DialogAdapterPickerView<DemoModel> view) {
         if (view.hasSelection()) {
             return view.getSelectedItems().get(0).getId();
@@ -76,7 +76,7 @@ public class DemoAdapterPickerView extends DialogAdapterPickerView<DemoModel> {
             return null;
     }
 
-    @BindingAdapter(value = {"categorySelection"})
+    @BindingAdapter(value = {"pickerSelection"})
     public static void setPickerSelection(DialogAdapterPickerView<DemoModel> view, UUID newCategory) {
         if (newCategory == null)
             return;
@@ -92,7 +92,7 @@ public class DemoAdapterPickerView extends DialogAdapterPickerView<DemoModel> {
             }
     }
 
-    @BindingAdapter(value = {"categorySelectionChanged"}, requireAll = false)
+    @BindingAdapter(value = {"pickerSelectionChanged"}, requireAll = false)
     public static void bindPickerEvent(DialogAdapterPickerView<DemoModel> view, final InverseBindingListener bindingListener) {
         if (view.hasSelection()) bindingListener.onChange();
         view.addSelectionChangedListener((oldPositions, newPositions) -> bindingListener.onChange());

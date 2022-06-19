@@ -42,4 +42,20 @@
     <style name="PickerViewHintTextAppearance" parent="@android:style/TextAppearance.Small">
         <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="Delimiter">
+        <item name="android:alpha">0.4</item>
+        <item name="android:background">?colorOnBackground</item>
+    </style>
+
+    <style name="HorizontalDelimiter" parent="@style/Delimiter">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+
+    <style name="VerticalDelimiter" parent="@style/Delimiter">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
 </resources>

@@ -5,6 +5,10 @@
     <!-- COMMON -->
     <string name="picker_ok_text">OK</string>
     <string name="picker_cancel_text">Cancel</string>
+    <string name="picker_trigger_input_boxed_text">BOXED</string>
+    <string name="picker_trigger_input_outlined_text">OUTLINED</string>
+    <string name="picker_trigger_input_button_text">BUTTON</string>
+    <string name="picker_trigger_input_image_button_text">IMAGE BUTTON</string>
     <!-- ADAPTER PICKER DEMO STRINGS -->
     <string name="adapter_picker_demo_text">Adapter picker demo</string>
     <string name="adapter_picker_dialog_title_text">Select an item</string>

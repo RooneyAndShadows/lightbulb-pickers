@@ -1,97 +1,263 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layout"
+    <data>
+
+        <variable
+            name="model"
+            type="com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.adapter_picker.VMAdapterPickerDemo" />
+
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?colorActionBarBackground"
-        app:contentInsetStart="0dp">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="?colorActionBarBackground"
+            app:contentInsetStart="0dp">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/app_bar_layout"
-        android:fillViewport="true"
-        android:padding="15dp">
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_below="@id/app_bar_layout"
+            android:fillViewport="true"
+            android:padding="15dp">
 
-            <com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView
-                android:id="@+id/pickerViewBoxed"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
-                app:APV_DialogMode="NORMAL"
-                app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
-                app:PV_DialogAnimation="transition_from_left_to_right"
-                app:PV_DialogButtonNegText="@string/picker_cancel_text"
-                app:PV_DialogButtonPosText="@string/picker_ok_text"
-                app:PV_DialogTag="DEMO_PICKER_TAG_BOXED"
-                app:PV_HintText="@string/adapter_picker_pick_item_text"
-                app:PV_Required="true"
-                app:PV_RequiredText="@string/adapter_picker_required_text">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
 
-            <com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView
-                android:id="@+id/pickerViewOutlined"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
-                app:APV_DialogMode="NORMAL"
-                app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
-                app:PV_DialogAnimation="transition_from_left_to_right"
-                app:PV_DialogButtonNegText="@string/picker_cancel_text"
-                app:PV_DialogButtonPosText="@string/picker_ok_text"
-                app:PV_DialogTag="DEMO_PICKER_TAG_OUTLINED"
-                app:PV_HintText="@string/adapter_picker_pick_item_text"
-                app:PV_Required="true"
-                app:PV_RequiredText="@string/adapter_picker_required_text">
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center">
 
-                <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
+                        <View
+                            style="@style/HorizontalDelimiter"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="0.5" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:text="@string/picker_trigger_input_boxed_text" />
+
+                        <View
+                            style="@style/HorizontalDelimiter"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="0.5" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView
+                        android:id="@+id/pickerViewBoxed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
+                        app:APV_DialogMode="NORMAL"
+                        app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
+                        app:PV_DialogAnimation="transition_from_left_to_right"
+                        app:PV_DialogButtonNegText="@string/picker_cancel_text"
+                        app:PV_DialogButtonPosText="@string/picker_ok_text"
+                        app:PV_DialogTag="DEMO_PICKER_TAG_BOXED"
+                        app:PV_HintText="@string/adapter_picker_pick_item_text"
+                        app:PV_Required="true"
+                        app:PV_RequiredText="@string/adapter_picker_required_text"
+                        app:pickerSelection="@={model.boxedSelection}">
+
+                        <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:ITV_LayoutType="OUTLINED" />
-            </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
 
-            <com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView
-                android:id="@+id/pickerViewButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
-                app:APV_DialogMode="NORMAL"
-                app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
-                app:PV_DialogAnimation="transition_from_left_to_right"
-                app:PV_DialogButtonNegText="@string/picker_cancel_text"
-                app:PV_DialogButtonPosText="@string/picker_ok_text"
-                app:PV_DialogTag="DEMO_PICKER_TAG_OUTLINED"
-                app:PV_HintText="@string/adapter_picker_pick_item_text"
-                app:PV_Required="true"
-                app:PV_RequiredText="@string/adapter_picker_required_text">
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center">
 
-                <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ButtonTriggerView
+                        <View
+                            style="@style/HorizontalDelimiter"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="0.5" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:text="@string/picker_trigger_input_outlined_text" />
+
+                        <View
+                            style="@style/HorizontalDelimiter"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="0.5" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView
+                        android:id="@+id/pickerViewOutlined"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
+                        app:APV_DialogMode="NORMAL"
+                        app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
+                        app:PV_DialogAnimation="transition_from_left_to_right"
+                        app:PV_DialogButtonNegText="@string/picker_cancel_text"
+                        app:PV_DialogButtonPosText="@string/picker_ok_text"
+                        app:PV_DialogTag="DEMO_PICKER_TAG_OUTLINED"
+                        app:PV_HintText="@string/adapter_picker_pick_item_text"
+                        app:PV_Required="true"
+                        app:PV_RequiredText="@string/adapter_picker_required_text"
+                        app:pickerSelection="@={model.outlinedSelection}">
+
+                        <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:ITV_LayoutType="OUTLINED" />
+                    </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
-        </androidx.appcompat.widget.LinearLayoutCompat>
-    </androidx.core.widget.NestedScrollView>
-</RelativeLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center">
+
+                        <View
+                            style="@style/HorizontalDelimiter"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="0.5" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:text="@string/picker_trigger_input_button_text" />
+
+                        <View
+                            style="@style/HorizontalDelimiter"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="0.5" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView
+                        android:id="@+id/pickerViewButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
+                        app:APV_DialogMode="NORMAL"
+                        app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
+                        app:PV_DialogAnimation="transition_from_left_to_right"
+                        app:PV_DialogButtonNegText="@string/picker_cancel_text"
+                        app:PV_DialogButtonPosText="@string/picker_ok_text"
+                        app:PV_DialogTag="DEMO_PICKER_TAG_OUTLINED"
+                        app:PV_HintText="@string/adapter_picker_pick_item_text"
+                        app:PV_Required="true"
+                        app:PV_RequiredText="@string/adapter_picker_required_text"
+                        app:pickerSelection="@={model.buttonSelection}">
+
+                        <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ButtonTriggerView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center">
+
+                        <View
+                            style="@style/HorizontalDelimiter"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="0.5" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:text="@string/picker_trigger_input_image_button_text" />
+
+                        <View
+                            style="@style/HorizontalDelimiter"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="0.5" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView
+                        android:id="@+id/pickerViewImageButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
+                        app:APV_DialogMode="NORMAL"
+                        app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
+                        app:PV_DialogAnimation="transition_from_left_to_right"
+                        app:PV_DialogButtonNegText="@string/picker_cancel_text"
+                        app:PV_DialogButtonPosText="@string/picker_ok_text"
+                        app:PV_DialogTag="DEMO_PICKER_TAG_OUTLINED"
+                        app:PV_HintText="@string/adapter_picker_pick_item_text"
+                        app:PV_Required="true"
+                        app:PV_RequiredText="@string/adapter_picker_required_text"
+                        app:pickerSelection="@={model.imageButtonSelection}">
+
+                        <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ImageButtonTriggerView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_button_round_corners"
+                            android:elevation="@dimen/system_elevation" />
+                    </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.core.widget.NestedScrollView>
+    </RelativeLayout>
+</layout>

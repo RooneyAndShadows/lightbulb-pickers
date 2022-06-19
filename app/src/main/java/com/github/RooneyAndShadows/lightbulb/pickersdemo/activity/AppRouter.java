@@ -2,7 +2,7 @@ package com.github.rooneyandshadows.lightbulb.pickersdemo.activity;
 
 import com.github.rooneyandshadows.lightbulb.application.activity.BaseActivity;
 import com.github.rooneyandshadows.lightbulb.application.activity.routing.BaseApplicationRouter;
-import com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.AdapterPickerDemoFragment;
+import com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.adapter_picker.FragmentAdapterPickerDemo;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -25,7 +25,7 @@ public class AppRouter extends BaseApplicationRouter {
             @NonNull
             @Override
             public Fragment getFragment() {
-                return AdapterPickerDemoFragment.getNewInstance();
+                return FragmentAdapterPickerDemo.getNewInstance();
             }
         }
     }

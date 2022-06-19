@@ -1,4 +1,4 @@
-package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments;
+package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.adapter_picker;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,19 +13,24 @@ import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.activity.MainActivity;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.activity.MenuConfigurations;
+import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentAdapterPickerDemoBinding;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.models.DemoModel;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
-public class AdapterPickerDemoFragment extends BaseFragment {
+public class FragmentAdapterPickerDemo extends BaseFragment {
+    private VMAdapterPickerDemo viewModel;
     private DemoAdapterPickerView pickerViewBoxed;
     private DemoAdapterPickerView pickerViewOutlined;
     private DemoAdapterPickerView pickerViewButton;
+    private DemoAdapterPickerView pickerViewImageButton;
 
-    public static AdapterPickerDemoFragment getNewInstance() {
-        return new AdapterPickerDemoFragment();
+    public static FragmentAdapterPickerDemo getNewInstance() {
+        return new FragmentAdapterPickerDemo();
     }
 
     @NonNull
@@ -42,8 +47,19 @@ public class AdapterPickerDemoFragment extends BaseFragment {
     }
 
     @Override
+    protected void create(@Nullable Bundle savedInstanceState) {
+        super.create(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(VMAdapterPickerDemo.class);
+        if (savedInstanceState == null) {
+            viewModel.initialize();
+        }
+    }
+
+    @Override
     public View createView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_adapter_picker_demo, container, false);
+        FragmentAdapterPickerDemoBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_adapter_picker_demo, container, false);
+        binding.setModel(viewModel);
+        return binding.getRoot();
     }
 
     @Override
@@ -69,6 +85,7 @@ public class AdapterPickerDemoFragment extends BaseFragment {
         pickerViewBoxed = getView().findViewById(R.id.pickerViewBoxed);
         pickerViewOutlined = getView().findViewById(R.id.pickerViewOutlined);
         pickerViewButton = getView().findViewById(R.id.pickerViewButton);
+        pickerViewImageButton = getView().findViewById(R.id.pickerViewImageButton);
     }
 
     private void setupDrawerButton() {
@@ -79,8 +96,9 @@ public class AdapterPickerDemoFragment extends BaseFragment {
     }
 
     private void setupCollection() {
-        pickerViewBoxed.setData(DemoModel.generateDemoCollection());
-        pickerViewOutlined.setData(DemoModel.generateDemoCollection());
-        pickerViewButton.setData(DemoModel.generateDemoCollection());
+        pickerViewBoxed.setData(viewModel.getDataSets().get(0));
+        pickerViewOutlined.setData(viewModel.getDataSets().get(1));
+        pickerViewButton.setData(viewModel.getDataSets().get(2));
+        pickerViewImageButton.setData(viewModel.getDataSets().get(3));
     }
 }
