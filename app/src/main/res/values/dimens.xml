@@ -3,4 +3,5 @@
     <dimen name="system_elevation">3dp</dimen>
     <dimen name="ICON_SIZE_RECYCLER_ITEM">22dp</dimen>
     <dimen name="ICON_SIZE_MEDIUM">18dp</dimen>
+    <dimen name="ICON_SIZE_MENU">14dp</dimen>
 </resources>

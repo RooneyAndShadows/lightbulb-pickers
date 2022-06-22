@@ -28,6 +28,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void create(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState == null)
-            router.toDemoRegular(BaseApplicationRouter.NavigationCommands.NAVIGATE_TO_AND_CLEAR_BACKSTACK);
+            router.toAdapterPickerDemo(BaseApplicationRouter.NavigationCommands.NAVIGATE_TO_AND_CLEAR_BACKSTACK);
     }
 }

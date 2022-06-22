@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.adapter_picker.VMAdapterPickerDemo" />
+            type="com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.color_picker.VMColorPickerDemo" />
 
     </data>
 
@@ -75,26 +75,26 @@
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView
+                    <com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogColorPickerView
                         android:id="@+id/pickerViewBoxed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
-                        app:APV_DialogMode="FULLSCREEN"
-                        app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
+                        app:CPV_DialogMessage="@string/color_picker_dialog_subtitle_text"
+                        app:CPV_DialogTitle="@string/color_picker_dialog_title_text"
                         app:PV_DialogAnimation="no_animation"
                         app:PV_DialogButtonNegText="@string/picker_cancel_text"
                         app:PV_DialogButtonPosText="@string/picker_ok_text"
                         app:PV_DialogTag="DEMO_PICKER_TAG_BOXED"
                         app:PV_HintText="@string/adapter_picker_pick_item_text"
                         app:PV_Required="true"
-                        app:PV_RequiredText="@string/adapter_picker_required_text"
-                        app:pickerSelection="@={model.boxedSelection}">
+                        app:PV_RequiredText="@string/color_picker_required_text"
+                        app:colorPickerSelection="@={model.boxedSelection}">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-                    </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
+                            android:layout_height="match_parent"
+                            app:ITV_IconUseAlpha="false" />
+                    </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogColorPickerView>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -129,26 +129,27 @@
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView
+                    <com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogColorPickerView
                         android:id="@+id/pickerViewOutlined"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
-                        app:APV_DialogMode="BOTTOM_SHEET"
-                        app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
+                        app:CPV_DialogMessage="@string/color_picker_dialog_subtitle_text"
+                        app:CPV_DialogTitle="@string/color_picker_dialog_title_text"
+                        app:PV_DialogAnimation="no_animation"
                         app:PV_DialogButtonNegText="@string/picker_cancel_text"
                         app:PV_DialogButtonPosText="@string/picker_ok_text"
                         app:PV_DialogTag="DEMO_PICKER_TAG_OUTLINED"
                         app:PV_HintText="@string/adapter_picker_pick_item_text"
                         app:PV_Required="true"
-                        app:PV_RequiredText="@string/adapter_picker_required_text"
-                        app:pickerSelection="@={model.outlinedSelection}">
+                        app:PV_RequiredText="@string/color_picker_required_text"
+                        app:colorPickerSelection="@={model.outlinedSelection}">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            app:ITV_IconUseAlpha="false"
                             app:ITV_LayoutType="OUTLINED" />
-                    </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
+                    </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogColorPickerView>
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -182,29 +183,27 @@
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView
+                    <com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogColorPickerView
                         android:id="@+id/pickerViewButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
-                        app:APV_DialogMode="NORMAL"
-                        app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
-                        app:PV_DialogAnimation="transition_from_left_to_right"
+                        app:CPV_DialogMessage="@string/color_picker_dialog_subtitle_text"
+                        app:CPV_DialogTitle="@string/color_picker_dialog_title_text"
+                        app:PV_DialogAnimation="no_animation"
                         app:PV_DialogButtonNegText="@string/picker_cancel_text"
                         app:PV_DialogButtonPosText="@string/picker_ok_text"
-                        app:PV_DialogTag="DEMO_PICKER_TAG_OUTLINED"
+                        app:PV_DialogTag="DEMO_PICKER_TAG_BUTTON"
                         app:PV_HintText="@string/adapter_picker_pick_item_text"
                         app:PV_Required="true"
-                        app:PV_RequiredText="@string/adapter_picker_required_text"
-                        app:pickerSelection="@={model.buttonSelection}">
+                        app:PV_RequiredText="@string/color_picker_required_text"
+                        app:colorPickerSelection="@={model.buttonSelection}">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ButtonTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
-                    </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
+                    </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogColorPickerView>
                 </androidx.appcompat.widget.LinearLayoutCompat>
-
-
+                
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -238,29 +237,28 @@
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView
+                    <com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogColorPickerView
                         android:id="@+id/pickerViewImageButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
-                        app:APV_DialogMode="NORMAL"
-                        app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
-                        app:PV_DialogAnimation="transition_from_left_to_right"
+                        app:CPV_DialogMessage="@string/color_picker_dialog_subtitle_text"
+                        app:CPV_DialogTitle="@string/color_picker_dialog_title_text"
+                        app:PV_DialogAnimation="no_animation"
                         app:PV_DialogButtonNegText="@string/picker_cancel_text"
                         app:PV_DialogButtonPosText="@string/picker_ok_text"
-                        app:PV_DialogTag="DEMO_PICKER_TAG_OUTLINED"
+                        app:PV_DialogTag="DEMO_PICKER_TAG_IMAGE_BUTTON"
                         app:PV_HintText="@string/adapter_picker_pick_item_text"
                         app:PV_Required="true"
-                        app:PV_RequiredText="@string/adapter_picker_required_text"
-                        app:pickerSelection="@={model.imageButtonSelection}">
+                        app:PV_RequiredText="@string/color_picker_required_text"
+                        app:colorPickerSelection="@={model.imageButtonSelection}">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ImageButtonTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/bg_button_round_corners"
                             android:elevation="@dimen/system_elevation" />
-                    </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
+                    </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogColorPickerView>
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.core.widget.NestedScrollView>

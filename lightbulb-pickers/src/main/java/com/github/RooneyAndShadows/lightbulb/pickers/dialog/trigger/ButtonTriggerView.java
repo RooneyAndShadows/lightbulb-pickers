@@ -1,6 +1,7 @@
 package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -137,7 +138,7 @@ public class ButtonTriggerView extends LinearLayout implements DialogPickerTrigg
                 pickerBackgroundColor = Color.TRANSPARENT;
             cornerRadius = ResourceUtils.dpToPx(a.getInt(R.styleable.ButtonTriggerView_BTV_BackgroundRadius, 5));
             errorAppearance = a.getResourceId(R.styleable.ButtonTriggerView_BTV_ErrorTextAppearance, R.style.PickerViewErrorTextAppearance);
-            defaultIconColor = ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface);
+            defaultIconColor = ResourceUtils.getColorByAttribute(context, R.attr.colorOnPrimary);
             pickerStartIconColor = a.getColor(R.styleable.ButtonTriggerView_BTV_StartIconColor, defaultIconColor);
         } finally {
             a.recycle();
@@ -185,8 +186,13 @@ public class ButtonTriggerView extends LinearLayout implements DialogPickerTrigg
     }
 
     private void setupStartIcon() {
-        if (pickerIcon != null)
-            pickerIcon.setTint(pickerStartIconColor);
+        buttonView.setIconTint(new ColorStateList(
+                new int[][]{
+                        new int[]{}  //
+                },
+                new int[]{
+                        pickerStartIconColor
+                }));
         buttonView.setIcon(pickerIcon);
     }
 

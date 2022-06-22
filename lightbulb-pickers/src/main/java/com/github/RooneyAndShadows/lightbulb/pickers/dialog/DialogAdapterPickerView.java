@@ -2,6 +2,7 @@ package com.github.rooneyandshadows.lightbulb.pickers.dialog;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -132,6 +133,7 @@ public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> ext
         Parcelable superState = super.onSaveInstanceState();
         SavedState myState = new SavedState(superState);
         myState.selection = selection;
+        myState.adapterState = adapter.saveAdapterState();
         return myState;
     }
 
@@ -139,6 +141,7 @@ public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> ext
     public void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         selection = savedState.selection;
+        adapter.restoreAdapterState(savedState.adapterState);
         super.onRestoreInstanceState(savedState.getSuperState());
     }
 
@@ -164,26 +167,6 @@ public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> ext
 
     public void setItemDecoration(ItemDecoration itemDecoration) {
         this.itemDecoration = itemDecoration;
-    }
-
-    private boolean compareValues(int[] v1, int[] v2) {
-        return Arrays.equals(v1, v2);
-    }
-
-    private void dispatchSelectionChangedEvents(int[] oldValue, int[] newValue) {
-        if (compareValues(oldValue, newValue))
-            return;
-        for (SelectionChangedListener selectionChangedListener : selectionChangedListeners)
-            selectionChangedListener.execute(oldValue, newValue);
-    }
-
-    private void selectInternally(int[] newSelection, boolean selectInAdapter) {
-        int[] oldSelection = selection;
-        selection = newSelection;
-        if (selectInAdapter)
-            adapter.selectPositions(newSelection);
-        updateTextAndValidate();
-        dispatchSelectionChangedEvents(oldSelection, newSelection);
     }
 
     public EasyRecyclerAdapter<ModelType> getAdapter() {
@@ -235,6 +218,26 @@ public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> ext
         updateTextAndValidate();
     }
 
+    private boolean compareValues(int[] v1, int[] v2) {
+        return Arrays.equals(v1, v2);
+    }
+
+    private void dispatchSelectionChangedEvents(int[] oldValue, int[] newValue) {
+        if (compareValues(oldValue, newValue))
+            return;
+        for (SelectionChangedListener selectionChangedListener : selectionChangedListeners)
+            selectionChangedListener.execute(oldValue, newValue);
+    }
+
+    private void selectInternally(int[] newSelection, boolean selectInAdapter) {
+        int[] oldSelection = selection;
+        selection = newSelection;
+        if (selectInAdapter)
+            adapter.selectPositions(newSelection);
+        updateTextAndValidate();
+        dispatchSelectionChangedEvents(oldSelection, newSelection);
+    }
+
     public interface SelectionChangedListener {
         void execute(int[] newPositions, int[] oldPositions);
     }
@@ -245,7 +248,7 @@ public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> ext
 
     private static class SavedState extends View.BaseSavedState {
         private int[] selection;
-
+        private Bundle adapterState;
 
         SavedState(Parcelable superState) {
             super(superState);
@@ -254,13 +257,14 @@ public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> ext
         private SavedState(Parcel in) {
             super(in);
             selection = in.createIntArray();
+            adapterState = in.readBundle(DialogAdapterPickerView.class.getClassLoader());
         }
 
         @Override
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
-            if (selection != null)
-                out.writeIntArray(selection);
+            out.writeIntArray(selection);
+            out.writeBundle(adapterState);
         }
 
         public static final Creator<SavedState> CREATOR

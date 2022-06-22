@@ -15,4 +15,10 @@
     <string name="adapter_picker_dialog_subtitle_text">for the picker</string>
     <string name="adapter_picker_pick_item_text">Pick an item</string>
     <string name="adapter_picker_required_text">Field can not be empty!</string>
+    <!-- COLOR PICKER DEMO STRINGS -->
+    <string name="color_picker_demo_text">Color picker demo</string>
+    <string name="color_picker_dialog_title_text">Select color</string>
+    <string name="color_picker_dialog_subtitle_text">for the picker</string>
+    <string name="color_picker_pick_item_text">Select color</string>
+    <string name="color_picker_required_text">Field can not be empty!</string>
 </resources>
