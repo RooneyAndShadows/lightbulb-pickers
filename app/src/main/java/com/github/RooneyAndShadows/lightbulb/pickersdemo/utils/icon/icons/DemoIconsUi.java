@@ -11,7 +11,8 @@ import java.util.Map;
 public enum DemoIconsUi implements IDemoIcon {
     ICON_MENU_ADAPTER_PICKER(1, FontAwesome.Icon.faw_shapes),
     ICON_MENU_COLOR_PICKER(2, FontAwesome.Icon.faw_palette),
-    ICON_PICKER_INDICATOR(3, FontAwesome.Icon.faw_shapes);
+    ICON_MENU_ICON_PICKER(3, FontAwesome.Icon.faw_icons),
+    ICON_PICKER_INDICATOR(4, FontAwesome.Icon.faw_shapes);
 
 
     private final Integer value;

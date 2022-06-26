@@ -161,7 +161,6 @@ public class DemoAdapterPickerView extends DialogAdapterPickerView<DemoModel> {
         view.addSelectionChangedListener((oldPositions, newPositions) -> bindingListener.onChange());
     }
 
-
     private void setupIcon() {
         int[] selectedPositions = getAdapter().getPositions(getSelectedItems());
         if (selectedPositions.length <= 0) {

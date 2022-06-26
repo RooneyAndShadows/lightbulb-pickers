@@ -43,6 +43,16 @@ public class MenuConfigurations {
                     Router.getInstance().getRouter().toColorPickerDemo(BaseApplicationRouter.NavigationCommands.NAVIGATE_TO);
                     slider.closeSlider();
                 })
+        )).addMenuItem(new PrimaryMenuItem(
+                -1,
+                ResourceUtils.getPhrase(activity, R.string.icon_picker_demo_text),
+                null,
+                AppIconUtils.getIconWithAttributeColor(activity, DemoIconsUi.ICON_MENU_ICON_PICKER, R.attr.colorOnBackground, R.dimen.ICON_SIZE_MENU),
+                1,
+                action((slider) -> {
+                    Router.getInstance().getRouter().toIconPickerDemo(BaseApplicationRouter.NavigationCommands.NAVIGATE_TO);
+                    slider.closeSlider();
+                })
         ));
         return configuration;
     }

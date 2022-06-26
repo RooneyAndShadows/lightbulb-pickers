@@ -21,4 +21,10 @@
     <string name="color_picker_dialog_subtitle_text">for the picker</string>
     <string name="color_picker_pick_item_text">Select color</string>
     <string name="color_picker_required_text">Field can not be empty!</string>
+    <!-- ICON PICKER DEMO STRINGS -->
+    <string name="icon_picker_demo_text">Icon picker demo</string>
+    <string name="icon_picker_dialog_title_text">Select icon</string>
+    <string name="icon_picker_dialog_subtitle_text">for the picker</string>
+    <string name="icon_picker_pick_item_text">Select icon</string>
+    <string name="icon_picker_required_text">Field can not be empty!</string>
 </resources>
