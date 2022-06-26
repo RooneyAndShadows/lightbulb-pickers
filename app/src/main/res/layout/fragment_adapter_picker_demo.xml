@@ -80,9 +80,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
-                        app:APV_DialogMode="FULLSCREEN"
+                        app:APV_DialogMode="NORMAL"
                         app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
-                        app:PV_DialogAnimation="no_animation"
+                        app:DAPV_SelectionMode="SINGLE"
+                        app:PV_DialogAnimation="transition_from_left_to_right"
                         app:PV_DialogButtonNegText="@string/picker_cancel_text"
                         app:PV_DialogButtonPosText="@string/picker_ok_text"
                         app:PV_DialogTag="DEMO_PICKER_TAG_BOXED"
@@ -95,7 +96,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
                     </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
-
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -134,8 +134,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
-                        app:APV_DialogMode="BOTTOM_SHEET"
+                        app:APV_DialogMode="NORMAL"
                         app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
+                        app:DAPV_SelectionMode="SINGLE"
                         app:PV_DialogButtonNegText="@string/picker_cancel_text"
                         app:PV_DialogButtonPosText="@string/picker_ok_text"
                         app:PV_DialogTag="DEMO_PICKER_TAG_OUTLINED"
@@ -189,6 +190,7 @@
                         app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
                         app:APV_DialogMode="NORMAL"
                         app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
+                        app:DAPV_SelectionMode="SINGLE"
                         app:PV_DialogAnimation="transition_from_left_to_right"
                         app:PV_DialogButtonNegText="@string/picker_cancel_text"
                         app:PV_DialogButtonPosText="@string/picker_ok_text"
@@ -246,6 +248,7 @@
                         app:APV_DialogMessage="@string/adapter_picker_dialog_subtitle_text"
                         app:APV_DialogMode="NORMAL"
                         app:APV_DialogTitle="@string/adapter_picker_dialog_title_text"
+                        app:DAPV_SelectionMode="SINGLE"
                         app:PV_DialogAnimation="transition_from_left_to_right"
                         app:PV_DialogButtonNegText="@string/picker_cancel_text"
                         app:PV_DialogButtonPosText="@string/picker_ok_text"

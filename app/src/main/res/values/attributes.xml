@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="colorDelimiter" format="reference|color" />
+
+    <declare-styleable name="DemoAdapterPickerView">
+        <attr name="DAPV_SelectionMode" format="enum">
+            <enum name="SINGLE" value="1" />
+            <enum name="MULTIPLE" value="2" />
+        </attr>
+    </declare-styleable>
 </resources>

@@ -13,40 +13,44 @@ import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 
 public class VMAdapterPickerDemo extends BaseObservableViewModel {
-    private UUID boxedSelection;
-    private UUID outlinedSelection;
-    private UUID buttonSelection;
-    private UUID imageButtonSelection;
-    private Map<Integer, List<DemoModel>> dataSets = new HashMap<>();
+    private final List<UUID> boxedSelection = new ArrayList<>();
+    private final List<UUID> outlinedSelection = new ArrayList<>();
+    private final List<UUID> buttonSelection = new ArrayList<>();
+    private final List<UUID> imageButtonSelection = new ArrayList<>();
+    private final Map<Integer, List<DemoModel>> dataSets = new HashMap<>();
 
     public void initialize() {
         dataSets.put(0, DemoModel.generateDemoCollection());
         dataSets.put(1, DemoModel.generateDemoCollection());
         dataSets.put(2, DemoModel.generateDemoCollection());
         dataSets.put(3, DemoModel.generateDemoCollection());
-        boxedSelection = dataSets.get(0).get(0).getId();
-        outlinedSelection = dataSets.get(1).get(0).getId();
-        buttonSelection = dataSets.get(2).get(0).getId();
-        imageButtonSelection = dataSets.get(3).get(0).getId();
+        boxedSelection.add(dataSets.get(0).get(0).getId());
+        outlinedSelection.add(dataSets.get(1).get(0).getId());
+        buttonSelection.add(dataSets.get(2).get(0).getId());
+        imageButtonSelection.add(dataSets.get(3).get(0).getId());
     }
 
-    public void setBoxedSelection(UUID boxedSelection) {
-        this.boxedSelection = boxedSelection;
+    public void setBoxedSelection(List<UUID> boxedSelection) {
+        this.boxedSelection.clear();
+        this.boxedSelection.addAll(boxedSelection);
         notifyPropertyChanged(BR.boxedSelection);
     }
 
-    public void setOutlinedSelection(UUID outlinedSelection) {
-        this.outlinedSelection = outlinedSelection;
+    public void setOutlinedSelection(List<UUID> outlinedSelection) {
+        this.outlinedSelection.clear();
+        this.outlinedSelection.addAll(outlinedSelection);
         notifyPropertyChanged(BR.outlinedSelection);
     }
 
-    public void setButtonSelection(UUID buttonSelection) {
-        this.buttonSelection = buttonSelection;
+    public void setButtonSelection(List<UUID> buttonSelection) {
+        this.buttonSelection.clear();
+        this.buttonSelection.addAll(buttonSelection);
         notifyPropertyChanged(BR.buttonSelection);
     }
 
-    public void setImageButtonSelection(UUID imageButtonSelection) {
-        this.imageButtonSelection = imageButtonSelection;
+    public void setImageButtonSelection(List<UUID> imageButtonSelection) {
+        this.imageButtonSelection.clear();
+        this.imageButtonSelection.addAll(imageButtonSelection);
         notifyPropertyChanged(BR.imageButtonSelection);
     }
 
@@ -55,22 +59,22 @@ public class VMAdapterPickerDemo extends BaseObservableViewModel {
     }
 
     @Bindable
-    public UUID getBoxedSelection() {
+    public List<UUID> getBoxedSelection() {
         return boxedSelection;
     }
 
     @Bindable
-    public UUID getOutlinedSelection() {
+    public List<UUID> getOutlinedSelection() {
         return outlinedSelection;
     }
 
     @Bindable
-    public UUID getButtonSelection() {
+    public List<UUID> getButtonSelection() {
         return buttonSelection;
     }
 
     @Bindable
-    public UUID getImageButtonSelection() {
+    public List<UUID> getImageButtonSelection() {
         return imageButtonSelection;
     }
 }

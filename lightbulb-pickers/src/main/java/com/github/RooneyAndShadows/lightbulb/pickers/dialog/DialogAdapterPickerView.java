@@ -27,10 +27,10 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
 
 @SuppressWarnings({"unused", "UnusedReturnValue", "unchecked"})
-public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> extends BaseDialogPickerView {
+public abstract class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> extends BaseDialogPickerView {
     private final ArrayList<ValidationCheck<ModelType>> validationCallbacks = new ArrayList<>();
     private final ArrayList<SelectionChangedListener> selectionChangedListeners = new ArrayList<>();
-    private EasyRecyclerAdapter<ModelType> adapter;
+    private final EasyRecyclerAdapter<ModelType> adapter;
     private ItemDecoration itemDecoration;
     private String dialogTitle;
     private String dialogMessage;
@@ -42,8 +42,19 @@ public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> ext
     }
 
     public DialogAdapterPickerView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
+
+    public DialogAdapterPickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public DialogAdapterPickerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        adapter = initializeAdapter();
+    }
+
+    protected abstract EasyRecyclerAdapter<ModelType> initializeAdapter();
 
     @Override
     protected void readAttributes(Context context, AttributeSet attrs) {
@@ -153,10 +164,6 @@ public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> ext
         validationCallbacks.add(validationCallback);
     }
 
-    public void setAdapter(EasyRecyclerAdapter<ModelType> adapter) {
-        this.adapter = adapter;
-    }
-
     public void setDialogTitle(String dialogTitle) {
         this.dialogTitle = dialogTitle;
     }
@@ -231,11 +238,26 @@ public class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> ext
 
     private void selectInternally(int[] newSelection, boolean selectInAdapter) {
         int[] oldSelection = selection;
-        selection = newSelection;
+        ensureAndApplySelection(newSelection);
         if (selectInAdapter)
-            adapter.selectPositions(newSelection);
+            adapter.selectPositions(newSelection, true, false);
         updateTextAndValidate();
-        dispatchSelectionChangedEvents(oldSelection, newSelection);
+        dispatchSelectionChangedEvents(oldSelection, selection);
+    }
+
+    private void ensureAndApplySelection(int[] newSelection) {
+        List<Integer> positionsToSelect = new ArrayList<>();
+        for (int positionToSelect : newSelection) {
+            if (!adapter.positionExists(positionToSelect))
+                continue;
+            positionsToSelect.add(positionToSelect);
+        }
+        selection = new int[positionsToSelect.size()];
+        if (positionsToSelect.size() <= 0)
+            return;
+        for (int i = 0; i < positionsToSelect.size(); i++) {
+            selection[i] = positionsToSelect.get(i);
+        }
     }
 
     public interface SelectionChangedListener {

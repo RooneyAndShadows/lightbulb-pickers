@@ -18,6 +18,7 @@ import com.github.rooneyandshadows.lightbulb.pickers.R;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -47,7 +48,15 @@ public abstract class BaseDialogPickerView extends LinearLayout {
     }
 
     public BaseDialogPickerView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
+    }
+
+    public BaseDialogPickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public BaseDialogPickerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         setSaveEnabled(true);
         readBaseAttributes(context, attrs);
         readAttributes(context, attrs);

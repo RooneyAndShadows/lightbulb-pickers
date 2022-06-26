@@ -425,12 +425,27 @@ public class ChipsPickerView<ModelType extends EasyAdapterDataModel> extends Lin
 
     private void selectInternally(int[] newSelection, boolean selectInAdapter) {
         int[] oldSelection = selection;
-        selection = newSelection;
+        ensureAndApplySelection(newSelection);
         if (recyclerAdapter != null && selectInAdapter)
-            recyclerAdapter.selectPositions(newSelection);
+            recyclerAdapter.selectPositions(newSelection, true, false);
         setupChips();
         validate();
-        dispatchSelectionChangedEvents(oldSelection, newSelection);
+        dispatchSelectionChangedEvents(oldSelection, selection);
+    }
+
+    private void ensureAndApplySelection(int[] newSelection) {
+        List<Integer> positionsToSelect = new ArrayList<>();
+        for (int positionToSelect : newSelection) {
+            if (!recyclerAdapter.positionExists(positionToSelect))
+                continue;
+            positionsToSelect.add(positionToSelect);
+        }
+        selection = new int[positionsToSelect.size()];
+        if (positionsToSelect.size() <= 0)
+            return;
+        for (int i = 0; i < positionsToSelect.size(); i++) {
+            selection[i] = positionsToSelect.get(i);
+        }
     }
 
     private boolean compareValues(int[] v1, int[] v2) {
