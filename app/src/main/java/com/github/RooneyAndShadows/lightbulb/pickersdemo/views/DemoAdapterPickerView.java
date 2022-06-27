@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingAdapter;
@@ -54,6 +55,7 @@ public class DemoAdapterPickerView extends DialogAdapterPickerView<DemoModel> {
         setItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
+    @NonNull
     @Override
     protected EasyRecyclerAdapter<DemoModel> initializeAdapter() {
         if (selectionMode.equals(SelectionModes.SINGLE)) {

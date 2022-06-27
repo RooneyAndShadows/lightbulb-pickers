@@ -1,5 +1,6 @@
 package com.github.rooneyandshadows.lightbulb.pickers.dialog;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAd
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter;
 import com.github.rooneyandshadows.lightbulb.pickers.R;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +33,7 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
 public abstract class DialogAdapterPickerView<ModelType extends EasyAdapterDataModel> extends BaseDialogPickerView {
     private final ArrayList<ValidationCheck<ModelType>> validationCallbacks = new ArrayList<>();
     private final ArrayList<SelectionChangedListener> selectionChangedListeners = new ArrayList<>();
-    private final EasyRecyclerAdapter<ModelType> adapter;
+    private EasyRecyclerAdapter<ModelType> adapter;
     private ItemDecoration itemDecoration;
     private String dialogTitle;
     private String dialogMessage;
@@ -51,9 +54,9 @@ public abstract class DialogAdapterPickerView<ModelType extends EasyAdapterDataM
 
     public DialogAdapterPickerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        adapter = initializeAdapter();
     }
 
+    @NotNull
     protected abstract EasyRecyclerAdapter<ModelType> initializeAdapter();
 
     @Override
@@ -75,8 +78,8 @@ public abstract class DialogAdapterPickerView<ModelType extends EasyAdapterDataM
     @Override
     protected String getViewText() {
         String text = "";
-        if (adapter != null && selection != null)
-            text = adapter.getPositionStrings(selection);
+        if (selection != null)
+            text = getAdapter().getPositionStrings(selection);
         return text;
     }
 
@@ -128,6 +131,11 @@ public abstract class DialogAdapterPickerView<ModelType extends EasyAdapterDataM
         return (AdapterPickerDialog<ModelType>) pickerDialog;
     }
 
+    protected final EasyRecyclerAdapter<ModelType> getAdapter() {
+        if (adapter == null)
+            adapter = initializeAdapter();
+        return adapter;
+    }
 
     @Override
     protected void dispatchSaveInstanceState(SparseArray<Parcelable> container) {
@@ -144,7 +152,7 @@ public abstract class DialogAdapterPickerView<ModelType extends EasyAdapterDataM
         Parcelable superState = super.onSaveInstanceState();
         SavedState myState = new SavedState(superState);
         myState.selection = selection;
-        myState.adapterState = adapter.saveAdapterState();
+        myState.adapterState = getAdapter().saveAdapterState();
         return myState;
     }
 
@@ -152,7 +160,7 @@ public abstract class DialogAdapterPickerView<ModelType extends EasyAdapterDataM
     public void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         selection = savedState.selection;
-        adapter.restoreAdapterState(savedState.adapterState);
+        getAdapter().restoreAdapterState(savedState.adapterState);
         super.onRestoreInstanceState(savedState.getSuperState());
     }
 
@@ -176,14 +184,8 @@ public abstract class DialogAdapterPickerView<ModelType extends EasyAdapterDataM
         this.itemDecoration = itemDecoration;
     }
 
-    public EasyRecyclerAdapter<ModelType> getAdapter() {
-        return adapter;
-    }
-
     public List<ModelType> getSelectedItems() {
-        if (adapter == null)
-            return new ArrayList<>();
-        return adapter.getItems(selection);
+        return getAdapter().getItems(selection);
     }
 
     public void selectItemAt(int selection) {
@@ -200,28 +202,22 @@ public abstract class DialogAdapterPickerView<ModelType extends EasyAdapterDataM
     public void selectItem(ModelType item) {
         if (item == null)
             return;
-        if (adapter != null) {
-            int position = adapter.getPosition(item);
-            if (position != -1)
-                selectItemAt(position);
-        }
+        int position = getAdapter().getPosition(item);
+        if (position != -1)
+            selectItemAt(position);
     }
 
     public List<ModelType> getData() {
-        if (adapter == null)
-            return null;
-        return new ArrayList<>(adapter.getItems());
+        return new ArrayList<>(getAdapter().getItems());
     }
 
     public void setData(List<ModelType> data) {
-        if (adapter == null)
-            return;
-        adapter.setCollection(data);
+        getAdapter().setCollection(data);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void refresh() {
-        if (adapter != null)
-            adapter.notifyDataSetChanged();
+        getAdapter().notifyDataSetChanged();
         updateTextAndValidate();
     }
 
@@ -240,7 +236,7 @@ public abstract class DialogAdapterPickerView<ModelType extends EasyAdapterDataM
         int[] oldSelection = selection;
         ensureAndApplySelection(newSelection);
         if (selectInAdapter)
-            adapter.selectPositions(newSelection, true, false);
+            getAdapter().selectPositions(newSelection, true, false);
         updateTextAndValidate();
         dispatchSelectionChangedEvents(oldSelection, selection);
     }
@@ -248,7 +244,7 @@ public abstract class DialogAdapterPickerView<ModelType extends EasyAdapterDataM
     private void ensureAndApplySelection(int[] newSelection) {
         List<Integer> positionsToSelect = new ArrayList<>();
         for (int positionToSelect : newSelection) {
-            if (!adapter.positionExists(positionToSelect))
+            if (!getAdapter().positionExists(positionToSelect))
                 continue;
             positionsToSelect.add(positionToSelect);
         }
