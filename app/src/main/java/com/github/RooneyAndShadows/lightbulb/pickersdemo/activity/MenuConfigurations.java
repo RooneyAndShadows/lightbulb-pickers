@@ -73,6 +73,16 @@ public class MenuConfigurations {
                     Router.getInstance().getRouter().toDatePickerDemo(BaseApplicationRouter.NavigationCommands.NAVIGATE_TO);
                     slider.closeSlider();
                 })
+        )).addMenuItem(new PrimaryMenuItem(
+                -1,
+                ResourceUtils.getPhrase(activity, R.string.date_range_picker_demo_text),
+                null,
+                AppIconUtils.getIconWithAttributeColor(activity, DemoIconsUi.ICON_MENU_DATE_RANGE_PICKER, R.attr.colorOnBackground, R.dimen.ICON_SIZE_MENU),
+                1,
+                action((slider) -> {
+                    Router.getInstance().getRouter().toDateRangePickerDemo(BaseApplicationRouter.NavigationCommands.NAVIGATE_TO);
+                    slider.closeSlider();
+                })
         ));
         return configuration;
     }

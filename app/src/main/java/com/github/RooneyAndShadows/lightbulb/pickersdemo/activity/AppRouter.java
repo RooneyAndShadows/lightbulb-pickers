@@ -5,6 +5,7 @@ import com.github.rooneyandshadows.lightbulb.application.activity.routing.BaseAp
 import com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.adapter_picker.FragmentAdapterPickerDemo;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.color_picker.FragmentColorPickerDemo;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.date_picker.FragmentDatePickerDemo;
+import com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.date_range_picker.FragmentDateRangePickerDemo;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.icon_picker.FragmentIconPickerDemo;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.month_picker.FragmentMonthPickerDemo;
 
@@ -39,6 +40,11 @@ public class AppRouter extends BaseApplicationRouter {
 
     public void toDatePickerDemo(NavigationCommands command) {
         Screen screen = new Screens.DatePickerScreen();
+        navigate(command, screen);
+    }
+
+    public void toDateRangePickerDemo(NavigationCommands command) {
+        Screen screen = new Screens.DateRangePickerScreen();
         navigate(command, screen);
     }
 
@@ -83,6 +89,14 @@ public class AppRouter extends BaseApplicationRouter {
             @Override
             public Fragment getFragment() {
                 return FragmentDatePickerDemo.getNewInstance();
+            }
+        }
+
+        public static final class DateRangePickerScreen extends Screen {
+            @NonNull
+            @Override
+            public Fragment getFragment() {
+                return FragmentDateRangePickerDemo.getNewInstance();
             }
         }
     }

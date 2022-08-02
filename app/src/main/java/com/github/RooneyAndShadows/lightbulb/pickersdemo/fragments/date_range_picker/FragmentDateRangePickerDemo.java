@@ -10,11 +10,13 @@ import com.github.rooneyandshadows.lightbulb.application.activity.slidermenu.dra
 import com.github.rooneyandshadows.lightbulb.application.fragment.BaseFragment;
 import com.github.rooneyandshadows.lightbulb.application.fragment.cofiguration.BaseFragmentConfiguration;
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils;
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateRangePickerView;
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateTimePickerView;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.activity.MainActivity;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.activity.MenuConfigurations;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentDatePickerDemoBinding;
+import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentDateRangePickerDemoBinding;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.AppIconUtils;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIconsUi;
 
@@ -25,10 +27,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class FragmentDateRangePickerDemo extends BaseFragment {
     private VMDateRangePickerDemo viewModel;
-    private DialogDateTimePickerView pickerViewBoxed;
-    private DialogDateTimePickerView pickerViewOutlined;
-    private DialogDateTimePickerView pickerViewButton;
-    private DialogDateTimePickerView pickerViewImageButton;
+    private DialogDateRangePickerView pickerViewBoxed;
+    private DialogDateRangePickerView pickerViewOutlined;
+    private DialogDateRangePickerView pickerViewButton;
+    private DialogDateRangePickerView pickerViewImageButton;
 
     public static FragmentDateRangePickerDemo getNewInstance() {
         return new FragmentDateRangePickerDemo();
@@ -61,7 +63,7 @@ public class FragmentDateRangePickerDemo extends BaseFragment {
 
     @Override
     public View createView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentDatePickerDemoBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_date_picker_demo, container, false);
+        FragmentDateRangePickerDemoBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_date_range_picker_demo, container, false);
         binding.setModel(viewModel);
         return binding.getRoot();
     }

@@ -86,7 +86,7 @@
                         app:PV_HintText="@string/adapter_picker_pick_item_text"
                         app:PV_Required="true"
                         app:PV_RequiredText="@string/icon_picker_required_text"
-                        app:datePickerSelection="@={model.buttonSelection}">
+                        app:dateRangePickerSelection="@={model.buttonSelection}">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
                             android:layout_width="match_parent"
@@ -138,7 +138,7 @@
                         app:PV_HintText="@string/adapter_picker_pick_item_text"
                         app:PV_Required="true"
                         app:PV_RequiredText="@string/icon_picker_required_text"
-                        app:datePickerSelection="@={model.buttonSelection}">
+                        app:dateRangePickerSelection="@={model.buttonSelection}">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
                             android:layout_width="match_parent"
@@ -190,7 +190,7 @@
                         app:PV_HintText="@string/adapter_picker_pick_item_text"
                         app:PV_Required="true"
                         app:PV_RequiredText="@string/icon_picker_required_text"
-                        app:datePickerSelection="@={model.buttonSelection}">
+                        app:dateRangePickerSelection="@={model.buttonSelection}">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ButtonTriggerView
                             android:layout_width="match_parent"
@@ -243,7 +243,7 @@
                         app:PV_HintText="@string/adapter_picker_pick_item_text"
                         app:PV_Required="true"
                         app:PV_RequiredText="@string/icon_picker_required_text"
-                        app:datePickerSelection="@={model.buttonSelection}">
+                        app:dateRangePickerSelection="@={model.buttonSelection}">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ImageButtonTriggerView
                             android:layout_width="match_parent"
