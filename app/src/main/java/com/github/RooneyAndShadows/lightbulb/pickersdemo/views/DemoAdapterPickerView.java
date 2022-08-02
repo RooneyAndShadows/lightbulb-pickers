@@ -166,7 +166,7 @@ public class DemoAdapterPickerView extends DialogAdapterPickerView<DemoModel> {
     private void setupIcon() {
         int[] selectedPositions = getAdapter().getPositions(getSelectedItems());
         if (selectedPositions.length <= 0) {
-            Drawable icon = AppIconUtils.getIconWithAttributeColor(getContext(), DemoIconsUi.ICON_PICKER_INDICATOR, R.attr.colorOnSurface, R.dimen.ICON_SIZE_MEDIUM);
+            Drawable icon = AppIconUtils.getIconWithAttributeColor(getContext(), DemoIconsUi.ICON_ADAPTER_PICKER_INDICATOR, R.attr.colorOnSurface, R.dimen.ICON_SIZE_MEDIUM);
             if (getTriggerView() instanceof InputTriggerView)
                 ((InputTriggerView) getTriggerView()).setStartIconUseAlpha(true);
             setPickerIcon(icon);

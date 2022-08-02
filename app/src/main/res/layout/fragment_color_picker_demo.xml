@@ -81,11 +81,11 @@
                         android:layout_height="wrap_content"
                         app:CPV_DialogMessage="@string/color_picker_dialog_subtitle_text"
                         app:CPV_DialogTitle="@string/color_picker_dialog_title_text"
-                        app:PV_DialogAnimation="no_animation"
+                        app:PV_DialogAnimation="transition_from_left_to_right"
                         app:PV_DialogButtonNegText="@string/picker_cancel_text"
                         app:PV_DialogButtonPosText="@string/picker_ok_text"
                         app:PV_DialogTag="DEMO_PICKER_TAG_BOXED"
-                        app:PV_HintText="@string/adapter_picker_pick_item_text"
+                        app:PV_HintText="@string/color_picker_pick_item_text"
                         app:PV_Required="true"
                         app:PV_RequiredText="@string/color_picker_required_text"
                         app:colorPickerSelection="@={model.boxedSelection}">
@@ -135,11 +135,11 @@
                         android:layout_height="wrap_content"
                         app:CPV_DialogMessage="@string/color_picker_dialog_subtitle_text"
                         app:CPV_DialogTitle="@string/color_picker_dialog_title_text"
-                        app:PV_DialogAnimation="no_animation"
+                        app:PV_DialogAnimation="transition_from_left_to_right"
                         app:PV_DialogButtonNegText="@string/picker_cancel_text"
                         app:PV_DialogButtonPosText="@string/picker_ok_text"
                         app:PV_DialogTag="DEMO_PICKER_TAG_OUTLINED"
-                        app:PV_HintText="@string/adapter_picker_pick_item_text"
+                        app:PV_HintText="@string/color_picker_pick_item_text"
                         app:PV_Required="true"
                         app:PV_RequiredText="@string/color_picker_required_text"
                         app:colorPickerSelection="@={model.outlinedSelection}">
@@ -189,11 +189,11 @@
                         android:layout_height="wrap_content"
                         app:CPV_DialogMessage="@string/color_picker_dialog_subtitle_text"
                         app:CPV_DialogTitle="@string/color_picker_dialog_title_text"
-                        app:PV_DialogAnimation="no_animation"
+                        app:PV_DialogAnimation="transition_from_left_to_right"
                         app:PV_DialogButtonNegText="@string/picker_cancel_text"
                         app:PV_DialogButtonPosText="@string/picker_ok_text"
                         app:PV_DialogTag="DEMO_PICKER_TAG_BUTTON"
-                        app:PV_HintText="@string/adapter_picker_pick_item_text"
+                        app:PV_HintText="@string/color_picker_pick_item_text"
                         app:PV_Required="true"
                         app:PV_RequiredText="@string/color_picker_required_text"
                         app:colorPickerSelection="@={model.buttonSelection}">
@@ -203,7 +203,7 @@
                             android:layout_height="match_parent" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogColorPickerView>
                 </androidx.appcompat.widget.LinearLayoutCompat>
-                
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -244,11 +244,11 @@
                         android:layout_gravity="center"
                         app:CPV_DialogMessage="@string/color_picker_dialog_subtitle_text"
                         app:CPV_DialogTitle="@string/color_picker_dialog_title_text"
-                        app:PV_DialogAnimation="no_animation"
+                        app:PV_DialogAnimation="transition_from_left_to_right"
                         app:PV_DialogButtonNegText="@string/picker_cancel_text"
                         app:PV_DialogButtonPosText="@string/picker_ok_text"
                         app:PV_DialogTag="DEMO_PICKER_TAG_IMAGE_BUTTON"
-                        app:PV_HintText="@string/adapter_picker_pick_item_text"
+                        app:PV_HintText="@string/color_picker_pick_item_text"
                         app:PV_Required="true"
                         app:PV_RequiredText="@string/color_picker_required_text"
                         app:colorPickerSelection="@={model.imageButtonSelection}">

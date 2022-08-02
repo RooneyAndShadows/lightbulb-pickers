@@ -53,6 +53,26 @@ public class MenuConfigurations {
                     Router.getInstance().getRouter().toIconPickerDemo(BaseApplicationRouter.NavigationCommands.NAVIGATE_TO);
                     slider.closeSlider();
                 })
+        )).addMenuItem(new PrimaryMenuItem(
+                -1,
+                ResourceUtils.getPhrase(activity, R.string.month_picker_demo_text),
+                null,
+                AppIconUtils.getIconWithAttributeColor(activity, DemoIconsUi.ICON_MENU_MONTH_PICKER, R.attr.colorOnBackground, R.dimen.ICON_SIZE_MENU),
+                1,
+                action((slider) -> {
+                    Router.getInstance().getRouter().toMonthPickerDemo(BaseApplicationRouter.NavigationCommands.NAVIGATE_TO);
+                    slider.closeSlider();
+                })
+        )).addMenuItem(new PrimaryMenuItem(
+                -1,
+                ResourceUtils.getPhrase(activity, R.string.date_picker_demo_text),
+                null,
+                AppIconUtils.getIconWithAttributeColor(activity, DemoIconsUi.ICON_MENU_DATE_PICKER, R.attr.colorOnBackground, R.dimen.ICON_SIZE_MENU),
+                1,
+                action((slider) -> {
+                    Router.getInstance().getRouter().toDatePickerDemo(BaseApplicationRouter.NavigationCommands.NAVIGATE_TO);
+                    slider.closeSlider();
+                })
         ));
         return configuration;
     }

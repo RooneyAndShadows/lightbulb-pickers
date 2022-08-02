@@ -17,20 +17,24 @@ import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPicke
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.BindingAdapter;
+import androidx.databinding.InverseBindingAdapter;
+import androidx.databinding.InverseBindingListener;
 
 import static com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.*;
 
 
-@SuppressWarnings({"unused", "UnusedReturnValue"})
+@SuppressWarnings({"unused", "UnusedReturnValue", "BooleanMethodIsAlwaysInverted"})
 public class DialogDateRangePickerView extends BaseDialogPickerView {
     private String datePickerFormat;
     private String datePickerFromText;
     private String datePickerToText;
     private OffsetDateTime[] selection;
-    private SelectionChangedListener internalSelectionChangedListeners;
+    private SelectionChangedListener dataBindingListener;
     protected final ArrayList<ValidationCheck> validationCallbacks = new ArrayList<>();
     private final ArrayList<SelectionChangedListener> selectionChangedListeners = new ArrayList<>();
 
@@ -71,6 +75,25 @@ public class DialogDateRangePickerView extends BaseDialogPickerView {
         }
         if (getDialog() == null) selectInternally(dateFrom, dateTo);
         else getDialog().setSelection(dateFrom, dateTo);
+    }
+
+    @BindingAdapter("dateRangePickerSelection")
+    public static void updatePickerSelectionBinding(DialogDateRangePickerView view, OffsetDateTime[] selectedRange) {
+        view.setPickerRange(selectedRange[0], selectedRange[1]);
+    }
+
+    @InverseBindingAdapter(attribute = "dateRangePickerSelection", event = "dateRangeSelectionChanged")
+    public static OffsetDateTime[] getText(DialogDateRangePickerView view) {
+        return view.getPickerRange();
+    }
+
+    @BindingAdapter("dateRangeSelectionChanged")
+    public static void setListeners(DialogDateRangePickerView view, final InverseBindingListener attrChange) {
+        view.dataBindingListener = (view1, newValue, oldValue) -> {
+            if (view1.compareValues(newValue, oldValue))
+                return;
+            attrChange.onChange();
+        };
     }
 
     public OffsetDateTime[] getPickerRange() {
@@ -180,15 +203,23 @@ public class DialogDateRangePickerView extends BaseDialogPickerView {
         super.onRestoreInstanceState(savedState.getSuperState());
     }
 
-    private void selectInternally(OffsetDateTime dateFrom, OffsetDateTime dateTo) {
-        selection = new OffsetDateTime[]{dateFrom, dateTo};
-        updateTextAndValidate();
-        dispatchRangeSelectionChangedEvent();
+    private boolean compareValues(OffsetDateTime[] v1, OffsetDateTime[] v2) {
+        return Arrays.equals(v1, v2);
     }
 
-    private void dispatchRangeSelectionChangedEvent() {
+    private void selectInternally(OffsetDateTime dateFrom, OffsetDateTime dateTo) {
+        OffsetDateTime[] oldSelection = new OffsetDateTime[]{selection[0], selection[1]};
+        OffsetDateTime[] newSelection = new OffsetDateTime[]{dateFrom, dateTo};
+        selection = newSelection;
+        updateTextAndValidate();
+        dispatchRangeSelectionChangedEvent(oldSelection, newSelection);
+    }
+
+    private void dispatchRangeSelectionChangedEvent(OffsetDateTime[] oldValue, OffsetDateTime[] newValue) {
         for (SelectionChangedListener publicChangedListener : selectionChangedListeners)
-            publicChangedListener.onSelectionChanged(this, selection);
+            publicChangedListener.onSelectionChanged(this, oldValue, newValue);
+        if (dataBindingListener != null)
+            dataBindingListener.onSelectionChanged(DialogDateRangePickerView.this, oldValue, newValue);
     }
 
     private static class SavedState extends View.BaseSavedState {
@@ -225,7 +256,7 @@ public class DialogDateRangePickerView extends BaseDialogPickerView {
     }
 
     public interface SelectionChangedListener {
-        void onSelectionChanged(DialogDateRangePickerView view, OffsetDateTime[] newRange);
+        void onSelectionChanged(DialogDateRangePickerView view, OffsetDateTime[] oldRange, OffsetDateTime[] newRange);
     }
 
     public interface ValidationCheck {
