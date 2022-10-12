@@ -42,7 +42,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.github.rooneyandshadows:java-commons:1.0.6'
     implementation 'com.github.rooneyandshadows:lightbulb-commons:1.0.10'
-    implementation 'com.github.rooneyandshadows:lightbulb-application:1.0.50'
+    implementation 'com.github.rooneyandshadows:lightbulb-application:1.0.39'
     implementation 'com.github.rooneyandshadows:lightbulb-recycleradapters:1.0.14'
+    implementation 'com.github.rooneyandshadows:lightbulb-dialogs:1.0.12'
     implementation project(":lightbulb-pickers")
 }

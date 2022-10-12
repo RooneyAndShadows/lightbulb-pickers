@@ -23,27 +23,27 @@ public class AppRouter extends BaseApplicationRouter {
         navigate(command, screen);
     }
 
-    public void toColorPickerDemo(NavigationCommands command) {
+    public void toColorPickerDemo(BaseApplicationRouter.NavigationCommands command) {
         Screen screen = new Screens.ColorPickerScreen();
         navigate(command, screen);
     }
 
-    public void toIconPickerDemo(NavigationCommands command) {
+    public void toIconPickerDemo(BaseApplicationRouter.NavigationCommands command) {
         Screen screen = new Screens.IconPickerScreen();
         navigate(command, screen);
     }
 
-    public void toMonthPickerDemo(NavigationCommands command) {
+    public void toMonthPickerDemo(BaseApplicationRouter.NavigationCommands command) {
         Screen screen = new Screens.MonthPickerScreen();
         navigate(command, screen);
     }
 
-    public void toDatePickerDemo(NavigationCommands command) {
+    public void toDatePickerDemo(BaseApplicationRouter.NavigationCommands command) {
         Screen screen = new Screens.DatePickerScreen();
         navigate(command, screen);
     }
 
-    public void toDateRangePickerDemo(NavigationCommands command) {
+    public void toDateRangePickerDemo(BaseApplicationRouter.NavigationCommands command) {
         Screen screen = new Screens.DateRangePickerScreen();
         navigate(command, screen);
     }

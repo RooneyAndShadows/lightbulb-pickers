@@ -1,19 +1,16 @@
 package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.color_picker;
 
 import com.github.rooneyandshadows.lightbulb.commons.models.BaseObservableViewModel;
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter;
-import com.github.rooneyandshadows.lightbulb.pickersdemo.models.DemoModel;
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color.AppColorUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 
-import static com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.*;
+import static com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.ColorModel;
 
 public class VMColorPickerDemo extends BaseObservableViewModel {
     private String boxedSelection;
