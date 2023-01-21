@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="picker_default_error_text" type="string">Error</item>
+    <item name="picker_default_positive_button_text" type="string">OK</item>
+    <item name="picker_default_negative_button_text" type="string">CANCEL</item>
+    <item name="picker_default_dialog_tag_text" type="string">DEFAULT_PICKER_DIALOG_TAG</item>
+    <!---->
     <item name="DP_InputLayoutTag" type="string">DPInputLayout</item>
     <item name="DP_InputEditTextTag" type="string">DPEditText</item>
     <item name="DP_ButtonTag" type="string">DPButton</item>

@@ -36,8 +36,8 @@ android {
 }
 
 dependencies {
-    implementation "androidx.core:core-ktx:$versions.ktx.core"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.6'
+    implementation "androidx.core:core-ktx:$versions.ktx.core"
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
