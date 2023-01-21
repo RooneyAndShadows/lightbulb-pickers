@@ -5,11 +5,6 @@
     <item name="picker_default_negative_button_text" type="string">CANCEL</item>
     <item name="picker_default_dialog_tag_text" type="string">DEFAULT_PICKER_DIALOG_TAG</item>
     <!---->
-    <item name="DP_InputLayoutTag" type="string">DPInputLayout</item>
-    <item name="DP_InputEditTextTag" type="string">DPEditText</item>
-    <item name="DP_ButtonTag" type="string">DPButton</item>
-    <item name="DP_ImageButtonTag" type="string">DPImageButton</item>
-    <item name="DP_ErrorTextTag" type="string">DPErrorText</item>
     <item name="CP_GroupTag" type="string">CPGroup</item>
     <item name="CP_ChipItemRemoveTag" type="string">CPChipButtonRemoveTag</item>
     <item name="CP_ChipItemTextTag" type="string">CPChipTextTag</item>

@@ -4,22 +4,22 @@
     tools:parentTag="android.widget.LinearLayout">
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/picker_view_input_layout_view"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tag="@string/DP_InputLayoutTag"
         app:boxStrokeWidth="1dp"
         app:errorTextAppearance="@style/PickerViewErrorTextAppearance"
         app:hintTextAppearance="@style/PickerViewHintTextAppearance">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/picker_view_input_edit_text_view"
             style="@style/PickerViewEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="false"
             android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:tag="@string/DP_InputEditTextTag" />
+            android:focusableInTouchMode="false" />
 
     </com.google.android.material.textfield.TextInputLayout>
 </merge>

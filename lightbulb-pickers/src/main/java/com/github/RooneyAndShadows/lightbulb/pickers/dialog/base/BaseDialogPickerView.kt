@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogAnimationTypes
+import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogAnimationTypes.*
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogButtonConfiguration
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel
@@ -32,25 +33,12 @@ abstract class BaseDialogPickerView<DialogType : BasePickerDialogFragment<out Ea
     private val triggerAttachedCallback: MutableList<TriggerAttachedCallback<DialogType>> = mutableListOf()
     private val isPickerDialogShowing: Boolean
         get() = pickerDialog.isDialogShown
+    val text: String
+        get() = triggerView?.triggerText ?: ""
     var triggerView: DialogPickerTriggerLayout? = null
         set(value) {
             field = value
-            if (field == null) removeAllViews()
-            if (triggerView !is DialogPickerTriggerLayout) {
-                Log.w(BaseDialogPickerView::class.java.name,
-                    "Trigger view must implement com.rands.lightbulb.pickers.dialog.base.TriggerView")
-                return
-            }
-            removeAllViews()
-            addView(triggerView as View)
-            triggerView?.apply {
-                setEnabled(this@BaseDialogPickerView.isEnabled)
-                attachTo(this@BaseDialogPickerView)
-                triggerAttachedCallback.forEach {
-                    it.onAttached(this, this@BaseDialogPickerView)
-                }
-            }
-
+            addViewInternally(field as View)
         }
     var dialogTag: String = ""
         set(value) {
@@ -67,10 +55,6 @@ abstract class BaseDialogPickerView<DialogType : BasePickerDialogFragment<out Ea
             field = value
             pickerDialog.dialogNegativeButton = generateButtonConfig(field)
         }
-
-    val text: String
-        get() = triggerView?.triggerText ?: ""
-
     var errorEnabled = false
         set(value) {
             field = value
@@ -97,7 +81,7 @@ abstract class BaseDialogPickerView<DialogType : BasePickerDialogFragment<out Ea
             field = value
             triggerView!!.setTriggerIcon(value, null)
         }
-    var pickerDialogAnimationType: DialogAnimationTypes = DialogAnimationTypes.NO_ANIMATION
+    var pickerDialogAnimationType: DialogAnimationTypes = NO_ANIMATION
         set(value) {
             field = value
             pickerDialog.dialogAnimationType = field
@@ -113,9 +97,10 @@ abstract class BaseDialogPickerView<DialogType : BasePickerDialogFragment<out Ea
             field = value
             triggerView!!.setTriggerErrorText(errorText)
         }
+
     abstract fun validate(): Boolean
-    protected abstract fun initializeDialog(): DialogType
     protected abstract val viewText: String
+    protected abstract fun initializeDialog(): DialogType
     protected abstract fun readAttributes(context: Context, attrs: AttributeSet?)
 
     init {
@@ -134,20 +119,7 @@ abstract class BaseDialogPickerView<DialogType : BasePickerDialogFragment<out Ea
 
     @Override
     override fun addView(child: View, index: Int, params: ViewGroup.LayoutParams) {
-        if (child !is DialogPickerTriggerLayout) {
-            Log.w(BaseDialogPickerView::class.java.name,
-                "Picker view child is ignored. All child views must implement com.rands.lightbulb.pickers.dialog.base.TriggerView")
-            return
-        }
-        if (childCount > 0) {
-            Log.w(BaseDialogPickerView::class.java.name, "Picker can have only one trigger view.")
-            return
-        }
-        super.addView(child, index, params)
-        triggerView = child
-        triggerView!!.setEnabled(isEnabled)
-        triggerView!!.attachTo(this)
-        for (callback in triggerAttachedCallback) callback.onAttached(child, this)
+        addViewInternally(child)
     }
 
     fun addOnTriggerAttachedListener(callback: TriggerAttachedCallback<DialogType>) {
@@ -166,6 +138,24 @@ abstract class BaseDialogPickerView<DialogType : BasePickerDialogFragment<out Ea
     fun setPickerIcon(icon: Drawable?, color: Int) {
         pickerIcon = icon
         triggerView!!.setTriggerIcon(icon, color)
+    }
+
+    private fun addViewInternally(child: View?) {
+        if (child == null) removeAllViews()
+        if (triggerView !is DialogPickerTriggerLayout) {
+            Log.w(BaseDialogPickerView::class.java.name,
+                "Picker view child is ignored. All child views must implement com.rands.lightbulb.pickers.dialog.base.TriggerView")
+            return
+        }
+        removeAllViews()
+        super.addView(child)
+        triggerView?.apply {
+            setEnabled(this@BaseDialogPickerView.isEnabled)
+            attachTo(this@BaseDialogPickerView)
+            triggerAttachedCallback.forEach {
+                it.onAttached(this, this@BaseDialogPickerView)
+            }
+        }
     }
 
     private fun generateButtonConfig(buttonText: String?): DialogButtonConfiguration? {

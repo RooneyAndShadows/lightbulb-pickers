@@ -1,11 +1,11 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.google.android.material.button.MaterialButton
-        style="@style/PickerViewButton"
-        android:tag="@string/DP_ButtonTag" />
+        android:id="@+id/picker_view_button"
+        style="@style/PickerViewButton" />
 
     <TextView
-        style="@style/PickerViewErrorTextView"
-        android:tag="@string/DP_ErrorTextTag" />
+        android:id="@+id/picker_view_error_text_view"
+        style="@style/PickerViewErrorTextView" />
 
 </merge>

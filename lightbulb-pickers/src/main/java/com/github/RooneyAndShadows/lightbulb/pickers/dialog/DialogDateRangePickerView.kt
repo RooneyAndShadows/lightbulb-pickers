@@ -220,7 +220,7 @@ class DialogDateRangePickerView(context: Context, attrs: AttributeSet?) : BaseDi
         fun onSelectionChanged(
             view: DialogDateRangePickerView?,
             oldRange: Array<OffsetDateTime?>?,
-            newRange: Array<OffsetDateTime?>?
+            newRange: Array<OffsetDateTime?>?,
         )
     }
 

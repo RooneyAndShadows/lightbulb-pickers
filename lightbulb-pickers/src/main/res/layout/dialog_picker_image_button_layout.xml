@@ -1,12 +1,12 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.appcompat.widget.AppCompatImageButton xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/picker_view_image_button"
         style="@style/PickerViewIconButton"
-        android:tag="@string/DP_ImageButtonTag"
         tools:layout_height="40dp"
         tools:layout_width="40dp" />
 
     <TextView
-        style="@style/PickerViewErrorTextView"
-        android:tag="@string/DP_ErrorTextTag" />
+        android:id="@+id/picker_view_error_text_view"
+        style="@style/PickerViewErrorTextView" />
 </merge>
