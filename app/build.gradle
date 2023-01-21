@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -35,14 +36,15 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    implementation "androidx.core:core-ktx:$versions.ktx.core"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.6'
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'com.github.rooneyandshadows:java-commons:1.0.6'
     implementation 'com.github.rooneyandshadows:lightbulb-commons:1.0.10'
-    implementation 'com.github.rooneyandshadows:lightbulb-application:1.0.39'
+    implementation 'com.github.rooneyandshadows:lightbulb-application:1.2.8'
     implementation 'com.github.rooneyandshadows:lightbulb-recycleradapters:1.0.14'
     implementation 'com.github.rooneyandshadows:lightbulb-dialogs:1.0.12'
     implementation project(":lightbulb-pickers")
