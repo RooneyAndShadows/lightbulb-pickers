@@ -39,6 +39,13 @@
             <enum name="transition_from_top_to_bottom" value="4" />
             <enum name="transition_from_bottom_to_bottom" value="5" />
         </attr>
+        <attr name="PV_DialogTitle" format="string" />
+        <attr name="PV_DialogMessage" format="string" />
+        <attr name="PV_DialogType" format="enum">
+            <enum name="NORMAL" value="1" />
+            <enum name="FULLSCREEN" value="2" />
+            <enum name="BOTTOM_SHEET" value="3" />
+        </attr>
         <attr name="PV_DialogButtonTextColor" format="color" />
         <attr name="PV_DialogButtonBorderRadius" format="integer" />
         <attr name="PV_ValidationEnabled" format="boolean" />
@@ -50,26 +57,13 @@
         <attr name="PV_ErrorText" format="string" />
     </declare-styleable>
 
-    <declare-styleable name="DialogAdapterPickerView">
-        <attr name="APV_DialogTitle" format="string" />
-        <attr name="APV_DialogMessage" format="string" />
-        <attr name="APV_DialogMode" format="enum">
-            <enum name="NORMAL" value="1" />
-            <enum name="FULLSCREEN" value="2" />
-            <enum name="BOTTOM_SHEET" value="3" />
-        </attr>
-    </declare-styleable>
+    <declare-styleable name="DialogAdapterPickerView" />
 
     <declare-styleable name="DialogIconPickerView">
-        <attr name="IPV_DialogTitle" format="string" />
-        <attr name="IPV_DialogMessage" format="string" />
         <attr name="IPV_SelectedIconSize" format="dimension" />
     </declare-styleable>
 
-    <declare-styleable name="DialogColorPickerView">
-        <attr name="CPV_DialogTitle" format="string" />
-        <attr name="CPV_DialogMessage" format="string" />
-    </declare-styleable>
+    <declare-styleable name="DialogColorPickerView" />
 
     <declare-styleable name="DialogDatePickerView">
         <attr name="DPV_DateFormat" format="string" />
