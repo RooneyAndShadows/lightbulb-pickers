@@ -8,6 +8,7 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.View
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView.*
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
@@ -44,7 +45,7 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
         set(data) {
             adapter.setCollection(data)
         }
-    var selection: IntArray?
+    override var selection: IntArray?
         set(value) {
             (pickerDialog as AdapterPickerDialog<ItemType>).setSelection(value)
         }
@@ -53,8 +54,6 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
         get() {
             return adapter.getItems(selection)
         }
-    val hasSelection: Boolean
-        get() = pickerDialog.hasSelection()
     override val viewText: String
         get() {
             return selection?.let {
@@ -63,7 +62,7 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
         }
 
     @Override
-    abstract override fun initializeDialog(): AdapterPickerDialog<ItemType>
+    abstract override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray?>
 
     @Suppress("UNCHECKED_CAST")
     @Override
@@ -150,6 +149,16 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     override fun onRestoreInstanceState(state: Parcelable) {
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
+    }
+
+    fun selectItemAt(position: Int) {
+        selection = intArrayOf(position)
+    }
+
+    fun selectItem(item: ItemType?) {
+        if (item == null) return
+        val position = adapter.getPosition(item)
+        if (position != -1) selectItemAt(position)
     }
 
     fun addSelectionChangedListener(listener: SelectionChangedListener) {

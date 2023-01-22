@@ -2,7 +2,6 @@ package com.github.rooneyandshadows.lightbulb.pickers.dialog
 
 import android.content.Context
 import android.graphics.Color
-import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import android.os.Parcelable.Creator
@@ -11,24 +10,20 @@ import android.util.SparseArray
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
+import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.java.commons.string.StringUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.ColorModel
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.buildDialog
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withNegativeButton
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withOnCancelListener
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withPositiveButton
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialogBuilder.buildDialog
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogPickerTriggerLayout
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel
 import java.util.*
 
-@Suppress("RedundantOverride")
+@Suppress("RedundantOverride", "UnnecessaryVariable")
 class DialogColorPickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -53,6 +48,7 @@ class DialogColorPickerView @JvmOverloads constructor(
             }
         })
     }
+
     @Override
     override fun readAttributes(context: Context, attrs: AttributeSet?) {
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogColorPickerView, 0, 0)
@@ -63,20 +59,8 @@ class DialogColorPickerView @JvmOverloads constructor(
         }
     }
 
-    @Override
-    override fun initializeDialog(): ColorPickerDialog? {
-        val dialogBuilder = ColorPickerDialogBuilder(manager, dialogTag, adapter)
-        return dialogBuilder
-            .withSelection(selection!!)
-            .withDialogType(pickerDialogType)
-            .withAnimations(pickerDialogAnimationType)
-            .withCancelOnClickOutsude(pickerDialogCancelable)
-            .withMessage(dialogMessage)
-            .withTitle(dialogTitle)
-            .withPositiveButton(DialogButtonConfiguration(pickerDialogPositiveButtonText)) { view, dialog -> updateTextAndValidate() }
-            .withNegativeButton(DialogButtonConfiguration(pickerDialogNegativeButtonText)) { view, dialog -> updateTextAndValidate() }
-            .withOnCancelListener { dialogFragment -> updateTextAndValidate() }
-            .withSelectionCallback { oldValue, newValue -> selectInternally(newValue, false) }
+    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray?> {
+        return ColorPickerDialogBuilder(null, fragmentManager, pickerDialogTag)
             .buildDialog()
     }
 
@@ -91,7 +75,7 @@ class DialogColorPickerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun onSaveInstanceState(): Parcelable? {
+    override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val myState = SavedState(superState)
         return myState
@@ -118,11 +102,8 @@ class DialogColorPickerView @JvmOverloads constructor(
     }
 
     private class SavedState : BaseSavedState {
-
         constructor(superState: Parcelable?) : super(superState)
-
-        constructor(parcel: Parcel) : super(parcel) {
-        }
+        constructor(parcel: Parcel) : super(parcel)
 
         @Override
         override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -150,8 +131,8 @@ class DialogColorPickerView @JvmOverloads constructor(
         @JvmStatic
         @InverseBindingAdapter(attribute = "colorPickerSelection", event = "colorPickerSelectionChanged")
         fun getSelectedValue(view: DialogColorPickerView): String? {
-            return if (view.hasSelection()) {
-                view.selectedItems[0].getColorExternalName()
+            return if (view.hasSelection) {
+                view.selectedItems[0].externalName
             } else null
         }
 
@@ -159,12 +140,12 @@ class DialogColorPickerView @JvmOverloads constructor(
         @BindingAdapter(value = ["colorPickerSelection"])
         fun setPickerSelection(view: DialogColorPickerView, newExternalName: String) {
             if (StringUtils.isNullOrEmptyString(newExternalName)) return
-            if (view.hasSelection()) {
+            if (view.hasSelection) {
                 val currentSelection: ColorModel = view.selectedItems[0]
-                if (currentSelection.getColorExternalName().equals(newExternalName)) return
+                if (currentSelection.externalName == newExternalName) return
             }
-            for (selectableTransactionTypeModel in view.data!!) if (newExternalName == selectableTransactionTypeModel.getColorExternalName()) {
-                view.selectItem(selectableTransactionTypeModel)
+            for (colorModel in view.data) if (newExternalName == colorModel.externalName) {
+                view.selectItem(colorModel)
                 break
             }
         }
@@ -172,8 +153,12 @@ class DialogColorPickerView @JvmOverloads constructor(
         @JvmStatic
         @BindingAdapter(value = ["colorPickerSelectionChanged"], requireAll = false)
         fun bindPickerEvent(view: DialogColorPickerView, bindingListener: InverseBindingListener) {
-            if (view.hasSelection()) bindingListener.onChange()
-            view.addSelectionChangedListener(SelectionChangedListener { newPositions: IntArray?, oldPositions: IntArray? -> bindingListener.onChange() })
+            if (view.hasSelection) bindingListener.onChange()
+            view.addSelectionChangedListener(object : SelectionChangedListener {
+                override fun execute(newPositions: IntArray?, oldPositions: IntArray?) {
+                    bindingListener.onChange()
+                }
+            })
         }
     }
 }

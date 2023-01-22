@@ -20,7 +20,7 @@ import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogAnimati
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogAnimationTypes.NO_ANIMATION
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogButtonConfiguration
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes
-import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes.*
+import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes.NORMAL
 import com.github.rooneyandshadows.lightbulb.pickers.R
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
@@ -35,7 +35,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     private val isPickerDialogShowing: Boolean
         get() = pickerDialog.isDialogShown
     protected val pickerDialog: BasePickerDialogFragment<SelectionType> by lazy {
-        val dialog = initializeDialog()
+        val dialog = initializeDialog(fragmentManager)
         onDialogInitialized(dialog)
         return@lazy dialog
     }
@@ -122,26 +122,26 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             field = value
             triggerView!!.setTriggerErrorText(errorText)
         }
+    val hasSelection: Boolean
+        get() = pickerDialog.hasSelection()
+    open var selection: SelectionType?
+        set(value) {
+            pickerDialog.setSelection(value)
+        }
+        get() = pickerDialog.getSelection()
 
     abstract fun validate(): Boolean
     protected abstract val viewText: String
-    protected abstract fun initializeDialog(): BasePickerDialogFragment<SelectionType>
+    protected abstract fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<SelectionType>
     protected abstract fun readAttributes(context: Context, attrs: AttributeSet?)
     protected open fun onDialogInitialized(dialog: BasePickerDialogFragment<SelectionType>) {
-        dialog.apply {
-            dialogTitle = pickerDialogTitle
-            dialogMessage = pickerDialogMessage
-            dialogType = pickerDialogType
-            dialogAnimationType = pickerDialogAnimationType
-            isCancelable = pickerDialogCancelable
-        }
     }
 
     init {
         isSaveEnabled = true
-        readAttrs(context, attrs)
         if (!isInEditMode)
             fragmentManager = (context as FragmentActivity).supportFragmentManager
+        readAttrs(context, attrs)
         orientation = VERTICAL
     }
 
