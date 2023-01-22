@@ -1,42 +1,113 @@
 package com.github.rooneyandshadows.lightbulb.pickers.dialog
 
 import android.content.Context
+import android.content.res.TypedArray
+import android.os.Parcelable
 import android.util.AttributeSet
+import android.util.SparseArray
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.DialogButtonConfiguration
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment.*
+import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogButtonConfiguration
+import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes
+import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes.*
+import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogButtonClickListener
+import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogCancelListener
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialogBuilder
+import com.github.rooneyandshadows.lightbulb.pickers.R
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter
 import java.util.*
 
-abstract class DialogAdapterPickerView<ModelType : EasyAdapterDataModel?>(
-    context: Context?,
-    attrs: AttributeSet?,
-    defStyleAttr: Int,
-    defStyleRes: Int
-) : BaseDialogPickerView(context, attrs, defStyleAttr, defStyleRes) {
-    private val validationCallbacks = ArrayList<ValidationCheck<ModelType>>()
+@Suppress("UNCHECKED_CAST")
+abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0,
+) : BaseDialogPickerView<IntArray?>(context, attrs, defStyleAttr, defStyleRes) {
+    private val validationCallbacks = ArrayList<ValidationCheck<ItemType>>()
     private val selectionChangedListeners = ArrayList<SelectionChangedListener>()
-    private var adapter: EasyRecyclerAdapter<ModelType>? = null
     private var itemDecoration: RecyclerView.ItemDecoration? = null
-    private var dialogTitle: String? = null
-    private var dialogMessage: String? = null
-    private var pickerDialogType: BaseDialogFragment.DialogTypes? = null
-    private var selection: IntArray?
+    private val adapter: EasyRecyclerAdapter<ItemType>
+        get() {
+            val dialog = (pickerDialog as AdapterPickerDialog<ItemType>)
+            return dialog.adapter
+        }
+    var data: List<ItemType>
+        get() {
+            return adapter.getItems()
+        }
+        set(data) {
+            adapter.setCollection(data)
+        }
+    var selection: IntArray?
+        set(value) {
+            (pickerDialog as AdapterPickerDialog<ItemType>).setSelection(value)
+        }
+        get() = pickerDialog.getSelection()
+    val selectedItems: List<ItemType>
+        get() {
+            return adapter.getItems(selection)
+        }
+    override val viewText: String
+        get() {
+            return selection?.let {
+                return@let adapter.getPositionStrings(it)
+            } ?: ""
+        }
 
-    constructor(context: Context) : this(context, null) {}
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0) {}
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : this(context, attrs, defStyleAttr, 0) {}
+    override abstract fun initializeDialog(): AdapterPickerDialog<ItemType>
 
-    protected abstract fun initializeAdapter(): EasyRecyclerAdapter<ModelType>
+    @Suppress("UNCHECKED_CAST")
+    override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray?>) {
+        super.onDialogInitialized(dialog)
+        val adapterDialog = dialog as AdapterPickerDialog<ItemType>
+        adapterDialog.apply {
+            dialogTitle = this@DialogAdapterPickerView.dialogTitle
+            dialogMessage = this@DialogAdapterPickerView.dialogMessage
+            dialogType = pickerDialogType
+            dialogAnimationType = pickerDialogAnimationType
+            isCancelable = pickerDialogCancelable
+            addOnPositiveClickListener(object : DialogButtonClickListener {
+                override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
+                    updateTextAndValidate()
+                }
+            })
+            addOnNegativeClickListeners(object : DialogButtonClickListener {
+                override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
+                    updateTextAndValidate()
+                }
+            })
+            addOnCancelListener(object : DialogCancelListener {
+                override fun doOnCancel(dialogFragment: BaseDialogFragment) {
+                    updateTextAndValidate()
+                }
+            })
+            addOnSelectionChangedListener(object : BasePickerDialogFragment.SelectionChangedListener<IntArray?> {
+                override fun onSelectionChanged(
+                    dialog: BasePickerDialogFragment<IntArray?>,
+                    oldValue: IntArray?,
+                    newValue: IntArray?,
+                ) {
+                    updateTextAndValidate()
+                    dispatchSelectionChangedEvents(oldValue, newValue)
+                }
+            })
+            setItemDecoration(itemDecoration)
+        }
+    }
+
     protected override fun readAttributes(context: Context, attrs: AttributeSet?) {
         val a: TypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogAdapterPickerView, 0, 0)
         try {
             dialogTitle = a.getString(R.styleable.DialogAdapterPickerView_APV_DialogTitle)
             dialogMessage = a.getString(R.styleable.DialogAdapterPickerView_APV_DialogMessage)
-            pickerDialogType = DialogTypes.valueOf(a.getInt(R.styleable.DialogAdapterPickerView_APV_DialogMode, 1))
+            pickerDialogType = valueOf(a.getInt(R.styleable.DialogAdapterPickerView_APV_DialogMode, 1))
             if (dialogTitle == null || dialogTitle == "") dialogTitle = ""
             if (dialogMessage == null || dialogMessage == "") dialogMessage = ""
         } finally {
@@ -44,12 +115,6 @@ abstract class DialogAdapterPickerView<ModelType : EasyAdapterDataModel?>(
         }
     }
 
-    protected val viewText: String
-        protected get() {
-            var text = ""
-            if (selection != null) text = getAdapter().getPositionStrings(selection)
-            return text
-        }
 
     fun hasSelection(): Boolean {
         return selection != null && selection!!.size > 0
@@ -57,54 +122,28 @@ abstract class DialogAdapterPickerView<ModelType : EasyAdapterDataModel?>(
 
     override fun validate(): Boolean {
         var isValid = true
-        if (validationEnabled) {
+        if (isValidationEnabled) {
             if (required && !hasSelection()) {
-                setErrorEnabled(true)
-                setErrorText(pickerRequiredText)
+                errorEnabled = true
+                errorText = pickerRequiredText
                 return false
             }
             for (validationCallback in validationCallbacks) isValid = isValid and validationCallback.validate(
                 selectedItems)
         }
-        if (!isValid) {
-            setErrorEnabled(true)
-        } else {
-            setErrorEnabled(false)
-            setErrorText(null)
+        if (!isValid) errorEnabled = true
+        else {
+            errorEnabled = false
+            errorText = null
         }
         return isValid
     }
 
-    protected override fun initializeDialog(): AdapterPickerDialog<ModelType>? {
-        val dialogBuilder: AdapterPickerDialogBuilder<ModelType> = AdapterPickerDialogBuilder(manager, DIALOG_TAG, adapter)
-        return dialogBuilder
-            .withSelection(selection!!)
-            .withDialogType(pickerDialogType)
-            .withAnimations(pickerDialogAnimationType)
-            .withCancelOnClickOutsude(pickerDialogCancelable)
-            .withMessage(dialogMessage)
-            .withTitle(dialogTitle)
-            .withItemDecoration(itemDecoration)
-            .withPositiveButton(DialogButtonConfiguration(pickerDialogPositiveButtonText)) { view, dialog -> updateTextAndValidate() }
-            .withNegativeButton(DialogButtonConfiguration(pickerDialogNegativeButtonText)) { view, dialog -> updateTextAndValidate() }
-            .withOnCancelListener { dialogFragment -> updateTextAndValidate() }
-            .withSelectionCallback { oldValue, newValue -> selectInternally(newValue, false) }
-            .buildDialog()
-    }
-
-    protected val dialog: AdapterPickerDialog<ModelType?>?
-        protected get() = pickerDialog as AdapterPickerDialog<ModelType?>?
-
-    protected fun getAdapter(): EasyRecyclerAdapter<ModelType> {
-        if (adapter == null) adapter = initializeAdapter()
-        return adapter!!
-    }
-
-    protected override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {
+    override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {
         dispatchFreezeSelfOnly(container)
     }
 
-    protected override fun dispatchRestoreInstanceState(container: SparseArray<Parcelable>) {
+    override fun dispatchRestoreInstanceState(container: SparseArray<Parcelable>) {
         dispatchThawSelfOnly(container)
     }
 
@@ -127,45 +166,13 @@ abstract class DialogAdapterPickerView<ModelType : EasyAdapterDataModel?>(
         selectionChangedListeners.add(changedCallback)
     }
 
-    fun addValidationCheck(validationCallback: ValidationCheck<ModelType>) {
+    fun addValidationCheck(validationCallback: ValidationCheck<ItemType>) {
         validationCallbacks.add(validationCallback)
-    }
-
-    fun setDialogTitle(dialogTitle: String?) {
-        this.dialogTitle = dialogTitle
-    }
-
-    fun setDialogMessage(dialogMessage: String?) {
-        this.dialogMessage = dialogMessage
     }
 
     fun setItemDecoration(itemDecoration: RecyclerView.ItemDecoration?) {
         this.itemDecoration = itemDecoration
     }
-
-    val selectedItems: List<ModelType>
-        get() = getAdapter().getItems(selection)
-
-    fun selectItemAt(selection: Int) {
-        val newSelection = intArrayOf(selection)
-        if (dialog == null) selectInternally(newSelection, true) else dialog!!.setSelection(newSelection)
-    }
-
-    fun setSelection(selection: IntArray) {
-        if (dialog == null) selectInternally(selection, true) else dialog!!.setSelection(selection)
-    }
-
-    fun selectItem(item: ModelType?) {
-        if (item == null) return
-        val position = getAdapter().getPosition(item)
-        if (position != -1) selectItemAt(position)
-    }
-
-    var data: List<ModelType>?
-        get() = ArrayList(getAdapter().getItems())
-        set(data) {
-            getAdapter().setCollection(data!!)
-        }
 
     @SuppressLint("NotifyDataSetChanged")
     fun refresh() {
