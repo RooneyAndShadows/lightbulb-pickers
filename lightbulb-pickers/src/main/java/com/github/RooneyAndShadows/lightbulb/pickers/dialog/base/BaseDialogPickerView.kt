@@ -15,12 +15,15 @@ import android.widget.LinearLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogAnimationTypes
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogAnimationTypes.NO_ANIMATION
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogButtonConfiguration
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes.NORMAL
+import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogButtonClickListener
+import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogCancelListener
 import com.github.rooneyandshadows.lightbulb.pickers.R
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
@@ -31,7 +34,10 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     defStyleRes: Int = 0,
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
     private lateinit var fragmentManager: FragmentManager
+    private val validationCallbacks: MutableList<ValidationCheck<SelectionType>> = mutableListOf()
+    private val selectionChangedListeners: MutableList<SelectionChangedListener<SelectionType>> = mutableListOf()
     private val triggerAttachedCallback: MutableList<TriggerAttachedCallback<SelectionType>> = mutableListOf()
+    protected var dataBindingListener: SelectionChangedListener<SelectionType>? = null
     private val isPickerDialogShowing: Boolean
         get() = pickerDialog.isDialogShown
     protected val pickerDialog: BasePickerDialogFragment<SelectionType> by lazy {
@@ -130,11 +136,59 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         }
         get() = pickerDialog.getSelection()
 
-    abstract fun validate(): Boolean
     protected abstract val viewText: String
     protected abstract fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<SelectionType>
     protected abstract fun readAttributes(context: Context, attrs: AttributeSet?)
+
+    protected open fun validate(): Boolean {
+        var isValid = true
+        if (isValidationEnabled) {
+            if (required && !hasSelection) {
+                errorEnabled = true
+                errorText = pickerRequiredText
+                return false
+            }
+            validationCallbacks.forEach {
+                isValid = isValid and it.validate(selection)
+                if (!isValid) return@forEach
+            }
+        }
+        if (!isValid) errorEnabled = true
+        else {
+            errorEnabled = false
+            errorText = null
+        }
+        return isValid
+    }
+
     protected open fun onDialogInitialized(dialog: BasePickerDialogFragment<SelectionType>) {
+        dialog.apply {
+            addOnPositiveClickListener(object : DialogButtonClickListener {
+                override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
+                    updateTextAndValidate()
+                }
+            })
+            addOnNegativeClickListeners(object : DialogButtonClickListener {
+                override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
+                    updateTextAndValidate()
+                }
+            })
+            addOnCancelListener(object : DialogCancelListener {
+                override fun doOnCancel(dialogFragment: BaseDialogFragment) {
+                    updateTextAndValidate()
+                }
+            })
+            addOnSelectionChangedListener(object : BasePickerDialogFragment.SelectionChangedListener<SelectionType> {
+                override fun onSelectionChanged(
+                    dialog: BasePickerDialogFragment<SelectionType>,
+                    oldValue: SelectionType?,
+                    newValue: SelectionType?
+                ) {
+                    updateTextAndValidate()
+                    dispatchSelectionChangedEvents(oldValue, newValue)
+                }
+            })
+        }
     }
 
     init {
@@ -163,6 +217,30 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         validate()
     }
 
+    fun addSelectionChangedListener(listener: SelectionChangedListener<SelectionType>) {
+        selectionChangedListeners.add(listener)
+    }
+
+    fun removeSelectionChangedListener(listener: SelectionChangedListener<SelectionType>) {
+        selectionChangedListeners.add(listener)
+    }
+
+    fun removeAllSelectionChangedListeners() {
+        selectionChangedListeners.clear()
+    }
+
+    fun addValidationCheck(validationCheck: ValidationCheck<SelectionType>) {
+        validationCallbacks.add(validationCheck)
+    }
+
+    fun removeValidationCheck(validationCheck: ValidationCheck<SelectionType>) {
+        validationCallbacks.remove(validationCheck)
+    }
+
+    fun removeAllValidationChecks() {
+        validationCallbacks.clear()
+    }
+
     fun addOnTriggerAttachedListener(callback: TriggerAttachedCallback<SelectionType>) {
         triggerAttachedCallback.add(callback)
     }
@@ -184,8 +262,10 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     private fun addViewInternally(child: View?) {
         if (child == null) removeAllViews()
         if (triggerView !is DialogPickerTriggerLayout) {
-            Log.w(BaseDialogPickerView::class.java.name,
-                "Picker view child is ignored. All child views must implement com.rands.lightbulb.pickers.dialog.base.TriggerView")
+            Log.w(
+                BaseDialogPickerView::class.java.name,
+                "Picker view child is ignored. All child views must implement com.rands.lightbulb.pickers.dialog.base.TriggerView"
+            )
             return
         }
         removeAllViews()
@@ -268,6 +348,13 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         }
     }
 
+    private fun dispatchSelectionChangedEvents(newValue: SelectionType?, oldValue: SelectionType?) {
+        selectionChangedListeners.forEach {
+            it.execute(newValue, oldValue)
+        }
+        dataBindingListener?.execute(newValue, oldValue)
+    }
+
     @Override
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {
         dispatchFreezeSelfOnly(container)
@@ -309,6 +396,18 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         pickerDialog.restoreDialogState(savedState.dialogState)
         updateTextAndValidate()
         if (isPickerDialogShowing) showPickerDialog()
+    }
+
+    interface SelectionChangedListener<SelectionType> {
+        fun execute(newSelection: SelectionType?, oldSelection: SelectionType?)
+    }
+
+    interface ValidationCheck<SelectionType> {
+        fun validate(currentSelection: SelectionType?): Boolean
+    }
+
+    interface TriggerAttachedCallback<SelectionType> {
+        fun onAttached(triggerView: DialogPickerTriggerLayout, pickerView: BaseDialogPickerView<SelectionType>)
     }
 
     private class SavedState : BaseSavedState {
@@ -364,9 +463,5 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
                 return arrayOfNulls(size)
             }
         }
-    }
-
-    interface TriggerAttachedCallback<SelectionType> {
-        fun onAttached(triggerView: DialogPickerTriggerLayout, pickerView: BaseDialogPickerView<SelectionType>)
     }
 }

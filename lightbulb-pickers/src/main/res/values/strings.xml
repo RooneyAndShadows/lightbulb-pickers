@@ -5,6 +5,8 @@
     <item name="picker_default_positive_button_text" type="string">OK</item>
     <item name="picker_default_negative_button_text" type="string">CANCEL</item>
     <item name="picker_default_dialog_tag_text" type="string">DEFAULT_PICKER_DIALOG_TAG</item>
+    <item name="picker_default_date_from_text" type="string">FROM</item>
+    <item name="picker_default_date_to_text" type="string">TO</item>
     <!---->
     <item name="CP_GroupTag" type="string">CPGroup</item>
     <item name="CP_ChipItemRemoveTag" type="string">CPChipButtonRemoveTag</item>

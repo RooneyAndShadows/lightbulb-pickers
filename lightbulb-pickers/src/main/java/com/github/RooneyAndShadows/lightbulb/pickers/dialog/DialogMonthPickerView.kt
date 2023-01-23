@@ -1,124 +1,105 @@
 package com.github.rooneyandshadows.lightbulb.pickers.dialog
 
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog.setCalendarBounds
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog.setDisabledMonths
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog.setEnabledMonths
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import com.github.rooneyandshadows.lightbulb.pickers.R
-import android.util.SparseArray
-import android.os.Parcelable
-import android.os.Parcel
-import android.os.Parcelable.Creator
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingListener
-import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import android.content.Context
+import android.os.Parcel
+import android.os.Parcelable
+import android.os.Parcelable.Creator
 import android.util.AttributeSet
+import android.util.SparseArray
 import android.view.View
+import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
+import androidx.fragment.app.FragmentManager
+import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.java.commons.string.StringUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogButtonClickListener
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogCancelListener
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog.*
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder
+import com.github.rooneyandshadows.lightbulb.pickers.R
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import java.time.OffsetDateTime
 import java.util.*
 
-class DialogMonthPickerView(context: Context, attrs: AttributeSet?) : BaseDialogPickerView(context, attrs) {
-    private var cachedDate: OffsetDateTime? = null
-    var selectionAsArray: IntArray?
-        private set
-    private var monthPickerFormat: String? = null
-    private var minYear = 0
-    private var maxYear = 0
-    private var disabledMonths: ArrayList<IntArray>? = null
-    private var enabledMonths: ArrayList<IntArray>? = null
-    private var dataBindingListener: SelectionChangedListener? = null
-    private val selectionChangedListeners = ArrayList<SelectionChangedListener>()
-    private val validationCallbacks = ArrayList<ValidationCheck>()
-    protected override val viewText: String
-        protected get() = if (!hasSelection()) "" else DateUtilsOffsetDate.getDateString(monthPickerFormat, selectionAsDate)
+class DialogMonthPickerView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0,
+) : BaseDialogPickerView<Month>(context, attrs, defStyleAttr, defStyleRess) {
+    private val dialog: MonthPickerDialog
+        get() {
+            return pickerDialog as MonthPickerDialog
+        }
+    var monthPickerFormat: String = DEFAULT_DATE_FORMAT
+        set(value) {
+            field = value
+            dialog.dialogDateFormat = field
+            updateTextAndValidate()
+        }
+        get() = dialog.dialogDateFormat
+    var minYear = DEFAULT_MIN_YEAR
+        private set(value) {
+            field = value
+            //TODO SET MIN YEAR TO DIALOG
+        }
+    var maxYear = DEFAULT_MAX_YEAR
+        private set(value) {
+            field = value
+            //TODO SET MIN YEAR TO DIALOG
+        }
+    var disabledMonths: List<Month> = listOf()
+        set(value) {
+            field = value
+            dialog.setDisabledMonths(field)
+        }
 
-    override fun validate(): Boolean {
-        var isValid = true
-        if (validationEnabled) {
-            if (required && !hasSelection()) {
-                isErrorEnabled = true
-                setErrorText(pickerRequiredText)
-                return false
-            }
-            for (validationCallback in validationCallbacks) isValid = isValid and validationCallback.validate(
-                selectionAsArray)
+    //TODO get()
+    var enabledMonths: List<Month> = listOf()
+        set(value) {
+            field = value
+            dialog.setEnabledMonths(field)
         }
-        if (!isValid) isErrorEnabled = true else {
-            isErrorEnabled = false
-            setErrorText(null)
-        }
-        return isValid
-    }
+
+    //TODO get()
+    override val viewText: String
+        get() = if (!hasSelection()) "" else DateUtilsOffsetDate.getDateString(monthPickerFormat, selectionAsDate)
 
     override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val a = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogMonthPickerView, 0, 0)
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogMonthPickerView, 0, 0)
         try {
-            monthPickerFormat =
-                StringUtils.getOrDefault(a.getString(R.styleable.DialogMonthPickerView_MPV_DateFormat), "YYYY, MMM")
-            minYear = a.getInteger(R.styleable.DialogMonthPickerView_MPV_MinYear, 1970)
-            maxYear = a.getInteger(R.styleable.DialogMonthPickerView_MPV_MaxYear, 2100)
+            attrTypedArray.apply {
+                monthPickerFormat = attrTypedArray.getString(R.styleable.DialogMonthPickerView_MPV_DateFormat).let {
+                    val default = DEFAULT_DATE_FORMAT
+                    if (it.isNullOrBlank()) return@let default
+                    else return@let it
+                }
+                minYear = getInteger(R.styleable.DialogMonthPickerView_MPV_MinYear, DEFAULT_MIN_YEAR)
+                maxYear = getInteger(R.styleable.DialogMonthPickerView_MPV_MaxYear, DEFAULT_MAX_YEAR)
+            }
         } finally {
-            a.recycle()
+            attrTypedArray.recycle()
         }
     }
 
-    override fun initializeDialog(): MonthPickerDialog? {
-        val builder = MonthPickerDialogBuilder(manager, dialogTag)
-            .withMinYear(minYear)
-            .withMaxYear(maxYear)
-            .withDisabledMonths(disabledMonths)
-            .withEnabledMonths(enabledMonths)
-            .withPositiveButton(DialogButtonConfiguration(pickerDialogPositiveButtonText),
-                DialogButtonClickListener { view: View?, dialogFragment: BaseDialogFragment? -> updateTextAndValidate() })
-            .withNegativeButton(DialogButtonConfiguration(pickerDialogNegativeButtonText),
-                DialogButtonClickListener { view: View?, dialogFragment: BaseDialogFragment? -> updateTextAndValidate() })
-            .withOnCancelListener(DialogCancelListener { dialogFragment: BaseDialogFragment? -> updateTextAndValidate() })
-            .withOnDateSelectedEvent(SelectionChangedListener<Month> { oldValue: BasePickerDialogFragment<Month?>?, newValue: Month? ->
-                selectInternally(newValue)
-            })
-            .withAnimations(pickerDialogAnimationType)
-        if (selectionAsArray != null) builder.withSelection(selectionAsArray!![0], selectionAsArray!![1])
-        return builder.buildDialog()
-    }
-
-    protected override val dialog: BasePickerDialogFragment<*>?
-        protected get() = pickerDialog as MonthPickerDialog
-
-    fun addSelectionChangedListener(listener: SelectionChangedListener) {
-        selectionChangedListeners.add(listener)
-    }
-
-    fun addValidationCheck(validationCallback: ValidationCheck) {
-        validationCallbacks.add(validationCallback)
-    }
-
-    fun setSelection(newSelection: IntArray?) {
-        var newSelection = newSelection
-        newSelection = validateSelectionInput(newSelection)
-        if (newSelection == null) cachedDate = null
-        if (dialog == null) selectInternally(newSelection) else dialog!!.setSelection(newSelection)
-    }
-
-    fun setSelection(year: Int, month: Int) {
-        val newSelection = intArrayOf(year, month)
-        setSelection(newSelection)
+    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<Month> {
+        return MonthPickerDialogBuilder(null, fragmentManager, pickerDialogTag)
+            .buildDialog()
     }
 
     fun setSelectionFromDate(newDate: OffsetDateTime?) {
-        var newSelection: IntArray? = null
-        if (newDate != null) newSelection = intArrayOf(DateUtilsOffsetDate.extractYearFromDate(newDate),
-            DateUtilsOffsetDate.extractMonthOfYearFromDate(newDate))
-        cachedDate = newDate
-        setSelection(newSelection)
+        var newSelection: Month? = null
+        if (newDate != null) {
+            val year = DateUtilsOffsetDate.extractYearFromDate(newDate)
+            val month = DateUtilsOffsetDate.extractMonthOfYearFromDate(newDate)
+            newSelection = Month(year, month)
+        }
+        selection = newSelection
     }
 
     fun setCalendarBounds(min: Int, max: Int) {
@@ -134,8 +115,10 @@ class DialogMonthPickerView(context: Context, attrs: AttributeSet?) : BaseDialog
 
     fun setDisabledMonths(disabled: ArrayList<IntArray>?) {
         disabledMonths = disabled
-        if (disabledMonths != null) for (disabledMonth in disabledMonths!!) if (Arrays.equals(disabledMonth,
-                selectionAsArray)
+        if (disabledMonths != null) for (disabledMonth in disabledMonths!!) if (Arrays.equals(
+                disabledMonth,
+                selectionAsArray
+            )
         ) setSelection(null)
         if (dialog != null) dialog.setDisabledMonths(disabledMonths)
     }
@@ -169,8 +152,10 @@ class DialogMonthPickerView(context: Context, attrs: AttributeSet?) : BaseDialog
                     cachedDate = DateUtilsOffsetDate.setYearToDate(cachedDate, selectionAsArray!![0])
                     cachedDate = DateUtilsOffsetDate.setMonthToDate(cachedDate, selectionAsArray!![1])
                 }
-                return if (cachedDate == null) DateUtilsOffsetDate.date(selectionAsArray!![0],
-                    selectionAsArray!![1]) else cachedDate
+                return if (cachedDate == null) DateUtilsOffsetDate.date(
+                    selectionAsArray!![0],
+                    selectionAsArray!![1]
+                ) else cachedDate
             }
             return null
         }
@@ -229,16 +214,24 @@ class DialogMonthPickerView(context: Context, attrs: AttributeSet?) : BaseDialog
         myState.maxYear = maxYear
         if (enabledMonths != null) {
             val enabledMonths = ArrayList<String>()
-            for (enabledMonth in this.enabledMonths!!) enabledMonths.add(DateUtilsOffsetDate.getDateStringInDefaultFormat(
-                DateUtilsOffsetDate.date(
-                    enabledMonth[0], enabledMonth[1])))
+            for (enabledMonth in this.enabledMonths!!) enabledMonths.add(
+                DateUtilsOffsetDate.getDateStringInDefaultFormat(
+                    DateUtilsOffsetDate.date(
+                        enabledMonth[0], enabledMonth[1]
+                    )
+                )
+            )
             myState.enabledMonths = enabledMonths
         }
         if (disabledMonths != null) {
             val disabledMonths = ArrayList<String>()
-            for (disabledMonth in this.disabledMonths!!) disabledMonths.add(DateUtilsOffsetDate.getDateStringInDefaultFormat(
-                DateUtilsOffsetDate.date(
-                    disabledMonth[0], disabledMonth[1])))
+            for (disabledMonth in this.disabledMonths!!) disabledMonths.add(
+                DateUtilsOffsetDate.getDateStringInDefaultFormat(
+                    DateUtilsOffsetDate.date(
+                        disabledMonth[0], disabledMonth[1]
+                    )
+                )
+            )
             myState.disabledMonths = disabledMonths
         }
         return myState
@@ -249,8 +242,10 @@ class DialogMonthPickerView(context: Context, attrs: AttributeSet?) : BaseDialog
         selectionAsArray = savedState.selection
         cachedDate =
             DateUtilsOffsetDate.getDateFromString(DateUtilsOffsetDate.defaultFormatWithTimeZone, savedState.cachedDate)
-        if (savedState.disabledMonths == null && savedState.enabledMonths == null) setCalendarBounds(savedState.minYear!!,
-            savedState.maxYear!!)
+        if (savedState.disabledMonths == null && savedState.enabledMonths == null) setCalendarBounds(
+            savedState.minYear!!,
+            savedState.maxYear!!
+        )
         if (savedState.disabledMonths != null) {
             val previouslyDisabledMonths = ArrayList<IntArray>()
             for (disabledMonth in savedState.disabledMonths!!) {
@@ -324,6 +319,10 @@ class DialogMonthPickerView(context: Context, attrs: AttributeSet?) : BaseDialog
     }
 
     companion object {
+        private const val DEFAULT_DATE_FORMAT = "YYYY, MMM"
+        private const val DEFAULT_MAX_YEAR = 2100
+        private const val DEFAULT_MIN_YEAR = 1970
+
         @JvmStatic
         @BindingAdapter("monthPickerSelection")
         fun updatePickerSelectionBinding(view: DialogMonthPickerView, selectedDate: OffsetDateTime?) {

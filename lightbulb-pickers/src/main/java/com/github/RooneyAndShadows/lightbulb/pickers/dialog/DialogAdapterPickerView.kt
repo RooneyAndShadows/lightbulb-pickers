@@ -7,15 +7,11 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.SparseArray
-import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView.*
-import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment.*
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes.*
-import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogButtonClickListener
-import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogCancelListener
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
@@ -30,13 +26,15 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
 ) : BaseDialogPickerView<IntArray?>(context, attrs, defStyleAttr, defStyleRes) {
-    private val validationCallbacks = ArrayList<ValidationCheck<ItemType>>()
-    private val selectionChangedListeners = ArrayList<SelectionChangedListener>()
-    private var itemDecoration: ItemDecoration? = null
     protected open val adapter: EasyRecyclerAdapter<ItemType>
         get() {
             val dialog = (pickerDialog as AdapterPickerDialog<ItemType>)
             return dialog.adapter
+        }
+    var itemDecoration: ItemDecoration? = null
+        set(value) {
+            field = value
+            (pickerDialog as AdapterPickerDialog<ItemType>).setItemDecoration(field)
         }
     var data: List<ItemType>
         get() {
@@ -70,62 +68,17 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
         super.onDialogInitialized(dialog)
         val adapterDialog = dialog as AdapterPickerDialog<ItemType>
         adapterDialog.apply {
-            addOnPositiveClickListener(object : DialogButtonClickListener {
-                override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
-                    updateTextAndValidate()
-                }
-            })
-            addOnNegativeClickListeners(object : DialogButtonClickListener {
-                override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
-                    updateTextAndValidate()
-                }
-            })
-            addOnCancelListener(object : DialogCancelListener {
-                override fun doOnCancel(dialogFragment: BaseDialogFragment) {
-                    updateTextAndValidate()
-                }
-            })
-            addOnSelectionChangedListener(object : BasePickerDialogFragment.SelectionChangedListener<IntArray?> {
-                override fun onSelectionChanged(
-                    dialog: BasePickerDialogFragment<IntArray?>,
-                    oldValue: IntArray?,
-                    newValue: IntArray?,
-                ) {
-                    updateTextAndValidate()
-                    dispatchSelectionChangedEvents(oldValue, newValue)
-                }
-            })
             setItemDecoration(itemDecoration)
         }
     }
 
     @Override
     override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val a: TypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogAdapterPickerView, 0, 0)
+        val attrTypedArray: TypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogAdapterPickerView, 0, 0)
         try {
         } finally {
-            a.recycle()
+            attrTypedArray.recycle()
         }
-    }
-
-    @Override
-    override fun validate(): Boolean {
-        var isValid = true
-        if (isValidationEnabled) {
-            if (required && !hasSelection) {
-                errorEnabled = true
-                errorText = pickerRequiredText
-                return false
-            }
-            for (validationCallback in validationCallbacks) isValid = isValid and validationCallback.validate(
-                selectedItems)
-        }
-        if (!isValid) errorEnabled = true
-        else {
-            errorEnabled = false
-            errorText = null
-        }
-        return isValid
     }
 
     @Override
@@ -161,55 +114,10 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
         if (position != -1) selectItemAt(position)
     }
 
-    fun addSelectionChangedListener(listener: SelectionChangedListener) {
-        selectionChangedListeners.add(listener)
-    }
-
-    fun removeSelectionChangedListener(listener: SelectionChangedListener) {
-        selectionChangedListeners.add(listener)
-    }
-
-    fun removeAllSelectionChangedListeners() {
-        selectionChangedListeners.clear()
-    }
-
-    fun addValidationCheck(validationCheck: ValidationCheck<ItemType>) {
-        validationCallbacks.add(validationCheck)
-    }
-
-    fun removeValidationCheck(validationCheck: ValidationCheck<ItemType>) {
-        validationCallbacks.remove(validationCheck)
-    }
-
-    fun removeAllValidationChecks() {
-        validationCallbacks.clear()
-    }
-
-    fun setItemDecoration(itemDecoration: ItemDecoration?) {
-        this.itemDecoration = itemDecoration
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     fun refresh() {
         adapter.notifyDataSetChanged()
         updateTextAndValidate()
-    }
-
-    private fun compareValues(v1: IntArray?, v2: IntArray?): Boolean {
-        return Arrays.equals(v1, v2)
-    }
-
-    private fun dispatchSelectionChangedEvents(oldValue: IntArray?, newValue: IntArray?) {
-        if (compareValues(oldValue, newValue)) return
-        for (selectionChangedListener in selectionChangedListeners) selectionChangedListener.execute(oldValue, newValue)
-    }
-
-    interface SelectionChangedListener {
-        fun execute(newPositions: IntArray?, oldPositions: IntArray?)
-    }
-
-    interface ValidationCheck<ModelType : EasyAdapterDataModel?> {
-        fun validate(selectedItems: List<ModelType>?): Boolean
     }
 
     private class SavedState : BaseSavedState {

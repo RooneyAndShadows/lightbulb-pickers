@@ -11,7 +11,6 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
-import com.github.rooneyandshadows.java.commons.string.StringUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter
@@ -21,9 +20,8 @@ import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPi
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogPickerTriggerLayout
-import java.util.*
 
-@Suppress("RedundantOverride", "UnnecessaryVariable")
+@Suppress("RedundantOverride", "UnnecessaryVariable", "unused")
 class DialogColorPickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -37,16 +35,23 @@ class DialogColorPickerView @JvmOverloads constructor(
         }
 
     init {
-        addSelectionChangedListener(object : SelectionChangedListener {
-            override fun execute(newPositions: IntArray?, oldPositions: IntArray?) {
-                updatePickerIcon(newPositions)
-            }
-        })
         addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray?> {
             override fun onAttached(triggerView: DialogPickerTriggerLayout, pickerView: BaseDialogPickerView<IntArray?>) {
                 updatePickerIcon(null)
             }
         })
+    }
+
+    @Override
+    override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray?>) {
+        super.onDialogInitialized(dialog)
+        dialog.apply {
+            addSelectionChangedListener(object : SelectionChangedListener<IntArray?> {
+                override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
+                    updatePickerIcon(newSelection)
+                }
+            })
+        }
     }
 
     @Override
@@ -124,7 +129,6 @@ class DialogColorPickerView @JvmOverloads constructor(
                 return arrayOfNulls(size)
             }
         }
-
     }
 
     companion object {
@@ -138,27 +142,28 @@ class DialogColorPickerView @JvmOverloads constructor(
 
         @JvmStatic
         @BindingAdapter(value = ["colorPickerSelection"])
-        fun setPickerSelection(view: DialogColorPickerView, newExternalName: String) {
-            if (StringUtils.isNullOrEmptyString(newExternalName)) return
+        fun setPickerSelection(view: DialogColorPickerView, newExternalName: String?) {
+            if (newExternalName.isNullOrBlank()) return
             if (view.hasSelection) {
                 val currentSelection: ColorModel = view.selectedItems[0]
                 if (currentSelection.externalName == newExternalName) return
             }
-            for (colorModel in view.data) if (newExternalName == colorModel.externalName) {
-                view.selectItem(colorModel)
-                break
-            }
+            for (colorModel in view.data)
+                if (newExternalName == colorModel.externalName) {
+                    view.selectItem(colorModel)
+                    break
+                }
         }
 
         @JvmStatic
         @BindingAdapter(value = ["colorPickerSelectionChanged"], requireAll = false)
         fun bindPickerEvent(view: DialogColorPickerView, bindingListener: InverseBindingListener) {
             if (view.hasSelection) bindingListener.onChange()
-            view.addSelectionChangedListener(object : SelectionChangedListener {
-                override fun execute(newPositions: IntArray?, oldPositions: IntArray?) {
+            view.dataBindingListener = object : SelectionChangedListener<IntArray?> {
+                override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
                     bindingListener.onChange()
                 }
-            })
+            }
         }
     }
 }
