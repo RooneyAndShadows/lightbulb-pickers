@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.activity
+package com.github.rooneyandshadows.lightbulb.pickersdemo.activity
 
 import com.github.rooneyandshadows.lightbulb.application.activity.BaseActivity
 

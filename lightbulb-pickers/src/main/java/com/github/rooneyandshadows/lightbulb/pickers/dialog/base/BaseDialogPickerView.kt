@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.dialog.base
+package com.github.rooneyandshadows.lightbulb.pickers.dialog.base
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -14,7 +14,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment

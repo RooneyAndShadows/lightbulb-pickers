@@ -1,7 +1,7 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.color.colors
+package com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color.colors
 
 import com.mikepenz.iconics.typeface.IIcon.name
-import com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.color.IDemoColor
+import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color.IDemoColor
 import android.graphics.Color
 import java.util.*
 

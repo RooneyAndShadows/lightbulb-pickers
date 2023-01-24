@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.dialog
+package com.github.rooneyandshadows.lightbulb.pickers.dialog
 
 import android.content.Context
 import android.os.Parcel
@@ -10,7 +10,7 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment

@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.dialog
+package com.github.rooneyandshadows.lightbulb.pickers.dialog
 
 import android.content.Context
 import android.os.Parcel
@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialogBuilder
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog.*

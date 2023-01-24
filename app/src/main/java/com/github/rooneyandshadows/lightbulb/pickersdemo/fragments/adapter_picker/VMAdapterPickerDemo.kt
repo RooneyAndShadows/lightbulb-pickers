@@ -1,6 +1,6 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.fragments.adapter_picker
+package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.adapter_picker
 
-import com.github.RooneyAndShadows.lightbulb.commons.models.BaseObservableViewModel
+import com.github.rooneyandshadows.lightbulb.commons.models.BaseObservableViewModel
 import java.util.*
 
 class VMAdapterPickerDemo : BaseObservableViewModel() {

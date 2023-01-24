@@ -1,6 +1,6 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.dialog
+package com.github.rooneyandshadows.lightbulb.pickers.dialog
 
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import android.util.SparseArray
 import android.os.Parcelable
 import android.os.Parcel

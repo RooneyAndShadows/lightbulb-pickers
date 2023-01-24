@@ -1,7 +1,7 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger.base
+package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base
 
 import android.graphics.drawable.Drawable
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 
 interface DialogPickerTriggerLayout {
     fun attachTo(pickerView: BaseDialogPickerView<*>)

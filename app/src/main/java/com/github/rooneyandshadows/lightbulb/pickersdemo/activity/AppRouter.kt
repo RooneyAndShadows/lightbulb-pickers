@@ -1,7 +1,7 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.activity
+package com.github.rooneyandshadows.lightbulb.pickersdemo.activity
 
 import androidx.fragment.app.Fragment
-import com.github.RooneyAndShadows.lightbulb.application.activity.BaseActivity
+import com.github.rooneyandshadows.lightbulb.application.activity.BaseActivity
 
 class AppRouter(contextActivity: BaseActivity?, fragmentContainerId: Int) :
     BaseApplicationRouter(contextActivity, fragmentContainerId) {

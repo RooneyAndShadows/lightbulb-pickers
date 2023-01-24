@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger
+package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -11,8 +11,8 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.widget.LinearLayout
 import androidx.core.graphics.ColorUtils
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R

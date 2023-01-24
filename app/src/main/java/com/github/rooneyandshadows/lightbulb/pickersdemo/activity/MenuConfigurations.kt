@@ -1,7 +1,7 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.activity
+package com.github.rooneyandshadows.lightbulb.pickersdemo.activity
 
 import android.view.View
-import com.github.RooneyAndShadows.lightbulb.application.activity.BaseActivity
+import com.github.rooneyandshadows.lightbulb.application.activity.BaseActivity
 import java.util.function.Consumer
 
 object MenuConfigurations {

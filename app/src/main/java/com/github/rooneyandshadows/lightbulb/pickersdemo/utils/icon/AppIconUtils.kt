@@ -1,10 +1,10 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.icon
+package com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon
 
 import android.content.Context
 import androidx.annotation.AttrRes
 import androidx.annotation.DimenRes
-import com.github.RooneyAndShadows.lightbulb.commons.utils.IconUtils
-import com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.icon.icons.DemoIcons
+import com.github.rooneyandshadows.lightbulb.commons.utils.IconUtils
+import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIcons
 import java.util.ArrayList
 
 object AppIconUtils {

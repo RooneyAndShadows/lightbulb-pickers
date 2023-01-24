@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.icon
+package com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon
 
 import com.mikepenz.iconics.typeface.IIcon
 

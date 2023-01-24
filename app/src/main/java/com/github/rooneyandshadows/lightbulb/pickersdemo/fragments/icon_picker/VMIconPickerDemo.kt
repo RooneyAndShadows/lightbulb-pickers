@@ -1,6 +1,6 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.fragments.icon_picker
+package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.icon_picker
 
-import com.github.RooneyAndShadows.lightbulb.commons.models.BaseObservableViewModel
+import com.github.rooneyandshadows.lightbulb.commons.models.BaseObservableViewModel
 import java.util.HashMap
 
 class VMIconPickerDemo : BaseObservableViewModel() {

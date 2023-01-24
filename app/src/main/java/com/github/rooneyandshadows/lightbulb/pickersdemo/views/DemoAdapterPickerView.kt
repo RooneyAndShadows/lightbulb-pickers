@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.views
+package com.github.rooneyandshadows.lightbulb.pickersdemo.views
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -9,13 +9,13 @@ import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger.InputTriggerView
-import com.github.RooneyAndShadows.lightbulb.pickersdemo.models.DemoModel
-import com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.icon.AppIconUtils
-import com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.icon.icons.DemoIconsUi
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
+import com.github.rooneyandshadows.lightbulb.pickersdemo.models.DemoModel
+import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.AppIconUtils
+import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIconsUi
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogsdemo.dialogs.DemoSingleSelectionDialog
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R

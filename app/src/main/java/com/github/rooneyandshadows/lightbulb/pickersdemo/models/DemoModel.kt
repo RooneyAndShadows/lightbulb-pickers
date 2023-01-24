@@ -1,9 +1,9 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.models
+package com.github.rooneyandshadows.lightbulb.pickersdemo.models
 
 import android.os.Parcel
 import android.os.Parcelable.Creator
-import com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.color.colors.DemoColors
-import com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.icon.icons.DemoIcons
+import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color.colors.DemoColors
+import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIcons
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils.Companion.writeString
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel
 import java.util.*

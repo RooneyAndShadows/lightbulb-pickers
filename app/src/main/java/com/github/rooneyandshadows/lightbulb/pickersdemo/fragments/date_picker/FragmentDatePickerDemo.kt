@@ -1,7 +1,7 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.fragments.date_picker
+package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.date_picker
 
 import android.view.View
-import com.github.RooneyAndShadows.lightbulb.application.activity.BaseActivity
+import com.github.rooneyandshadows.lightbulb.application.activity.BaseActivity
 
 class FragmentDatePickerDemo : BaseFragment() {
     private var viewModel: VMDatePickerDemo? = null

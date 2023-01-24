@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.color
+package com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color
 
 interface IDemoColor {
     val color: Int

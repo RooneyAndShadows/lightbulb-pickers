@@ -1,7 +1,7 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.fragments.icon_picker
+package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.icon_picker
 
 import android.view.View
-import com.github.RooneyAndShadows.lightbulb.application.activity.BaseActivity
+import com.github.rooneyandshadows.lightbulb.application.activity.BaseActivity
 
 class FragmentIconPickerDemo : BaseFragment() {
     private var viewModel: VMIconPickerDemo? = null

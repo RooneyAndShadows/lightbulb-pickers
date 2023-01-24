@@ -1,6 +1,6 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.fragments.date_picker
+package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.date_picker
 
-import com.github.RooneyAndShadows.java.commons.date.DateUtilsOffsetDate
+import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import java.time.OffsetDateTime
 
 class VMDatePickerDemo : BaseObservableViewModel() {

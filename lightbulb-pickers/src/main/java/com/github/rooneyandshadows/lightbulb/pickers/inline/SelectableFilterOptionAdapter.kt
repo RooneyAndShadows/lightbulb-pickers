@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.inline
+package com.github.rooneyandshadows.lightbulb.pickers.inline
 
 import android.annotation.SuppressLint
 import android.os.Bundle

@@ -2,8 +2,8 @@ package com.github.rooneyandshadows.lightbulb.dialogsdemo.dialogs
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import com.github.RooneyAndShadows.lightbulb.pickersdemo.models.DemoModel
-import com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.icon.AppIconUtils
+import com.github.rooneyandshadows.lightbulb.pickersdemo.models.DemoModel
+import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.AppIconUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.DrawableUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog

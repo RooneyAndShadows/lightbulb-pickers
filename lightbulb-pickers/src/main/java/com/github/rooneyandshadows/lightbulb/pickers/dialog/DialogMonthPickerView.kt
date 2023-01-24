@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickers.dialog
+package com.github.rooneyandshadows.lightbulb.pickers.dialog
 
 import android.content.Context
 import android.os.Parcel
@@ -14,7 +14,7 @@ import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragme
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog.*
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder
-import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R

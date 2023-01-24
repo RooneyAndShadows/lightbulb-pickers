@@ -1,6 +1,6 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.fragments.color_picker
+package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.color_picker
 
-import com.github.RooneyAndShadows.lightbulb.commons.models.BaseObservableViewModel
+import com.github.rooneyandshadows.lightbulb.commons.models.BaseObservableViewModel
 import java.util.HashMap
 
 class VMColorPickerDemo : BaseObservableViewModel() {

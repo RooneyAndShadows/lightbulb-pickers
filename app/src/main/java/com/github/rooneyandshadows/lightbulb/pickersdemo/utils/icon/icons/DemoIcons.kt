@@ -1,8 +1,8 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.icon.icons
+package com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons
 
 import com.mikepenz.iconics.typeface.IIcon.name
 import com.mikepenz.iconics.typeface.IIcon
-import com.github.RooneyAndShadows.lightbulb.pickersdemo.utils.icon.IDemoIcon
+import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.IDemoIcon
 import com.mikepenz.iconics.typeface.library.fontawesome.FontAwesome
 import java.util.*
 

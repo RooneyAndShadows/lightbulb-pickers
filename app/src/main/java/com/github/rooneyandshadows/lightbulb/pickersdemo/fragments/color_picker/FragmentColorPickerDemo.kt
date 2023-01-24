@@ -1,7 +1,7 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.fragments.color_picker
+package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.color_picker
 
 import android.view.View
-import com.github.RooneyAndShadows.lightbulb.application.activity.BaseActivity
+import com.github.rooneyandshadows.lightbulb.application.activity.BaseActivity
 
 class FragmentColorPickerDemo : BaseFragment() {
     private var viewModel: VMColorPickerDemo? = null

@@ -1,7 +1,7 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.fragments.adapter_picker
+package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.adapter_picker
 
 import android.view.View
-import com.github.RooneyAndShadows.lightbulb.application.activity.BaseActivity
+import com.github.rooneyandshadows.lightbulb.application.activity.BaseActivity
 
 class FragmentAdapterPickerDemo : BaseFragment() {
     private var viewModel: VMAdapterPickerDemo? = null

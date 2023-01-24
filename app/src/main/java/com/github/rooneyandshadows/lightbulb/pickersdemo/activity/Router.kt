@@ -1,4 +1,4 @@
-package com.github.RooneyAndShadows.lightbulb.pickersdemo.activity
+package com.github.rooneyandshadows.lightbulb.pickersdemo.activity
 
 class Router {
     var router: AppRouter? = null
