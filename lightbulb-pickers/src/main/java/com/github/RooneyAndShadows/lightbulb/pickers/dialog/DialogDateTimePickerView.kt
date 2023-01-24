@@ -1,22 +1,22 @@
-package com.github.rooneyandshadows.lightbulb.pickers.dialog
+package com.github.RooneyAndShadows.lightbulb.pickers.dialog
 
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import com.github.rooneyandshadows.lightbulb.pickers.R
-import android.util.SparseArray
-import android.os.Parcelable
-import android.os.Parcel
-import android.os.Parcelable.Creator
-import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingListener
-import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import android.content.Context
+import android.os.Parcel
+import android.os.Parcelable
+import android.os.Parcelable.Creator
 import android.util.AttributeSet
+import android.util.SparseArray
+import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
+import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialogBuilder
+import com.github.rooneyandshadows.lightbulb.pickers.R
 import java.time.OffsetDateTime
 
 @Suppress("RedundantOverride", "UnnecessaryVariable", "unused")
@@ -25,7 +25,7 @@ class DialogDateTimePickerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
-) : BaseDialogPickerView<OffsetDateTime?>(context, attrs, defStyleAttr, defStyleRes) {
+) : BaseDialogPickerView<OffsetDateTime>(context, attrs, defStyleAttr, defStyleRes) {
     private val dialog: DateTimePickerDialog
         get() = pickerDialog as DateTimePickerDialog
     private var datePickerFormat: String = DEFAULT_DATE_FORMAT
@@ -46,7 +46,7 @@ class DialogDateTimePickerView @JvmOverloads constructor(
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogDatePickerView, 0, 0)
         try {
             attrTypedArray.apply {
-                datePickerFormat = getString(R.styleable.DialogDatePickerView_DPV_DateFormat).let {
+                datePickerFormat = getString(R.styleable.DialogDatePickerView_dpv_date_format).let {
                     val default = DEFAULT_DATE_FORMAT
                     if (it.isNullOrBlank()) return@let default
                     else return@let it
@@ -58,7 +58,7 @@ class DialogDateTimePickerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<OffsetDateTime?> {
+    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<OffsetDateTime> {
         return DateTimePickerDialogBuilder(null, fragmentManager, pickerDialogTag)
             .buildDialog()
     }
@@ -121,20 +121,20 @@ class DialogDateTimePickerView @JvmOverloads constructor(
 
         @JvmStatic
         @BindingAdapter("datePickerSelection")
-        fun updatePickerSelectionBinding(view: DialogDateTimePickerView, selectedDate: OffsetDateTime?) {
-            view.selection = selectedDate
+        fun setDateTime(view: DialogDateTimePickerView, newDateTime: OffsetDateTime?) {
+            view.selection = newDateTime
         }
 
         @JvmStatic
         @InverseBindingAdapter(attribute = "datePickerSelection", event = "dateSelectionChanged")
-        fun getText(view: DialogDateTimePickerView): OffsetDateTime? {
+        fun getDateTime(view: DialogDateTimePickerView): OffsetDateTime? {
             return view.selection
         }
 
         @JvmStatic
         @BindingAdapter("dateSelectionChanged")
         fun setListeners(view: DialogDateTimePickerView, attrChange: InverseBindingListener) {
-            view.dataBindingListener = object : SelectionChangedListener<OffsetDateTime?> {
+            view.dataBindingListener = object : SelectionChangedListener<OffsetDateTime> {
                 override fun execute(newSelection: OffsetDateTime?, oldSelection: OffsetDateTime?) {
                     if (!view.compareValues(newSelection, oldSelection))
                         attrChange.onChange()

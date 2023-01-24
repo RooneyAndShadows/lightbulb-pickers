@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.github.rooneyandshadows.lightbulb.pickersdemo">
+    package="com.github.RooneyAndShadows.lightbulb.pickersdemo">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/DemoTheme">
         <activity
-            android:name="com.github.rooneyandshadows.lightbulb.pickersdemo.activity.MainActivity"
+            android:name="com.github.RooneyAndShadows.lightbulb.pickersdemo.activity.MainActivity"
             android:exported="true"
             android:theme="@style/SplashThemeLight">
             <intent-filter>

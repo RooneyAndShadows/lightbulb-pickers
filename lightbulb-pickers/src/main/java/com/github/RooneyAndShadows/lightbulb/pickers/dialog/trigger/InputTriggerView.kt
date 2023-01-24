@@ -1,4 +1,4 @@
-package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger
+package com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -11,12 +11,11 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.widget.LinearLayout
 import androidx.core.graphics.ColorUtils
-import com.github.rooneyandshadows.java.commons.string.StringUtils
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogPickerTriggerLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -116,7 +115,7 @@ class InputTriggerView @JvmOverloads constructor(
 
     @Override
     override fun setTriggerHintText(hintText: String?) {
-        val hasHint = !StringUtils.isNullOrEmptyString(hintText)
+        val hasHint = !hintText.isNullOrBlank()
         textInputLayout.isHintEnabled = hasHint
         textInputLayout.hint = hintText
         textInputEditText.hint = null
@@ -181,7 +180,7 @@ class InputTriggerView @JvmOverloads constructor(
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.InputTriggerView, 0, 0)
         try {
             attrTypedArray.apply {
-                getColor(R.styleable.InputTriggerView_ITV_StrokeColor, -1).apply {
+                getColor(R.styleable.InputTriggerView_itv_stroke_color, -1).apply {
                     val default = ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface)
                     pickerInputBoxStrokeColor = when (this) {
                         -1 -> default
@@ -190,7 +189,7 @@ class InputTriggerView @JvmOverloads constructor(
                         return@let ColorUtils.setAlphaComponent(this, 140)
                     }
                 }
-                getColor(R.styleable.InputTriggerView_ITV_BackgroundColor, -1).apply {
+                getColor(R.styleable.InputTriggerView_itv_background_color, -1).apply {
                     val default = ResourceUtils.getColorByAttribute(getContext(), R.attr.colorOnSurface)
                     triggerBackgroundColor = when (this) {
                         -1 -> default
@@ -199,24 +198,28 @@ class InputTriggerView @JvmOverloads constructor(
                         return@let ColorUtils.setAlphaComponent(this, 30)
                     }
                 }
-                getInt(R.styleable.InputTriggerView_ITV_LayoutType, InputTypes.BOXED.value).apply {
+                getInt(R.styleable.InputTriggerView_itv_layout_type, InputTypes.BOXED.value).apply {
                     inputType = InputTypes.valueOf(this)
                 }
-                getResourceId(R.styleable.InputTriggerView_ITV_ErrorTextAppearance,
-                    R.style.PickerViewErrorTextAppearance).apply {
+                getResourceId(
+                    R.styleable.InputTriggerView_itv_error_text_appearance,
+                    R.style.PickerViewErrorTextAppearance
+                ).apply {
                     errorAppearance = this
                 }
-                getResourceId(R.styleable.InputTriggerView_ITV_HintTextAppearance,
-                    R.style.PickerViewHintTextAppearance).apply {
+                getResourceId(
+                    R.styleable.InputTriggerView_itv_hint_text_appearance,
+                    R.style.PickerViewHintTextAppearance
+                ).apply {
                     hintAppearance = this
                 }
-                getColor(R.styleable.InputTriggerView_ITV_StartIconColor, -1).apply {
+                getColor(R.styleable.InputTriggerView_itv_start_icon_color, -1).apply {
                     pickerStartIconColor = when (this) {
                         -1 -> ResourceUtils.getColorByAttribute(context, R.attr.colorAccent)
                         else -> this
                     }
                 }
-                startIconUseAlpha = getBoolean(R.styleable.InputTriggerView_ITV_IconUseAlpha, true)
+                startIconUseAlpha = getBoolean(R.styleable.InputTriggerView_itv_icon_use_alpha, true)
             }
         } finally {
             attrTypedArray.recycle()
@@ -252,28 +255,42 @@ class InputTriggerView @JvmOverloads constructor(
     }
 
     private fun setupStroke() {
-        textInputLayout.setBoxStrokeColorStateList(ColorStateList(arrayOf(intArrayOf(android.R.attr.state_focused),
-            intArrayOf(android.R.attr.state_enabled),
-            intArrayOf(android.R.attr.state_focused, android.R.attr.state_pressed),
-            intArrayOf(-android.R.attr.state_enabled),
-            intArrayOf()), intArrayOf(
-            pickerInputBoxStrokeColor,
-            pickerInputBoxStrokeColor,
-            pickerInputBoxStrokeColor,
-            pickerInputBoxStrokeColor,
-            pickerInputBoxStrokeColor
-        )))
+        textInputLayout.setBoxStrokeColorStateList(
+            ColorStateList(
+                arrayOf(
+                    intArrayOf(android.R.attr.state_focused),
+                    intArrayOf(android.R.attr.state_enabled),
+                    intArrayOf(android.R.attr.state_focused, android.R.attr.state_pressed),
+                    intArrayOf(-android.R.attr.state_enabled),
+                    intArrayOf()
+                ), intArrayOf(
+                    pickerInputBoxStrokeColor,
+                    pickerInputBoxStrokeColor,
+                    pickerInputBoxStrokeColor,
+                    pickerInputBoxStrokeColor,
+                    pickerInputBoxStrokeColor
+                )
+            )
+        )
     }
 
     private fun setupStartIcon() {
         val alpha = if (startIconUseAlpha) 140 else 255
         val iconColor: Int = ColorUtils.setAlphaComponent(pickerStartIconColor, alpha)
-        textInputLayout.setStartIconTintList(ColorStateList(arrayOf(intArrayOf(android.R.attr.state_focused,
-            android.R.attr.state_pressed), intArrayOf(-android.R.attr.state_enabled), intArrayOf()), intArrayOf(
-            iconColor,
-            iconColor,
-            iconColor
-        )))
+        textInputLayout.setStartIconTintList(
+            ColorStateList(
+                arrayOf(
+                    intArrayOf(
+                        android.R.attr.state_focused,
+                        android.R.attr.state_pressed
+                    ), intArrayOf(-android.R.attr.state_enabled), intArrayOf()
+                ), intArrayOf(
+                    iconColor,
+                    iconColor,
+                    iconColor
+                )
+            )
+        )
         textInputLayout.startIconDrawable = pickerIcon
     }
 

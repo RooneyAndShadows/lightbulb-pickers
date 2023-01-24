@@ -1,7 +1,6 @@
-plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-}
+apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 33
@@ -43,9 +42,9 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'com.github.rooneyandshadows:java-commons:1.0.6'
-    implementation 'com.github.rooneyandshadows:lightbulb-commons:1.0.10'
+    implementation 'com.github.rooneyandshadows:lightbulb-commons:1.0.18'
     implementation 'com.github.rooneyandshadows:lightbulb-application:1.2.8'
     implementation 'com.github.rooneyandshadows:lightbulb-recycleradapters:1.0.14'
-    implementation 'com.github.rooneyandshadows:lightbulb-dialogs:1.0.12'
+    implementation 'com.github.rooneyandshadows:lightbulb-dialogs:2.0.0-RC4'
     implementation project(":lightbulb-pickers")
 }

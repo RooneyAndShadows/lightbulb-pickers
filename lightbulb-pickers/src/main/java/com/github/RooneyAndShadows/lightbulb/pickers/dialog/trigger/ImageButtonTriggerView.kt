@@ -1,4 +1,4 @@
-package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger
+package com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger
 
 import android.content.Context
 import android.graphics.Color
@@ -11,10 +11,10 @@ import android.util.SparseArray
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatTextView
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogPickerTriggerLayout
 
 @Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate")
 class ImageButtonTriggerView @JvmOverloads constructor(
@@ -140,19 +140,21 @@ class ImageButtonTriggerView @JvmOverloads constructor(
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ImageButtonTriggerView, 0, 0)
         try {
-            hasDefinedBoxBackgroundAttribute = attrTypedArray.hasValue(R.styleable.ButtonTriggerView_BTV_BackgroundColor)
+            hasDefinedBoxBackgroundAttribute = attrTypedArray.hasValue(R.styleable.ButtonTriggerView_btv_background_color)
             attrTypedArray.apply {
-                getColor(R.styleable.ImageButtonTriggerView_IBTV_BackgroundColor, -1).apply {
+                getColor(R.styleable.ImageButtonTriggerView_ibtv_BackgroundColor, -1).apply {
                     buttonBackgroundColor = when (this) {
                         -1 -> Color.TRANSPARENT
                         else -> this
                     }
                 }
-                getResourceId(R.styleable.ImageButtonTriggerView_IBTV_ErrorTextAppearance,
-                    R.style.PickerViewErrorTextAppearance).apply {
+                getResourceId(
+                    R.styleable.ImageButtonTriggerView_ibtv_ErrorTextAppearance,
+                    R.style.PickerViewErrorTextAppearance
+                ).apply {
                     errorAppearance = this
                 }
-                getColor(R.styleable.ImageButtonTriggerView_IBTV_StartIconColor, -1).apply {
+                getColor(R.styleable.ImageButtonTriggerView_ibtv_StartIconColor, -1).apply {
                     pickerStartIconColor = when (this) {
                         -1 -> ResourceUtils.getColorByAttribute(context, R.attr.colorOnPrimary)
                         else -> this

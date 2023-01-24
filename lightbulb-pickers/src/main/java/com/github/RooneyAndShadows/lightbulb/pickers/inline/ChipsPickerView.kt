@@ -1,142 +1,46 @@
-package com.github.rooneyandshadows.lightbulb.pickers.inline
+package com.github.RooneyAndShadows.lightbulb.pickers.inline
 
-import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.show
-import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment.isDialogShown
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter.getDrawable
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.selectedItems
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.getPositionStrings
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder.withSelection
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder.withDialogType
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder.withAnimations
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.saveAdapterState
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.restoreAdapterState
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.selectPositions
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.positionExists
-import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment.setSelection
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.getPosition
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter.setCollection
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.hasSelection
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.getItems
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialogBuilder.withInitialTime
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialogBuilder.buildDialog
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder.withSelection
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder.withDialogType
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder.withAnimations
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.setCollection
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.getItem
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.getColorDrawable
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.ColorModel.colorHex
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withMinYear
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withMaxYear
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withDisabledMonths
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withEnabledMonths
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withPositiveButton
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withNegativeButton
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withOnCancelListener
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withOnDateSelectedEvent
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withAnimations
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.withSelection
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder.buildDialog
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog.setSelection
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog.setCalendarBounds
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog.setDisabledMonths
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog.setEnabledMonths
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialogBuilder.withSelection
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialogBuilder.withDialogType
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialogBuilder.withAnimations
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.setCollection
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialogBuilder.withSelection
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialog.setSelection
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog.setSelection
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialogBuilder.withSelection
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.addOnSelectionChangedListener
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.selectedPositionsAsArray
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel.itemName
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.selectItem
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.addItem
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter.isItemSelected
-import android.widget.LinearLayout
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogPickerTriggerLayout
 import android.graphics.drawable.Drawable
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView.TriggerAttachedCallback
 import kotlin.jvm.JvmOverloads
-import androidx.fragment.app.FragmentActivity
 import android.view.ViewGroup
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import android.content.res.TypedArray
-import com.github.rooneyandshadows.lightbulb.pickers.R
 import android.util.SparseArray
 import android.os.Parcelable
 import android.os.Parcel
 import android.os.Parcelable.Creator
-import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
-import com.google.android.material.textfield.TextInputLayout
-import com.google.android.material.textfield.TextInputEditText
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView.InputTypes
-import android.content.res.ColorStateList
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
-import com.google.android.material.button.MaterialButton
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.AppCompatImageButton
-import android.os.Bundle
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogIconPickerView
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingListener
-import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogTimePickerView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogColorPickerView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogMonthPickerView
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogAdapterPickerView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateTimePickerView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateRangePickerView
 import androidx.appcompat.widget.LinearLayoutCompat
-import com.github.rooneyandshadows.lightbulb.textinputview.TextInputView
-import com.github.rooneyandshadows.lightbulb.pickers.inline.SelectableFilterOptionAdapter
-import com.github.rooneyandshadows.lightbulb.pickers.inline.ChipsPickerView.AdapterOptionCreator
-import com.github.rooneyandshadows.lightbulb.pickers.inline.ChipsPickerView.OnHideListener
-import com.github.rooneyandshadows.lightbulb.pickers.inline.ChipsPickerView.OnOptionCreatedListener
-import com.github.rooneyandshadows.lightbulb.textinputview.TextInputView.TextChangedCallback
 import android.widget.ScrollView
 import androidx.core.widget.NestedScrollView
-import com.github.rooneyandshadows.lightbulb.pickers.inline.ChipsPickerView
 import android.view.View.OnFocusChangeListener
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import android.widget.Filterable
-import android.widget.RelativeLayout
-import com.github.rooneyandshadows.lightbulb.pickers.inline.SelectableFilterOptionAdapter.ChipVH
-import android.widget.Filter.FilterResults
 import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.rooneyandshadows.java.commons.string.StringUtils
+import com.github.rooneyandshadows.lightbulb.commons.utils.DrawableUtils
+import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
+import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.callbacks.EasyAdapterSelectionChangedListener
+import com.github.rooneyandshadows.lightbulb.textinputview.TextInputView
+import com.github.rooneyandshadows.lightbulb.textinputview.TextInputView.TextChangedCallback
 import com.nex3z.flowlayout.FlowLayout
 import java.util.*
 
-class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads constructor(
+class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null
-) : LinearLayoutCompat(context, attrs) {
-    private val CHIPS_GROUP_TAG = ResourceUtils.getPhrase(getContext(), R.string.CP_GroupTag)
-    private val CHIPS_FILTER_CONTAINER_TAG = ResourceUtils.getPhrase(getContext(), R.string.CP_FilterTag)
-    private val CHIPS_FILTER_INPUT_TAG = ResourceUtils.getPhrase(getContext(), R.string.CP_InputEditTextTag)
-    private val CHIPS_OPTIONS_RECYCLER_TAG = ResourceUtils.getPhrase(getContext(), R.string.CP_OptionsRecyclerTag)
-    private val CHIPS_CHIP_ITEM_TEXT_TAG = ResourceUtils.getPhrase(getContext(), R.string.CP_ChipItemTextTag)
-    private val CHIPS_CHIP_ITEM_REMOVE_TAG = ResourceUtils.getPhrase(getContext(), R.string.CP_ChipItemRemoveTag)
-
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0,
+) : LinearLayoutCompat(context, attrs, defStyleAttr, defStyleRes) {
     //private PopupWindow popupWindow;
-    private var rootLayout: LinearLayoutCompat? = null
     private var recyclerView: RecyclerView? = null
-    private var chipGroupInput: TextInputView? = null
-    private var chipGroup: FlowLayout? = null
+    private var filterInput: TextInputView? = null
+    private var flowLayout: FlowLayout? = null
     var pickerHintText: String? = null
         private set
     private var errorText: String? = null
@@ -150,7 +54,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
     private var backgroundCornerRadius = 0
     private var chipsGroupPadding = 0
     private var selection: IntArray?
-    var recyclerAdapter: SelectableFilterOptionAdapter<ModelType?>? = null
+    var recyclerAdapter: SelectableFilterOptionAdapter<ModelType>? = null
         private set
     private var optionCreator: AdapterOptionCreator<ModelType>? = null
     private var internalOnShowListener: OnShowListener? = null
@@ -159,7 +63,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
     private val selectionChangedListeners = ArrayList<SelectionChangedListener>()
     private val onHideListeners = ArrayList<OnHideListener>()
     private val onOptionCreatedListeners = ArrayList<OnOptionCreatedListener<ModelType>>()
-    private val textWatcher = TextChangedCallback { newValue: String, oldValue: String? ->
+    private val textWatcher = TextChangedCallback { newValue: String, _: String? ->
         handleAddOptionVisibility()
         filterOptions(newValue)
     }
@@ -206,7 +110,8 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
             return false
         }
         for (validationCallback in validationCallbacks) isValid = isValid and validationCallback.validate(
-            selectedItems)
+            selectedItems
+        )
         if (isValid) setErrorText(null) else {
             setErrorText(errorText)
         }
@@ -239,7 +144,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
     fun setPickerIcon(icon: Drawable?, color: Int?) {
         pickerIcon = icon
         if (color != null) pickerIcon!!.setTint(color)
-        chipGroupInput!!.setStartIcon(pickerIcon)
+        filterInput!!.setStartIcon(pickerIcon)
     }
 
     fun setPickerIcon(icon: Drawable?) {
@@ -248,19 +153,19 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
 
     fun setErrorText(error: String?) {
         errorText = error
-        chipGroupInput!!.error = errorText
+        filterInput!!.error = errorText
     }
 
     fun setHintText(hintText: String?) {
         pickerHintText = hintText
-        chipGroupInput!!.setHintText(pickerHintText)
+        filterInput!!.setHintText(pickerHintText)
     }
 
     fun setRecyclerAdapter(adapter: SelectableFilterOptionAdapter<ModelType>?) {
         recyclerAdapter = adapter
         recyclerAdapter!!.addOnSelectionChangedListener(EasyAdapterSelectionChangedListener { newSelection: IntArray ->
             selectInternally(newSelection, false)
-            chipGroupInput!!.text = ""
+            filterInput!!.text = ""
             hidePicker()
         })
         recyclerView = findViewWithTag(CHIPS_OPTIONS_RECYCLER_TAG)
@@ -320,7 +225,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
     }*/
     fun showPicker() {
         if (isPickerShown) return
-        if (!chipGroupInput!!.hasFocus()) chipGroupInput!!.requestFocus()
+        if (!filterInput!!.hasFocus()) filterInput!!.requestFocus()
         recyclerView!!.visibility = VISIBLE
         if (internalOnShowListener != null) internalOnShowListener!!.execute()
         for (onShowListener in onShowListeners) onShowListener.execute()
@@ -328,7 +233,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
 
     fun hidePicker() {
         if (!isPickerShown) return
-        if (chipGroupInput!!.hasFocus()) chipGroupInput!!.clearFocus()
+        if (filterInput!!.hasFocus()) filterInput!!.clearFocus()
         recyclerView!!.visibility = GONE
         for (onHideListener in onHideListeners) onHideListener.execute()
     }
@@ -339,23 +244,28 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.ChipsPickerView, 0, 0)
         try {
-            pickerHintText = a.getString(R.styleable.ChipsPickerView_CPV_HintText)
-            pickerRequiredText = a.getString(R.styleable.ChipsPickerView_CPV_RequiredText)
+            pickerHintText = a.getString(R.styleable.ChipsPickerView_cpv_hint_text)
+            pickerRequiredText = a.getString(R.styleable.ChipsPickerView_cpv_required_text)
             pickerHintText = StringUtils.getOrDefault(pickerHintText, "...")
             pickerRequiredText = StringUtils.getOrDefault(pickerRequiredText, "Field is required")
-            backgroundColor = a.getColor(R.styleable.ChipsPickerView_CPV_BackgroundColor,
-                ColorUtils.setAlphaComponent(ResourceUtils.getColorByAttribute(getContext(), R.attr.colorOnSurface), 30))
-            backgroundCornerRadius = a.getDimensionPixelSize(R.styleable.ChipsPickerView_CPV_BackgroundCornerRadius,
-                ResourceUtils.getDimenPxById(getContext(),
-                    com.google.android.material.R.dimen.mtrl_textinput_box_corner_radius_medium))
-            backgroundCornerRadius = a.getDimensionPixelSize(R.styleable.ChipsPickerView_CPV_BackgroundCornerRadius,
-                ResourceUtils.getDimenPxById(getContext(),
-                    com.google.android.material.R.dimen.mtrl_textinput_box_corner_radius_medium))
-            chipsGroupPadding = a.getDimensionPixelSize(R.styleable.ChipsPickerView_CPV_ChipGroupPadding,
-                ResourceUtils.getDimenPxById(getContext(), R.dimen.chips_picker_chip_group_padding))
-            required = a.getBoolean(R.styleable.ChipsPickerView_CPV_Required, false)
-            closeOnLostFocus = a.getBoolean(R.styleable.ChipsPickerView_CPV_CloseOnLostFocus, true)
-            allowToAddNewOptions = a.getBoolean(R.styleable.ChipsPickerView_CPV_AllowToAddNewOptions, true)
+            backgroundColor = a.getColor(
+                R.styleable.ChipsPickerView_cpv_background_color,
+                ColorUtils.setAlphaComponent(ResourceUtils.getColorByAttribute(getContext(), R.attr.colorOnSurface), 30)
+            )
+            backgroundCornerRadius = a.getDimensionPixelSize(
+                R.styleable.ChipsPickerView_cpv_background_corner_radius,
+                ResourceUtils.getDimenPxById(
+                    getContext(),
+                    com.google.android.material.R.dimen.mtrl_textinput_box_corner_radius_medium
+                )
+            )
+            chipsGroupPadding = a.getDimensionPixelSize(
+                R.styleable.ChipsPickerView_cpv_chip_group_padding,
+                ResourceUtils.getDimenPxById(getContext(), R.dimen.chips_picker_chip_group_padding)
+            )
+            required = a.getBoolean(R.styleable.ChipsPickerView_cpv_required, false)
+            closeOnLostFocus = a.getBoolean(R.styleable.ChipsPickerView_cpv_close_on_lost_focus, true)
+            allowToAddNewOptions = a.getBoolean(R.styleable.ChipsPickerView_cpv_allow_to_add_new_options, true)
             defaultIconColor =
                 ColorUtils.setAlphaComponent(ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface), 140)
         } finally {
@@ -370,9 +280,9 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
     }
 
     private fun renderLayout() {
-        rootLayout = inflate(context, R.layout.chips_picker_layout, this) as LinearLayoutCompat
-        chipGroup = findViewWithTag(CHIPS_GROUP_TAG)
-        chipGroupInput = findViewWithTag(CHIPS_FILTER_INPUT_TAG)
+        inflate(context, R.layout.chips_picker_layout, this) as LinearLayoutCompat
+        flowLayout = findViewWithTag(R.id.picker_flow_layout)
+        filterInput = findViewWithTag(R.id.picker_filter_input_view)
     }
 
     private fun setupViews() {
@@ -385,18 +295,18 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
     }
 
     private fun setupInput() {
-        chipGroupInput!!.removeTextChangedCallback(textWatcher)
-        chipGroupInput!!.addTextChangedCallback(textWatcher)
-        chipGroupInput!!.onFocusChangeListener =
+        filterInput!!.removeTextChangedCallback(textWatcher)
+        filterInput!!.addTextChangedCallback(textWatcher)
+        filterInput!!.onFocusChangeListener =
             OnFocusChangeListener { v: View?, hasFocus: Boolean -> if (hasFocus && !isPickerShown) showPicker() else if (closeOnLostFocus && !hasFocus && isPickerShown) hidePicker() }
     }
 
     private fun setupAddButton() {
         val icon = ResourceUtils.getDrawable(context, R.drawable.chip_picker_add_icon)
         icon!!.setTint(ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface))
-        chipGroupInput!!.setEndIcon(icon) { v: View? ->
+        filterInput!!.setEndIcon(icon) {
             if (!allowToAddNewOptions || recyclerAdapter == null || optionCreator == null) return@setEndIcon
-            val newOptionName = chipGroupInput!!.text
+            val newOptionName = filterInput!!.text
             val newOption = optionCreator!!.createOption(newOptionName)
             recyclerAdapter!!.addItem(newOption)
             for (optionCreatedListener in onOptionCreatedListeners) optionCreatedListener.execute(newOption)
@@ -406,23 +316,25 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
 
     private fun setupBackground(newColor: Int) {
         backgroundColor = newColor
-        val backgroundDrawable: Drawable =
-            getLayeredRoundedCornersDrawable.getLayeredRoundedCornersDrawable(ResourceUtils.getColorByAttribute(
-                context, R.attr.colorSurface), backgroundColor, backgroundCornerRadius)
+        val backgroundDrawable: Drawable = DrawableUtils.getLayeredRoundedCornersDrawable(
+            ResourceUtils.getColorByAttribute(context, R.attr.colorSurface),
+            backgroundColor, backgroundCornerRadius
+        )
         background = backgroundDrawable
     }
 
     private fun handleAddOptionVisibility() {
         if (!allowToAddNewOptions || recyclerAdapter == null || optionCreator == null) {
-            chipGroupInput!!.setEndIconVisible(false)
+            filterInput!!.setEndIconVisible(false)
             return
         }
-        val text = chipGroupInput!!.text
-        chipGroupInput!!.setEndIconVisible(!StringUtils.isNullOrEmptyString(text) && !recyclerAdapter!!.hasItemWithName(text))
+        val text = filterInput!!.text
+        val showAddOption = !text.isNullOrBlank() && !recyclerAdapter!!.hasItemWithName(text)
+        filterInput!!.setEndIconVisible(showAddOption)
     }
 
     private fun filterOptions(queryText: String) {
-        if (recyclerAdapter != null) recyclerAdapter.getFilter().filter(queryText)
+        if (recyclerAdapter != null) recyclerAdapter!!.getFilter().filter(queryText)
     }
 
     private fun setupChips() {
@@ -431,49 +343,47 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
     }
 
     private fun clearChips() {
-        val childCount = chipGroup!!.childCount
-        var child = chipGroup!!.getChildAt(0)
-        while (child != null) {
-            val tag = child.tag
-            if (tag != null && tag == CHIPS_FILTER_CONTAINER_TAG) break
-            chipGroup!!.removeView(child)
-            child = chipGroup!!.getChildAt(0)
-        }
+        flowLayout!!.removeAllViews()
     }
 
     private fun buildChips() {
-        if (recyclerAdapter == null || recyclerAdapter!!.selectedItems.size <= 0) {
-            chipGroup!!.setPadding(0, 0, 0, 0)
+        if (recyclerAdapter == null || recyclerAdapter!!.selectedItems.isEmpty()) {
+            flowLayout!!.setPadding(0, 0, 0, 0)
             return
         }
-        chipGroup!!.setPadding(chipsGroupPadding,
+        flowLayout!!.setPadding(
             chipsGroupPadding,
             chipsGroupPadding,
-            ResourceUtils.getDimenPxById(context, R.dimen.chips_picker_spacing_size))
+            chipsGroupPadding,
+            ResourceUtils.getDimenPxById(context, R.dimen.chips_picker_spacing_size)
+        )
         val selectedItems = recyclerAdapter!!.selectedItems
-        for (position in selectedItems.indices) buildChip(selectedItems[position])
+        for (position in selectedItems.indices) {
+            val chipView = buildChip(selectedItems[position])
+            flowLayout!!.addView(chipView)
+        }
     }
 
-    private fun buildChip(targetItem: ModelType?) {
-        val itemName = targetItem!!.itemName
-        val chipLayout = LayoutInflater.from(context).inflate(R.layout.chips_picker_chip, this, false) as LinearLayoutCompat
-        val chipTextView = chipLayout.findViewWithTag<TextView>(CHIPS_CHIP_ITEM_TEXT_TAG)
-        val chipRemoveButton = chipLayout.findViewWithTag<AppCompatImageButton>(CHIPS_CHIP_ITEM_REMOVE_TAG)
-        val chipBackground: Drawable = getRoundedCornersDrawable.getRoundedCornersDrawable(ResourceUtils.getColorByAttribute(
-            context, R.attr.colorOnSurface), ResourceUtils.getDimenPxById(context, R.dimen.chips_picker_chip_height))
-        val chipRemoveIcon = ResourceUtils.getDrawable(context, R.drawable.chip_picker_remove_icon)
-        chipRemoveIcon!!.setTint(ResourceUtils.getColorByAttribute(context, R.attr.colorPrimary))
-        chipLayout.background = ResourceUtils.getDrawable(context, R.drawable.bg_chip_picker_item)
-        chipRemoveButton.setImageDrawable(chipRemoveIcon)
-        chipRemoveButton.setOnClickListener { v: View? -> recyclerAdapter!!.selectItem(targetItem, false) }
-        chipRemoveButton.setBackgroundDrawable(ResourceUtils.getDrawable(context, R.drawable.bg_chip_picker_remove_icon))
-        chipTextView.text = itemName
-        chipTextView.setTextColor(ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface))
-        chipTextView.compoundDrawablePadding = ResourceUtils.getDimenPxById(context, R.dimen.chips_picker_spacing_size)
-        val childrenCount = chipGroup!!.childCount
-        val index: Int
-        index = if (childrenCount > 1) childrenCount - 1 else 0
-        chipGroup!!.addView(chipLayout, index)
+    private fun buildChip(targetItem: ModelType): View {
+        val itemName = targetItem.itemName
+        val layoutInflater = LayoutInflater.from(context)
+        val layoutId = R.layout.chips_picker_chip
+        return layoutInflater.inflate(layoutId, null, false).apply {
+            background = ResourceUtils.getDrawable(context, R.drawable.bg_chip_picker_item)
+            findViewById<AppCompatImageButton>(R.id.picker_chip_item_remove_button).apply {
+                val chipRemoveIcon = ResourceUtils.getDrawable(context, R.drawable.chip_picker_remove_icon).apply {
+                    this!!.setTint(ResourceUtils.getColorByAttribute(context, R.attr.colorPrimary))
+                }
+                background = ResourceUtils.getDrawable(context, R.drawable.bg_chip_picker_remove_icon)
+                setImageDrawable(chipRemoveIcon)
+                setOnClickListener { recyclerAdapter!!.selectItem(targetItem, false) }
+            }
+            findViewById<TextView>(R.id.picker_chip_item_text_view).apply {
+                text = itemName
+                setTextColor(ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface))
+                compoundDrawablePadding = ResourceUtils.getDimenPxById(context, R.dimen.chips_picker_spacing_size)
+            }
+        }
     }
 
     private fun selectInternally(newSelection: IntArray, selectInAdapter: Boolean) {
@@ -531,7 +441,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
             }
         });
     }*/
-    public override fun onSaveInstanceState(): Parcelable? {
+    public override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val myState = SavedState(superState)
         myState.pickerIsShowing = isPickerShown
@@ -546,7 +456,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
         myState.pickerChipGroupPadding = chipsGroupPadding
         myState.pickerBackgroundCornerRadius = backgroundCornerRadius
         myState.pickerAllowToAddNewOptions = allowToAddNewOptions
-        myState.pickerInputState = chipGroupInput!!.onSaveInstanceState()
+        myState.pickerInputState = filterInput!!.onSaveInstanceState()
         return myState
     }
 
@@ -565,7 +475,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
         backgroundCornerRadius = savedState.pickerBackgroundCornerRadius
         defaultIconColor = savedState.pickerDefaultIconColor
         allowToAddNewOptions = savedState.pickerAllowToAddNewOptions
-        chipGroupInput!!.onRestoreInstanceState(savedState.pickerInputState)
+        filterInput!!.onRestoreInstanceState(savedState.pickerInputState)
         setupViews()
         if (isPickerShowing) showPicker()
     }
@@ -579,7 +489,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
     }
 
     private class SavedState : BaseSavedState {
-        var selection: IntArray?
+        var selection: IntArray? = null
         var pickerHintText: String? = null
         var pickerErrorText: String? = null
         var pickerRequiredText: String? = null
@@ -596,22 +506,22 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
         var pickerInputState: Parcelable? = null
 
         internal constructor(superState: Parcelable?) : super(superState) {}
-        private constructor(`in`: Parcel) : super(`in`) {
-            selection = `in`.createIntArray()
-            pickerHintText = `in`.readString()
-            pickerErrorText = `in`.readString()
-            pickerRequiredText = `in`.readString()
-            pickerIsShowing = `in`.readByte().toInt() != 0
-            pickerIsRequired = `in`.readByte().toInt() != 0
-            pickerIsErrorEnabled = `in`.readByte().toInt() != 0
-            pickerShowSelectedTextValue = `in`.readByte().toInt() != 0
-            pickerCloseOnLostFocus = `in`.readByte().toInt() != 0
-            pickerAllowToAddNewOptions = `in`.readByte().toInt() != 0
-            pickerBackgroundColor = `in`.readInt()
-            pickerDefaultIconColor = `in`.readInt()
-            pickerChipGroupPadding = `in`.readInt()
-            pickerBackgroundCornerRadius = `in`.readInt()
-            pickerInputState = `in`.readParcelable(javaClass.classLoader)
+        private constructor(parcel: Parcel) : super(parcel) {
+            selection = parcel.createIntArray()
+            pickerHintText = parcel.readString()
+            pickerErrorText = parcel.readString()
+            pickerRequiredText = parcel.readString()
+            pickerIsShowing = parcel.readByte().toInt() != 0
+            pickerIsRequired = parcel.readByte().toInt() != 0
+            pickerIsErrorEnabled = parcel.readByte().toInt() != 0
+            pickerShowSelectedTextValue = parcel.readByte().toInt() != 0
+            pickerCloseOnLostFocus = parcel.readByte().toInt() != 0
+            pickerAllowToAddNewOptions = parcel.readByte().toInt() != 0
+            pickerBackgroundColor = parcel.readInt()
+            pickerDefaultIconColor = parcel.readInt()
+            pickerChipGroupPadding = parcel.readInt()
+            pickerBackgroundCornerRadius = parcel.readInt()
+            pickerInputState = parcel.readParcelable(javaClass.classLoader)
         }
 
         override fun writeToParcel(out: Parcel, flags: Int) {
@@ -633,17 +543,20 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel?> @JvmOverloads construct
             out.writeParcelable(pickerInputState, flags)
         }
 
-        companion object {
-            val CREATOR: Creator<SavedState> = object : Creator<SavedState?> {
-                override fun createFromParcel(`in`: Parcel): SavedState? {
-                    return SavedState(`in`)
-                }
+        override fun describeContents(): Int {
+            return 0
+        }
 
-                override fun newArray(size: Int): Array<SavedState?> {
-                    return arrayOfNulls(size)
-                }
+        companion object CREATOR : Creator<SavedState> {
+            override fun createFromParcel(parcel: Parcel): SavedState {
+                return SavedState(parcel)
+            }
+
+            override fun newArray(size: Int): Array<SavedState?> {
+                return arrayOfNulls(size)
             }
         }
+
     }
 
     interface SelectionChangedListener {

@@ -16,7 +16,6 @@
         android:gravity="center_vertical"
         android:paddingStart="@dimen/chips_picker_spacing_size"
         android:paddingEnd="@dimen/chips_picker_spacing_size"
-        android:tag="chipOptionTextView"
         android:textAppearance="@android:style/TextAppearance"
         tools:text="Option" />
 

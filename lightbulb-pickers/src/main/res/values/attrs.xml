@@ -1,96 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="InputTriggerView">
-        <attr name="ITV_BackgroundColor" format="color" />
-        <attr name="ITV_StrokeColor" format="color" />
-        <attr name="ITV_StartIconColor" format="color" />
-        <attr name="ITV_ErrorTextAppearance" format="reference" />
-        <attr name="ITV_HintTextAppearance" format="reference" />
-        <attr name="ITV_IconUseAlpha" format="boolean" />
-        <attr name="ITV_LayoutType" format="enum">
+        <attr name="itv_background_color" format="color" />
+        <attr name="itv_stroke_color" format="color" />
+        <attr name="itv_start_icon_color" format="color" />
+        <attr name="itv_error_text_appearance" format="reference" />
+        <attr name="itv_hint_text_appearance" format="reference" />
+        <attr name="itv_icon_use_alpha" format="boolean" />
+        <attr name="itv_layout_type" format="enum">
             <enum name="BOXED" value="1" />
             <enum name="OUTLINED" value="2" />
         </attr>
     </declare-styleable>
 
     <declare-styleable name="ButtonTriggerView">
-        <attr name="BTV_BackgroundColor" format="color" />
-        <attr name="BTV_TextColor" format="color" />
-        <attr name="BTV_BackgroundRadius" format="integer" />
-        <attr name="BTV_StartIconColor" format="color" />
-        <attr name="BTV_ErrorTextAppearance" format="reference" />
+        <attr name="btv_background_color" format="color" />
+        <attr name="btv_text_color" format="color" />
+        <attr name="btv_background_corner_radius" format="integer" />
+        <attr name="btv_start_icon_color" format="color" />
+        <attr name="btv_error_text_appearance" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="ImageButtonTriggerView">
-        <attr name="IBTV_BackgroundColor" format="color" />
-        <attr name="IBTV_ErrorTextAppearance" format="reference" />
-        <attr name="IBTV_StartIconColor" format="color" />
+        <attr name="ibtv_BackgroundColor" format="color" />
+        <attr name="ibtv_ErrorTextAppearance" format="reference" />
+        <attr name="ibtv_StartIconColor" format="color" />
     </declare-styleable>
 
     <declare-styleable name="PickerView">
-        <attr name="PV_DialogTag" format="string" />
-        <attr name="PV_DialogCancelable" format="boolean" />
-        <attr name="PV_DialogButtonPosText" format="string" />
-        <attr name="PV_DialogButtonNegText" format="string" />
-        <attr name="PV_DialogAnimation" format="enum">
+        <attr name="pv_dialog_tag" format="string" />
+        <attr name="pv_dialog_cancelable" format="boolean" />
+        <attr name="pv_dialog_button_positive_text" format="string" />
+        <attr name="pv_dialog_button_negative_text" format="string" />
+        <attr name="pv_dialog_animation" format="enum">
             <enum name="fade" value="1" />
             <enum name="no_animation" value="2" />
             <enum name="transition_from_left_to_right" value="3" />
             <enum name="transition_from_top_to_bottom" value="4" />
             <enum name="transition_from_bottom_to_bottom" value="5" />
         </attr>
-        <attr name="PV_DialogTitle" format="string" />
-        <attr name="PV_DialogMessage" format="string" />
-        <attr name="PV_DialogType" format="enum">
+        <attr name="pv_dialog_title" format="string" />
+        <attr name="pv_dialog_message" format="string" />
+        <attr name="pv_dialog_type" format="enum">
             <enum name="NORMAL" value="1" />
             <enum name="FULLSCREEN" value="2" />
             <enum name="BOTTOM_SHEET" value="3" />
         </attr>
-        <attr name="PV_DialogButtonTextColor" format="color" />
-        <attr name="PV_DialogButtonBorderRadius" format="integer" />
-        <attr name="PV_ValidationEnabled" format="boolean" />
-        <attr name="PV_ErrorEnabled" format="boolean" />
-        <attr name="PV_Required" format="boolean" />
-        <attr name="PV_ShowSelectedText" format="boolean" />
-        <attr name="PV_HintText" format="string" />
-        <attr name="PV_RequiredText" format="string" />
-        <attr name="PV_ErrorText" format="string" />
+        <attr name="pv_dialog_button_text_color" format="color" />
+        <attr name="pv_dialog_button_corner_radius" format="integer" />
+        <attr name="pv_validation_enabled" format="boolean" />
+        <attr name="pv_error_enabled" format="boolean" />
+        <attr name="pv_required" format="boolean" />
+        <attr name="pv_show_selected_text" format="boolean" />
+        <attr name="pv_hint_text" format="string" />
+        <attr name="pv_error_required_text" format="string" />
+        <attr name="pv_error_text" format="string" />
     </declare-styleable>
 
     <declare-styleable name="DialogAdapterPickerView" />
 
     <declare-styleable name="DialogIconPickerView">
-        <attr name="IPV_SelectedIconSize" format="dimension" />
+        <attr name="ipv_selected_icon_size" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="DialogColorPickerView" />
 
     <declare-styleable name="DialogDatePickerView">
-        <attr name="DPV_DateFormat" format="string" />
+        <attr name="dpv_date_format" format="string" />
     </declare-styleable>
 
     <declare-styleable name="DialogDateRangePickerView">
-        <attr name="DRPV_TextFrom" format="string" />
-        <attr name="DRPV_TextTo" format="string" />
-        <attr name="DRPV_DateFormat" format="string" />
+        <attr name="drpv_text_from" format="string" />
+        <attr name="drpv_text_to" format="string" />
+        <attr name="drpv_date_format" format="string" />
     </declare-styleable>
 
     <declare-styleable name="DialogMonthPickerView">
-        <attr name="MPV_MinYear" format="integer" />
-        <attr name="MPV_MaxYear" format="integer" />
-        <attr name="MPV_DateFormat" format="string" />
+        <attr name="mpv_min_year" format="integer" />
+        <attr name="mpv_max_year" format="integer" />
+        <attr name="mpv_date_format" format="string" />
     </declare-styleable>
 
-    <declare-styleable name="DialogTimePickerView" />
+    <declare-styleable name="DialogTimePickerView">
+        <attr name="tpv_time_format" format="string" />
+    </declare-styleable>
 
     <declare-styleable name="ChipsPickerView">
-        <attr name="CPV_Required" format="boolean" />
-        <attr name="CPV_CloseOnLostFocus" format="boolean" />
-        <attr name="CPV_AllowToAddNewOptions" format="boolean" />
-        <attr name="CPV_HintText" format="string" />
-        <attr name="CPV_RequiredText" format="string" />
-        <attr name="CPV_BackgroundColor" format="color" />
-        <attr name="CPV_BackgroundCornerRadius" format="dimension" />
-        <attr name="CPV_ChipGroupPadding" format="dimension" />
+        <attr name="cpv_required" format="boolean" />
+        <attr name="cpv_close_on_lost_focus" format="boolean" />
+        <attr name="cpv_allow_to_add_new_options" format="boolean" />
+        <attr name="cpv_hint_text" format="string" />
+        <attr name="cpv_required_text" format="string" />
+        <attr name="cpv_background_color" format="color" />
+        <attr name="cpv_background_corner_radius" format="dimension" />
+        <attr name="cpv_chip_group_padding" format="dimension" />
     </declare-styleable>
 </resources>

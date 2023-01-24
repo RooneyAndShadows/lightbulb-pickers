@@ -1,4 +1,4 @@
-package com.github.rooneyandshadows.lightbulb.pickers.dialog
+package com.github.RooneyAndShadows.lightbulb.pickers.dialog
 
 import android.content.Context
 import android.os.Parcel
@@ -10,13 +10,14 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
-import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
-import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialogBuilder
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
+import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog.*
 import com.github.rooneyandshadows.lightbulb.pickers.R
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -26,7 +27,7 @@ class DialogDateRangePickerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
-) : BaseDialogPickerView<Array<OffsetDateTime?>>(context, attrs, defStyleAttr, defStyleRes) {
+) : BaseDialogPickerView<DateRange>(context, attrs, defStyleAttr, defStyleRes) {
     private val dialog: DateRangePickerDialog
         get() = pickerDialog as DateRangePickerDialog
     private var datePickerFormat: String = DEFAULT_DATE_FORMAT
@@ -52,8 +53,8 @@ class DialogDateRangePickerView @JvmOverloads constructor(
         get() {
             val default = ResourceUtils.getPhrase(context, R.string.dialog_date_picker_empty_text)
             if (!hasSelection) return default
-            val from = DateUtilsOffsetDate.getDateString(datePickerFormat, selection!![0])
-            val to = DateUtilsOffsetDate.getDateString(datePickerFormat, selection!![1])
+            val from = DateUtilsOffsetDate.getDateString(datePickerFormat, selection!!.from)
+            val to = DateUtilsOffsetDate.getDateString(datePickerFormat, selection!!.to)
             val viewTextFormat = "{from} - {to}"
             return viewTextFormat.replace("{from}", from).replace("{to}", to)
         }
@@ -63,17 +64,17 @@ class DialogDateRangePickerView @JvmOverloads constructor(
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogDateRangePickerView, 0, 0)
         try {
             attrTypedArray.apply {
-                datePickerFormat = getString(R.styleable.DialogDateRangePickerView_DRPV_DateFormat).let {
+                datePickerFormat = getString(R.styleable.DialogDateRangePickerView_drpv_date_format).let {
                     val default = DEFAULT_DATE_FORMAT
                     if (it.isNullOrBlank()) return@let default
                     else return@let it
                 }
-                datePickerFromText = getString(R.styleable.DialogDateRangePickerView_DRPV_TextFrom).let {
+                datePickerFromText = getString(R.styleable.DialogDateRangePickerView_drpv_text_from).let {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_date_from_text)
                     if (it.isNullOrBlank()) return@let default
                     else return@let it
                 }
-                datePickerToText = getString(R.styleable.DialogDateRangePickerView_DRPV_TextTo).let {
+                datePickerToText = getString(R.styleable.DialogDateRangePickerView_drpv_text_to).let {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_date_to_text)
                     if (it.isNullOrBlank()) return@let default
                     else return@let it
@@ -84,8 +85,7 @@ class DialogDateRangePickerView @JvmOverloads constructor(
         }
     }
 
-    @Override
-    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<Array<OffsetDateTime?>> {
+    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<DateRange> {
         return DateRangePickerDialogBuilder(null, fragmentManager, pickerDialogTag)
             .buildDialog()
     }
@@ -114,18 +114,13 @@ class DialogDateRangePickerView @JvmOverloads constructor(
     }
 
     fun setRange(start: OffsetDateTime, end: OffsetDateTime) {
-        selection = arrayOf(start, end)
+        selection = DateRange(start, end)
     }
 
-    private fun compareValues(v1: Array<OffsetDateTime?>?, v2: Array<OffsetDateTime?>?): Boolean {
-        if ((v1 == null || v1.isEmpty()) && (v2 == null || v2.isEmpty())) return true
-        if ((v1 == null || v1.isEmpty()) || (v2 == null || v2.isEmpty())) return false
-        if (v1.size != v2.size) return false
-        return compareDates(v1.first(), v2.first()) && compareDates(v1.last(), v2.last())
-    }
-
-    private fun compareDates(testDate: OffsetDateTime?, target: OffsetDateTime?): Boolean {
-        return DateUtilsOffsetDate.isDateEqual(testDate, target, false)
+    private fun compareValues(v1: DateRange?, v2: DateRange?): Boolean {
+        if ((v1 == null) && (v2 == null)) return true
+        if ((v1 == null) || (v2 == null)) return false
+        return v1.compare(v2)
     }
 
     private class SavedState : BaseSavedState {
@@ -160,23 +155,22 @@ class DialogDateRangePickerView @JvmOverloads constructor(
 
         @JvmStatic
         @BindingAdapter("dateRangePickerSelection")
-        fun updatePickerSelectionBinding(view: DialogDateRangePickerView, selectedRange: Array<OffsetDateTime?>?) {
-            view.selection = selectedRange
+        fun setDateRange(view: DialogDateRangePickerView, newDateRange: DateRange?) {
+            view.selection = newDateRange
         }
 
         @JvmStatic
         @InverseBindingAdapter(attribute = "dateRangePickerSelection", event = "dateRangeSelectionChanged")
-        fun getText(view: DialogDateRangePickerView): Array<OffsetDateTime?>? {
+        fun getDateRange(view: DialogDateRangePickerView): DateRange? {
             return view.selection
         }
 
         @JvmStatic
         @BindingAdapter("dateRangeSelectionChanged")
         fun setListeners(view: DialogDateRangePickerView, attrChange: InverseBindingListener) {
-            view.dataBindingListener = object : SelectionChangedListener<Array<OffsetDateTime?>> {
-                override fun execute(newSelection: Array<OffsetDateTime?>?, oldSelection: Array<OffsetDateTime?>?) {
-                    if (!view.compareValues(newSelection, oldSelection))
-                        attrChange.onChange()
+            view.dataBindingListener = object : SelectionChangedListener<DateRange> {
+                override fun execute(newSelection: DateRange?, oldSelection: DateRange?) {
+                    if (!view.compareValues(newSelection, oldSelection)) attrChange.onChange()
                 }
             }
         }

@@ -7,11 +7,5 @@
     <item name="picker_default_dialog_tag_text" type="string">DEFAULT_PICKER_DIALOG_TAG</item>
     <item name="picker_default_date_from_text" type="string">FROM</item>
     <item name="picker_default_date_to_text" type="string">TO</item>
-    <!---->
-    <item name="CP_GroupTag" type="string">CPGroup</item>
-    <item name="CP_ChipItemRemoveTag" type="string">CPChipButtonRemoveTag</item>
-    <item name="CP_ChipItemTextTag" type="string">CPChipTextTag</item>
-    <item name="CP_FilterTag" type="string">CPHeader</item>
-    <item name="CP_InputEditTextTag" type="string">CPInputEditText</item>
-    <item name="CP_OptionsRecyclerTag" type="string">CPOptionsRecycler</item>
+    <item name="picker_chips_default_hint" type="string">...</item>
 </resources>

@@ -7,22 +7,22 @@
     android:paddingEnd="@dimen/chips_picker_spacing_size">
 
     <TextView
+        android:id="@+id/picker_chip_item_text_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:ellipsize="marquee"
         android:gravity="center_vertical"
         android:singleLine="true"
-        android:tag="@string/CP_ChipItemTextTag"
         android:textStyle="bold"
         tools:text="chip text" />
 
     <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/picker_chip_item_remove_button"
         android:layout_width="@dimen/chips_picker_chip_remove_button_size"
         android:layout_height="@dimen/chips_picker_chip_remove_button_size"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/chips_picker_spacing_size"
-        android:tag="@string/CP_ChipItemRemoveTag"
         tools:src="@drawable/chip_picker_remove_icon" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,4 +1,4 @@
-package com.github.rooneyandshadows.lightbulb.pickers.dialog.base
+package com.github.RooneyAndShadows.lightbulb.pickers.dialog.base
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
@@ -135,7 +136,6 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             pickerDialog.setSelection(value)
         }
         get() = pickerDialog.getSelection()
-
     protected abstract val viewText: String
     protected abstract fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<SelectionType>
     protected abstract fun readAttributes(context: Context, attrs: AttributeSet?)
@@ -293,55 +293,55 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.PickerView, 0, 0)
         try {
             attrTypedArray.apply {
-                getString(R.styleable.PickerView_PV_DialogTitle).apply {
+                getString(R.styleable.PickerView_pv_dialog_title).apply {
                     val default = ""
                     pickerDialogTitle = this ?: default
                 }
-                getString(R.styleable.PickerView_PV_DialogMessage).apply {
+                getString(R.styleable.PickerView_pv_dialog_message).apply {
                     val default = ""
                     pickerDialogMessage = this ?: default
                 }
-                getString(R.styleable.PickerView_PV_HintText).apply {
+                getString(R.styleable.PickerView_pv_hint_text).apply {
                     val default = ""
                     pickerHintText = this ?: default
                 }
-                getString(R.styleable.PickerView_PV_ErrorText).apply {
+                getString(R.styleable.PickerView_pv_error_text).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_error_text)
                     errorText = this ?: default
                 }
-                getString(R.styleable.PickerView_PV_RequiredText).apply {
+                getString(R.styleable.PickerView_pv_error_required_text).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_required_text)
                     pickerRequiredText = this ?: default
                 }
-                getString(R.styleable.PickerView_PV_DialogButtonPosText).apply {
+                getString(R.styleable.PickerView_pv_dialog_button_positive_text).apply {
                     pickerDialogPositiveButtonText = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_positive_button_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
                 }
-                getString(R.styleable.PickerView_PV_DialogButtonNegText).apply {
+                getString(R.styleable.PickerView_pv_dialog_button_negative_text).apply {
                     pickerDialogNegativeButtonText = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_negative_button_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
                 }
-                getString(R.styleable.PickerView_PV_DialogTag).apply {
+                getString(R.styleable.PickerView_pv_dialog_tag).apply {
                     pickerDialogTag = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_dialog_tag_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
                 }
-                getInt(R.styleable.PickerView_PV_DialogType, NORMAL.value).apply {
+                getInt(R.styleable.PickerView_pv_dialog_type, NORMAL.value).apply {
                     pickerDialogType = DialogTypes.valueOf(this)
                 }
-                getInt(R.styleable.PickerView_PV_DialogAnimation, NO_ANIMATION.value).apply {
+                getInt(R.styleable.PickerView_pv_dialog_animation, NO_ANIMATION.value).apply {
                     pickerDialogAnimationType = DialogAnimationTypes.valueOf(this)
                 }
-                errorEnabled = getBoolean(R.styleable.PickerView_PV_ErrorEnabled, false)
-                required = getBoolean(R.styleable.PickerView_PV_Required, false)
-                isValidationEnabled = getBoolean(R.styleable.PickerView_PV_ValidationEnabled, false)
-                pickerDialogCancelable = getBoolean(R.styleable.PickerView_PV_DialogCancelable, true)
-                showSelectedTextValue = getBoolean(R.styleable.PickerView_PV_ShowSelectedText, true)
+                errorEnabled = getBoolean(R.styleable.PickerView_pv_error_enabled, false)
+                required = getBoolean(R.styleable.PickerView_pv_required, false)
+                isValidationEnabled = getBoolean(R.styleable.PickerView_pv_validation_enabled, false)
+                pickerDialogCancelable = getBoolean(R.styleable.PickerView_pv_dialog_cancelable, true)
+                showSelectedTextValue = getBoolean(R.styleable.PickerView_pv_show_selected_text, true)
             }
         } finally {
             attrTypedArray.recycle()

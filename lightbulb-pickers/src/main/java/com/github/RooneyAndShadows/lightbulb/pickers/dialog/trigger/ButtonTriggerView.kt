@@ -1,4 +1,4 @@
-package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger
+package com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -11,10 +11,10 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
-import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
-import com.github.rooneyandshadows.lightbulb.pickers.R
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogPickerTriggerLayout
+import com.github.RooneyAndShadows.lightbulb.commons.utils.ResourceUtils
+import com.github.RooneyAndShadows.lightbulb.pickers.R
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
 import com.google.android.material.button.MaterialButton
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -144,22 +144,22 @@ class ButtonTriggerView @JvmOverloads constructor(
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ButtonTriggerView, 0, 0)
         try {
-            hasDefinedBoxBackgroundAttribute = attrTypedArray.hasValue(R.styleable.ButtonTriggerView_BTV_BackgroundColor)
+            hasDefinedBoxBackgroundAttribute = attrTypedArray.hasValue(R.styleable.ButtonTriggerView_btv_BackgroundColor)
             attrTypedArray.apply {
-                getColor(R.styleable.ButtonTriggerView_BTV_BackgroundColor, -1).apply {
+                getColor(R.styleable.ButtonTriggerView_btv_BackgroundColor, -1).apply {
                     buttonBackgroundColor = when (this) {
                         -1 -> Color.TRANSPARENT
                         else -> this
                     }
                 }
-                getInt(R.styleable.ButtonTriggerView_BTV_BackgroundRadius, 5).apply {
+                getInt(R.styleable.ButtonTriggerView_btv_BackgroundRadius, 5).apply {
                     cornerRadius = ResourceUtils.dpToPx(this)
                 }
-                getResourceId(R.styleable.ButtonTriggerView_BTV_ErrorTextAppearance,
+                getResourceId(R.styleable.ButtonTriggerView_btv_ErrorTextAppearance,
                     R.style.PickerViewErrorTextAppearance).apply {
                     errorAppearance = this
                 }
-                getColor(R.styleable.ButtonTriggerView_BTV_StartIconColor, -1).apply {
+                getColor(R.styleable.ButtonTriggerView_btv_StartIconColor, -1).apply {
                     pickerStartIconColor = when (this) {
                         -1 -> ResourceUtils.getColorByAttribute(context, R.attr.colorOnPrimary)
                         else -> this

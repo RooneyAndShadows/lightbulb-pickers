@@ -1,4 +1,4 @@
-package com.github.rooneyandshadows.lightbulb.pickers.dialog
+package com.github.RooneyAndShadows.lightbulb.pickers.dialog
 
 import android.content.Context
 import android.graphics.Color
@@ -11,15 +11,16 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
-import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.ColorModel
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
+import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogPickerTriggerLayout
 
 @Suppress("RedundantOverride", "UnnecessaryVariable", "unused")
 class DialogColorPickerView @JvmOverloads constructor(
@@ -35,18 +36,18 @@ class DialogColorPickerView @JvmOverloads constructor(
         }
 
     init {
-        addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray?> {
-            override fun onAttached(triggerView: DialogPickerTriggerLayout, pickerView: BaseDialogPickerView<IntArray?>) {
+        addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray> {
+            override fun onAttached(triggerView: DialogPickerTriggerLayout, pickerView: BaseDialogPickerView<IntArray>) {
                 updatePickerIcon(null)
             }
         })
     }
 
     @Override
-    override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray?>) {
+    override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
         super.onDialogInitialized(dialog)
         dialog.apply {
-            addSelectionChangedListener(object : SelectionChangedListener<IntArray?> {
+            addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
                 override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
                     updatePickerIcon(newSelection)
                 }
@@ -64,7 +65,7 @@ class DialogColorPickerView @JvmOverloads constructor(
         }
     }
 
-    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray?> {
+    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray> {
         return ColorPickerDialogBuilder(null, fragmentManager, pickerDialogTag)
             .buildDialog()
     }
@@ -133,33 +134,36 @@ class DialogColorPickerView @JvmOverloads constructor(
 
     companion object {
         @JvmStatic
-        @InverseBindingAdapter(attribute = "colorPickerSelection", event = "colorPickerSelectionChanged")
-        fun getSelectedValue(view: DialogColorPickerView): String? {
-            return if (view.hasSelection) {
-                view.selectedItems[0].externalName
-            } else null
-        }
-
-        @JvmStatic
         @BindingAdapter(value = ["colorPickerSelection"])
-        fun setPickerSelection(view: DialogColorPickerView, newExternalName: String?) {
-            if (newExternalName.isNullOrBlank()) return
+        fun setColor(view: DialogColorPickerView, newColorName: String?) {
+            if (newColorName.isNullOrBlank()) {
+                if (view.hasSelection) view.selection = null
+                return
+            }
             if (view.hasSelection) {
                 val currentSelection: ColorModel = view.selectedItems[0]
-                if (currentSelection.externalName == newExternalName) return
+                if (currentSelection.externalName == newColorName) return
             }
             for (colorModel in view.data)
-                if (newExternalName == colorModel.externalName) {
+                if (newColorName == colorModel.externalName) {
                     view.selectItem(colorModel)
                     break
                 }
         }
 
         @JvmStatic
+        @InverseBindingAdapter(attribute = "colorPickerSelection", event = "colorPickerSelectionChanged")
+        fun getColor(view: DialogColorPickerView): String? {
+            return if (view.hasSelection) {
+                view.selectedItems[0].externalName
+            } else null
+        }
+
+        @JvmStatic
         @BindingAdapter(value = ["colorPickerSelectionChanged"], requireAll = false)
         fun bindPickerEvent(view: DialogColorPickerView, bindingListener: InverseBindingListener) {
             if (view.hasSelection) bindingListener.onChange()
-            view.dataBindingListener = object : SelectionChangedListener<IntArray?> {
+            view.dataBindingListener = object : SelectionChangedListener<IntArray> {
                 override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
                     bindingListener.onChange()
                 }

@@ -1,4 +1,4 @@
-package com.github.rooneyandshadows.lightbulb.pickers.dialog
+package com.github.RooneyAndShadows.lightbulb.pickers.dialog
 
 import android.content.Context
 import android.os.Parcel
@@ -10,6 +10,7 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
+import com.github.RooneyAndShadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter
@@ -37,10 +38,10 @@ class DialogIconPickerView @JvmOverloads constructor(
         }
 
     @Override
-    override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray?>) {
+    override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
         super.onDialogInitialized(dialog)
         dialog.apply {
-            addSelectionChangedListener(object : SelectionChangedListener<IntArray?> {
+            addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
                 override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
                     updatePickerIcon(newSelection)
                 }
@@ -54,7 +55,7 @@ class DialogIconPickerView @JvmOverloads constructor(
         try {
             attrTypedArray.apply {
                 val default = ResourceUtils.getDimenPxById(context, R.dimen.icon_picker_selected_size)
-                selectedIconSize = getDimensionPixelSize(R.styleable.DialogIconPickerView_IPV_SelectedIconSize, default)
+                selectedIconSize = getDimensionPixelSize(R.styleable.DialogIconPickerView_ipv_selected_icon_size, default)
             }
             showSelectedTextValue = false
         } finally {
@@ -63,7 +64,7 @@ class DialogIconPickerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray?> {
+    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray> {
         return IconPickerDialogBuilder(null, fragmentManager, pickerDialogTag)
             .buildDialog()
     }
@@ -138,32 +139,35 @@ class DialogIconPickerView @JvmOverloads constructor(
 
     companion object {
         @JvmStatic
-        @InverseBindingAdapter(attribute = "iconPickerSelection", event = "iconPickerSelectionChanged")
-        fun getSelectedValue(view: DialogIconPickerView): String? {
-            return if (view.hasSelection) {
-                view.selectedItems[0].iconName
-            } else null
-        }
-
-        @JvmStatic
         @BindingAdapter(value = ["iconPickerSelection"])
-        fun setPickerSelection(view: DialogIconPickerView, newExternalName: String?) {
-            if (newExternalName.isNullOrBlank()) return
+        fun setIcon(view: DialogIconPickerView, newIconName: String?) {
+            if (newIconName.isNullOrBlank()) {
+                if (view.hasSelection) view.selection = null
+                return
+            }
             if (view.hasSelection) {
                 val currentSelection: IconModel = view.selectedItems[0]
-                if (currentSelection.iconName == newExternalName) return
+                if (currentSelection.iconName == newIconName) return
             }
-            for (iconModel in view.data) if (newExternalName == iconModel.iconName) {
+            for (iconModel in view.data) if (newIconName == iconModel.iconName) {
                 view.selectItem(iconModel)
                 break
             }
         }
 
         @JvmStatic
+        @InverseBindingAdapter(attribute = "iconPickerSelection", event = "iconPickerSelectionChanged")
+        fun getIcon(view: DialogIconPickerView): String? {
+            return if (view.hasSelection) {
+                view.selectedItems[0].iconName
+            } else null
+        }
+
+        @JvmStatic
         @BindingAdapter(value = ["iconPickerSelectionChanged"], requireAll = false)
         fun bindPickerEvent(view: DialogIconPickerView, bindingListener: InverseBindingListener) {
             if (view.hasSelection) bindingListener.onChange()
-            view.dataBindingListener = object : SelectionChangedListener<IntArray?> {
+            view.dataBindingListener = object : SelectionChangedListener<IntArray> {
                 override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
                     bindingListener.onChange()
                 }
