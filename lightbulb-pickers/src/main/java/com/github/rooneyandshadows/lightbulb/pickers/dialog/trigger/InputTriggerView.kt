@@ -175,7 +175,6 @@ class InputTriggerView @JvmOverloads constructor(
         return pickerView
     }
 
-
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.InputTriggerView, 0, 0)
         try {

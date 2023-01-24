@@ -14,7 +14,6 @@ import android.util.Log
 import androidx.appcompat.widget.LinearLayoutCompat
 import android.widget.ScrollView
 import androidx.core.widget.NestedScrollView
-import android.view.View.OnFocusChangeListener
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -31,18 +30,17 @@ import com.github.rooneyandshadows.lightbulb.textinputview.TextInputView.TextCha
 import com.nex3z.flowlayout.FlowLayout
 import java.util.*
 
-class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructor(
+@Suppress("MemberVisibilityCanBePrivate", "unused", "ObjectLiteralToLambda")
+open class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
 ) : LinearLayoutCompat(context, attrs, defStyleAttr, defStyleRes) {
     //private PopupWindow popupWindow;
-    private var recyclerView: RecyclerView? = null
-    private var filterInput: TextInputView? = null
-    private var flowLayout: FlowLayout? = null
-    var pickerHintText: String? = null
-        private set
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var filterInput: TextInputView
+    private lateinit var flowLayout: FlowLayout
     private var errorText: String? = null
     private var pickerRequiredText: String? = null
     private var pickerIcon: Drawable? = null
@@ -53,13 +51,11 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
     private var backgroundColor = 0
     private var backgroundCornerRadius = 0
     private var chipsGroupPadding = 0
-    private var selection: IntArray?
-    var recyclerAdapter: SelectableFilterOptionAdapter<ModelType>? = null
-        private set
+    private val adapter = SelectableFilterOptionAdapter<ModelType>()
     private var optionCreator: AdapterOptionCreator<ModelType>? = null
     private var internalOnShowListener: OnShowListener? = null
     private val onShowListeners = ArrayList<OnShowListener>()
-    private val validationCallbacks = ArrayList<ValidationCheck<ModelType?>>()
+    private val validationCallbacks = ArrayList<ValidationCheck<ModelType>>()
     private val selectionChangedListeners = ArrayList<SelectionChangedListener>()
     private val onHideListeners = ArrayList<OnHideListener>()
     private val onOptionCreatedListeners = ArrayList<OnOptionCreatedListener<ModelType>>()
@@ -67,10 +63,46 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
         handleAddOptionVisibility()
         filterOptions(newValue)
     }
+    var pickerHintText: String? = null
+        private set
+    var selection: List<ModelType>
+        set(value) {
+            val positions = adapter.getPositions(value)
+            adapter.selectPositions(
+                positions = positions,
+                newState = true,
+                incremental = false
+            )
+        }
+        get() = adapter.selectedItems
+    var selectedPositions: IntArray
+        set(value) = adapter.selectPositions(
+            positions = value,
+            newState = true,
+            incremental = false
+        )
+        get() = adapter.selectedPositionsAsArray
+    var options: List<ModelType>
+        get() = adapter.getItems()
+        set(value) {
+            adapter.setCollection(value)
+        }
+    val isPickerShown: Boolean
+        get() = recyclerView.visibility == VISIBLE
 
     init {
         isSaveEnabled = true
         readAttributes(context, attrs)
+        adapter.addOnSelectionChangedListener(object : EasyAdapterSelectionChangedListener {
+            override fun onChanged(newSelection: IntArray?) {
+                filterInput.text = ""
+                hidePicker()
+                setupChips()
+                validate()
+                dispatchSelectionChangedEvents()
+            }
+
+        })
         initLayout()
     }
 
@@ -90,17 +122,12 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
         selectionChangedListeners.add(changedCallback)
     }
 
-    fun addValidationCheck(validationCallback: ValidationCheck<ModelType?>) {
+    fun addValidationCheck(validationCallback: ValidationCheck<ModelType>) {
         validationCallbacks.add(validationCallback)
     }
 
-    fun selectItems(positions: IntArray) {
-        selectInternally(positions, true)
-    }
-
     fun selectItemAt(selection: Int) {
-        val newSelection = intArrayOf(selection)
-        selectInternally(newSelection, true)
+        selectedPositions = intArrayOf(selection)
     }
 
     fun validate(): Boolean {
@@ -110,7 +137,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
             return false
         }
         for (validationCallback in validationCallbacks) isValid = isValid and validationCallback.validate(
-            selectedItems
+            selection
         )
         if (isValid) setErrorText(null) else {
             setErrorText(errorText)
@@ -123,12 +150,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
     }
 
     fun addOption(option: ModelType) {
-        if (recyclerAdapter == null) return
-        recyclerAdapter!!.addItem(option)
-    }
-
-    fun setSelection(selection: IntArray) {
-        selectInternally(selection, true)
+        adapter.addItem(option)
     }
 
     fun setAllowToAddNewOptions(allowToAddNewOptions: Boolean) {
@@ -144,7 +166,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
     fun setPickerIcon(icon: Drawable?, color: Int?) {
         pickerIcon = icon
         if (color != null) pickerIcon!!.setTint(color)
-        filterInput!!.setStartIcon(pickerIcon)
+        filterInput.setStartIcon(pickerIcon)
     }
 
     fun setPickerIcon(icon: Drawable?) {
@@ -153,62 +175,45 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
 
     fun setErrorText(error: String?) {
         errorText = error
-        filterInput!!.error = errorText
+        filterInput.error = errorText
     }
 
     fun setHintText(hintText: String?) {
         pickerHintText = hintText
-        filterInput!!.setHintText(pickerHintText)
+        filterInput.setHintText(pickerHintText)
     }
 
-    fun setRecyclerAdapter(adapter: SelectableFilterOptionAdapter<ModelType>?) {
-        recyclerAdapter = adapter
-        recyclerAdapter!!.addOnSelectionChangedListener(EasyAdapterSelectionChangedListener { newSelection: IntArray ->
-            selectInternally(newSelection, false)
-            filterInput!!.text = ""
-            hidePicker()
-        })
-        recyclerView = findViewWithTag(CHIPS_OPTIONS_RECYCLER_TAG)
-        recyclerView.setPadding(chipsGroupPadding, chipsGroupPadding, chipsGroupPadding, chipsGroupPadding)
-        recyclerView.setItemAnimator(null)
-        recyclerView.setLayoutManager(LinearLayoutManager(context))
-        recyclerView.setAdapter(recyclerAdapter)
-        hidePicker()
-    }
 
     fun hasSelection(): Boolean {
-        return if (recyclerAdapter == null) false else recyclerAdapter!!.hasSelection()
+        return adapter.hasSelection()
     }
-
-    val selectedItems: List<ModelType?>
-        get() = if (recyclerAdapter == null) ArrayList() else recyclerAdapter!!.getItems(selection)
-    val selectedPositions: IntArray
-        get() = if (recyclerAdapter == null) intArrayOf() else recyclerAdapter!!.selectedPositionsAsArray
-    var options: List<ModelType?>?
-        get() = if (recyclerAdapter == null) ArrayList() else recyclerAdapter!!.getItems()
-        set(option) {
-            if (recyclerAdapter == null) return
-            recyclerAdapter!!.setCollection(option!!)
-        }
 
     fun attachToScrollingParent(parent: ViewGroup) {
         if (parent is ScrollView) {
-            internalOnShowListener = OnShowListener { parent.post { parent.smoothScrollTo(0, bottom) } }
+            internalOnShowListener = object : OnShowListener {
+                override fun execute() {
+                    parent.post { parent.smoothScrollTo(0, bottom) }
+                }
+            }
             return
+        } else if (parent is NestedScrollView) {
+            internalOnShowListener = object : OnShowListener {
+                override fun execute() {
+                    parent.post { parent.smoothScrollTo(0, bottom) }
+                }
+            }
+        } else {
+            Log.w(ChipsPickerView::class.java.name, "Scrolling parent ignored. Parent type must be one of " +
+                    "ScrollView|NestedScrollView")
         }
-        if (parent is NestedScrollView) {
-            internalOnShowListener = OnShowListener { parent.post { parent.smoothScrollTo(0, bottom) } }
-        }
-        Log.w(ChipsPickerView::class.java.name, "Scrolling parent type must be one of ScrollView|NestedScrollView")
     }
 
     fun getErrorText(): String? {
         return errorText
     }
 
-    fun selectItem(item: ModelType?) {
-        if (item == null || recyclerAdapter == null) return
-        val position = recyclerAdapter!!.getPosition(item)
+    fun selectItem(item: ModelType) {
+        val position = adapter.getPosition(item)
         if (position != -1) selectItemAt(position)
     }
 
@@ -223,23 +228,22 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
         rc.setAdapter(recyclerAdapter);
         popupWindow.showAsDropDown(chipGroupInput, 0, 0);
     }*/
+
     fun showPicker() {
         if (isPickerShown) return
-        if (!filterInput!!.hasFocus()) filterInput!!.requestFocus()
-        recyclerView!!.visibility = VISIBLE
+        if (!filterInput.hasFocus()) filterInput.requestFocus()
+        recyclerView.visibility = VISIBLE
         if (internalOnShowListener != null) internalOnShowListener!!.execute()
         for (onShowListener in onShowListeners) onShowListener.execute()
     }
 
     fun hidePicker() {
         if (!isPickerShown) return
-        if (filterInput!!.hasFocus()) filterInput!!.clearFocus()
-        recyclerView!!.visibility = GONE
+        if (filterInput.hasFocus()) filterInput.clearFocus()
+        recyclerView.visibility = GONE
         for (onHideListener in onHideListeners) onHideListener.execute()
     }
 
-    protected val isPickerShown: Boolean
-        protected get() = recyclerView != null && recyclerView!!.visibility == VISIBLE
 
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.ChipsPickerView, 0, 0)
@@ -276,7 +280,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
     private fun initLayout() {
         orientation = VERTICAL
         renderLayout()
-        setupViews()
+        initializeViews()
     }
 
     private fun renderLayout() {
@@ -285,31 +289,47 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
         filterInput = findViewWithTag(R.id.picker_filter_input_view)
     }
 
-    private fun setupViews() {
+    private fun initializeViews() {
         setupBackground(backgroundColor)
         setHintText(pickerHintText)
         setErrorText(errorText)
         setupInput()
         setupChips()
+        setupRecyclerView()
         setupAddButton()
+        hidePicker()
     }
 
     private fun setupInput() {
-        filterInput!!.removeTextChangedCallback(textWatcher)
-        filterInput!!.addTextChangedCallback(textWatcher)
-        filterInput!!.onFocusChangeListener =
-            OnFocusChangeListener { v: View?, hasFocus: Boolean -> if (hasFocus && !isPickerShown) showPicker() else if (closeOnLostFocus && !hasFocus && isPickerShown) hidePicker() }
+        filterInput.removeTextChangedCallback(textWatcher)
+        filterInput.addTextChangedCallback(textWatcher)
+        filterInput.onFocusChangeListener = object : OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if (hasFocus && !isPickerShown) showPicker()
+                else if (closeOnLostFocus && !hasFocus && isPickerShown) hidePicker()
+            }
+        }
+    }
+
+    private fun setupRecyclerView() {
+        recyclerView = findViewById(R.id.picker_recycler_view)
+        recyclerView.setPadding(chipsGroupPadding, chipsGroupPadding, chipsGroupPadding, chipsGroupPadding)
+        recyclerView.itemAnimator = null
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = this.adapter
     }
 
     private fun setupAddButton() {
         val icon = ResourceUtils.getDrawable(context, R.drawable.chip_picker_add_icon)
         icon!!.setTint(ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface))
-        filterInput!!.setEndIcon(icon) {
-            if (!allowToAddNewOptions || recyclerAdapter == null || optionCreator == null) return@setEndIcon
-            val newOptionName = filterInput!!.text
+        filterInput.setEndIcon(icon) {
+            if (!allowToAddNewOptions || optionCreator == null) return@setEndIcon
+            val newOptionName = filterInput.text
             val newOption = optionCreator!!.createOption(newOptionName)
-            recyclerAdapter!!.addItem(newOption)
-            for (optionCreatedListener in onOptionCreatedListeners) optionCreatedListener.execute(newOption)
+            adapter.addItem(newOption)
+            onOptionCreatedListeners.forEach {
+                it.execute(newOption)
+            }
         }
         handleAddOptionVisibility()
     }
@@ -324,17 +344,17 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
     }
 
     private fun handleAddOptionVisibility() {
-        if (!allowToAddNewOptions || recyclerAdapter == null || optionCreator == null) {
-            filterInput!!.setEndIconVisible(false)
+        if (!allowToAddNewOptions || optionCreator == null) {
+            filterInput.setEndIconVisible(false)
             return
         }
-        val text = filterInput!!.text
-        val showAddOption = !text.isNullOrBlank() && !recyclerAdapter!!.hasItemWithName(text)
-        filterInput!!.setEndIconVisible(showAddOption)
+        val text = filterInput.text
+        val showAddOption = !text.isNullOrBlank() && !adapter.hasItemWithName(text)
+        filterInput.setEndIconVisible(showAddOption)
     }
 
     private fun filterOptions(queryText: String) {
-        if (recyclerAdapter != null) recyclerAdapter!!.getFilter().filter(queryText)
+        adapter.filter.filter(queryText)
     }
 
     private fun setupChips() {
@@ -343,24 +363,24 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
     }
 
     private fun clearChips() {
-        flowLayout!!.removeAllViews()
+        flowLayout.removeAllViews()
     }
 
     private fun buildChips() {
-        if (recyclerAdapter == null || recyclerAdapter!!.selectedItems.isEmpty()) {
-            flowLayout!!.setPadding(0, 0, 0, 0)
+        if (adapter.selectedItems.isEmpty()) {
+            flowLayout.setPadding(0, 0, 0, 0)
             return
         }
-        flowLayout!!.setPadding(
+        flowLayout.setPadding(
             chipsGroupPadding,
             chipsGroupPadding,
             chipsGroupPadding,
             ResourceUtils.getDimenPxById(context, R.dimen.chips_picker_spacing_size)
         )
-        val selectedItems = recyclerAdapter!!.selectedItems
+        val selectedItems = adapter.selectedItems
         for (position in selectedItems.indices) {
             val chipView = buildChip(selectedItems[position])
-            flowLayout!!.addView(chipView)
+            flowLayout.addView(chipView)
         }
     }
 
@@ -376,7 +396,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
                 }
                 background = ResourceUtils.getDrawable(context, R.drawable.bg_chip_picker_remove_icon)
                 setImageDrawable(chipRemoveIcon)
-                setOnClickListener { recyclerAdapter!!.selectItem(targetItem, false) }
+                setOnClickListener { adapter.selectItem(targetItem, false) }
             }
             findViewById<TextView>(R.id.picker_chip_item_text_view).apply {
                 text = itemName
@@ -386,35 +406,14 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
         }
     }
 
-    private fun selectInternally(newSelection: IntArray, selectInAdapter: Boolean) {
-        val oldSelection = selection
-        ensureAndApplySelection(newSelection)
-        if (recyclerAdapter != null && selectInAdapter) recyclerAdapter!!.selectPositions(newSelection, true, false)
-        setupChips()
-        validate()
-        dispatchSelectionChangedEvents(oldSelection, selection)
-    }
-
-    private fun ensureAndApplySelection(newSelection: IntArray) {
-        val positionsToSelect: MutableList<Int> = ArrayList()
-        for (positionToSelect in newSelection) {
-            if (!recyclerAdapter!!.positionExists(positionToSelect)) continue
-            positionsToSelect.add(positionToSelect)
-        }
-        selection = IntArray(positionsToSelect.size)
-        if (positionsToSelect.size <= 0) return
-        for (i in positionsToSelect.indices) {
-            selection!![i] = positionsToSelect[i]
-        }
-    }
-
     private fun compareValues(v1: IntArray?, v2: IntArray?): Boolean {
         return Arrays.equals(v1, v2)
     }
 
-    private fun dispatchSelectionChangedEvents(oldValue: IntArray?, newValue: IntArray?) {
-        if (compareValues(newValue, oldValue)) return
-        for (selectionChangedListener in selectionChangedListeners) selectionChangedListener.execute(oldValue, newValue)
+    private fun dispatchSelectionChangedEvents() {
+        selectionChangedListeners.forEach {
+            it.execute(selectedPositions)
+        }
     }
 
     /*private void buildPopup() {
@@ -441,6 +440,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
             }
         });
     }*/
+
     public override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val myState = SavedState(superState)
@@ -456,7 +456,7 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
         myState.pickerChipGroupPadding = chipsGroupPadding
         myState.pickerBackgroundCornerRadius = backgroundCornerRadius
         myState.pickerAllowToAddNewOptions = allowToAddNewOptions
-        myState.pickerInputState = filterInput!!.onSaveInstanceState()
+        myState.pickerInputState = filterInput.onSaveInstanceState()
         return myState
     }
 
@@ -475,8 +475,8 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
         backgroundCornerRadius = savedState.pickerBackgroundCornerRadius
         defaultIconColor = savedState.pickerDefaultIconColor
         allowToAddNewOptions = savedState.pickerAllowToAddNewOptions
-        filterInput!!.onRestoreInstanceState(savedState.pickerInputState)
-        setupViews()
+        filterInput.onRestoreInstanceState(savedState.pickerInputState)
+        initializeViews()
         if (isPickerShowing) showPicker()
     }
 
@@ -505,7 +505,8 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
         var pickerBackgroundCornerRadius = 0
         var pickerInputState: Parcelable? = null
 
-        internal constructor(superState: Parcelable?) : super(superState) {}
+        constructor(superState: Parcelable?) : super(superState)
+
         private constructor(parcel: Parcel) : super(parcel) {
             selection = parcel.createIntArray()
             pickerHintText = parcel.readString()
@@ -560,10 +561,10 @@ class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructo
     }
 
     interface SelectionChangedListener {
-        fun execute(oldSelection: IntArray?, newSelection: IntArray?)
+        fun execute(newSelection: IntArray?)
     }
 
-    interface ValidationCheck<ModelType : EasyAdapterDataModel?> {
+    interface ValidationCheck<ModelType : EasyAdapterDataModel> {
         fun validate(selectedItems: List<ModelType>?): Boolean
     }
 

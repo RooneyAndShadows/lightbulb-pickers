@@ -22,10 +22,10 @@
         app:textInputViewType="boxed" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/picker_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/chips_picker_recycler_height"
         android:overScrollMode="never"
-        android:tag="@string/CP_OptionsRecyclerTag"
         android:visibility="gone">
 
     </androidx.recyclerview.widget.RecyclerView>

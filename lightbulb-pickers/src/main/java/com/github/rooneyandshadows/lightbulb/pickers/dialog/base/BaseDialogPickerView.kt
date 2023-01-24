@@ -38,9 +38,9 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     private val validationCallbacks: MutableList<ValidationCheck<SelectionType>> = mutableListOf()
     private val selectionChangedListeners: MutableList<SelectionChangedListener<SelectionType>> = mutableListOf()
     private val triggerAttachedCallback: MutableList<TriggerAttachedCallback<SelectionType>> = mutableListOf()
-    protected var dataBindingListener: SelectionChangedListener<SelectionType>? = null
     private val isPickerDialogShowing: Boolean
         get() = pickerDialog.isDialogShown
+    protected var dataBindingListener: SelectionChangedListener<SelectionType>? = null
     protected val pickerDialog: BasePickerDialogFragment<SelectionType> by lazy {
         val dialog = initializeDialog(fragmentManager)
         onDialogInitialized(dialog)
