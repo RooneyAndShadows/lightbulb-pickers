@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.color_picker.VMColorPickerDemo" />
+            type="com.github.rooneyandshadowss.lightbulb.pickersdemo.fragments.color_picker.VMColorPickerDemo" />
 
     </data>
 

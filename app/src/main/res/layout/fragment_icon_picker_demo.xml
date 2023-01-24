@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.icon_picker.VMIconPickerDemo" />
+            type="com.github.rooneyandshadowss.lightbulb.pickersdemo.fragments.icon_picker.VMIconPickerDemo" />
 
     </data>
 

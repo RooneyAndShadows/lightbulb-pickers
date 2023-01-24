@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.date_picker.VMDatePickerDemo" />
+            type="com.github.rooneyandshadowss.lightbulb.pickersdemo.fragments.date_picker.VMDatePickerDemo" />
 
     </data>
 
