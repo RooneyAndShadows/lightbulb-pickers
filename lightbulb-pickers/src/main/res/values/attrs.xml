@@ -87,7 +87,6 @@
 
     <declare-styleable name="ChipsPickerView">
         <attr name="cpv_required" format="boolean" />
-        <attr name="cpv_close_on_lost_focus" format="boolean" />
         <attr name="cpv_allow_to_add_new_options" format="boolean" />
         <attr name="cpv_hint_text" format="string" />
         <attr name="cpv_required_text" format="string" />

@@ -1,6 +1,9 @@
 package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.date_picker
 
+import androidx.databinding.Bindable
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
+import com.github.rooneyandshadows.lightbulb.commons.models.BaseObservableViewModel
+import com.github.rooneyandshadows.lightbulb.pickersdemo.BR
 import java.time.OffsetDateTime
 
 class VMDatePickerDemo : BaseObservableViewModel() {
@@ -8,6 +11,7 @@ class VMDatePickerDemo : BaseObservableViewModel() {
     private var outlinedSelection: OffsetDateTime? = null
     private var buttonSelection: OffsetDateTime? = null
     private var imageButtonSelection: OffsetDateTime? = null
+
     fun initialize() {
         boxedSelection = DateUtilsOffsetDate.nowLocal()
         outlinedSelection = DateUtilsOffsetDate.nowLocal()

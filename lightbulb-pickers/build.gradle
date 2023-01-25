@@ -60,12 +60,12 @@ afterEvaluate {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.6"
+    coreLibraryDesugaring "com.android.tools:$versions.android.desugar"
     implementation "androidx.core:core-ktx:$versions.ktx.core"
-    implementation "androidx.appcompat:appcompat:$versions.android_appcompat"
-    implementation "androidx.annotation:annotation:$versions.android_annotation"
-    implementation "com.google.android.material:material:$versions.material"
     implementation "com.nex3z:flow-layout:$versions.flow_layout"
+    implementation "androidx.appcompat:appcompat:$versions.android.appcompat"
+    implementation "androidx.annotation:annotation:$versions.android.annotation"
+    implementation "com.google.android.material:material:$versions.android.material"
     implementation "com.github.rooneyandshadows:java-commons:$versions.java.commons"
     implementation "com.github.rooneyandshadows:lightbulb-commons:$versions.lightbulb.commons"
     implementation "com.github.rooneyandshadows:lightbulb-textinputview:$versions.lightbulb.textinputview"

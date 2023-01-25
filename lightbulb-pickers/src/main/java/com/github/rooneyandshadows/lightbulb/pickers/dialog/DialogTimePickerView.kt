@@ -140,6 +140,7 @@ class DialogTimePickerView @JvmOverloads constructor(
 
         @BindingAdapter("timePickerSelectionChanged")
         fun setListeners(view: DialogTimePickerView, attrChange: InverseBindingListener) {
+            if (view.hasSelection) attrChange.onChange()
             view.dataBindingListener = object : SelectionChangedListener<Time> {
                 override fun execute(newSelection: Time?, oldSelection: Time?) {
                     if (view.compareValues(newSelection, newSelection)) return

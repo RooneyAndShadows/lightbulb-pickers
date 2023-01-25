@@ -9,6 +9,7 @@ import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.DividerItemDecoration.*
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
@@ -30,23 +31,23 @@ class DemoAdapterPickerView @JvmOverloads constructor(
 ) : DialogAdapterPickerView<DemoModel>(context, attrs, defStyleAttr, defStyleRes) {
 
     init {
-        addSelectionChangedListener(object : SelectionChangedListener<IntArray?> {
+        addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
             override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
                 setupIcon()
             }
         })
-        addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray?> {
-            override fun onAttached(triggerView: DialogPickerTriggerLayout, pickerView: BaseDialogPickerView<IntArray?>) {
+        addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray> {
+            override fun onAttached(triggerView: DialogPickerTriggerLayout, pickerView: BaseDialogPickerView<IntArray>) {
                 setupIcon()
             }
         })
         itemDecoration = DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL)
     }
-
+    @Override
     override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray> {
         return DemoSingleSelectionDialog()
     }
-
+    @Override
     override fun readAttributes(context: Context, attrs: AttributeSet?) {
         super.readAttributes(context, attrs)
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.DemoAdapterPickerView, 0, 0)
@@ -56,6 +57,7 @@ class DemoAdapterPickerView @JvmOverloads constructor(
         }
     }
 
+    @Override
     override fun onRestoreInstanceState(state: Parcelable) {
         super.onRestoreInstanceState(state)
         setupIcon()
@@ -137,6 +139,7 @@ class DemoAdapterPickerView @JvmOverloads constructor(
         @BindingAdapter(value = ["pickerSelectionChanged"], requireAll = false)
         fun bindPickerEvent(view: DialogAdapterPickerView<DemoModel>, bindingListener: InverseBindingListener) {
             if (view.hasSelection) bindingListener.onChange()
+            view.
             view.addSelectionChangedListener(SelectionChangedListener<IntArray> { oldPositions: IntArray?, newPositions: IntArray? -> bindingListener.onChange() })
         }
     }

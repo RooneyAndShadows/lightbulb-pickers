@@ -133,7 +133,6 @@ class DialogColorPickerView @JvmOverloads constructor(
     }
 
     companion object {
-        @JvmStatic
         @BindingAdapter(value = ["colorPickerSelection"])
         fun setColor(view: DialogColorPickerView, newColorName: String?) {
             if (newColorName.isNullOrBlank()) {
@@ -151,7 +150,6 @@ class DialogColorPickerView @JvmOverloads constructor(
                 }
         }
 
-        @JvmStatic
         @InverseBindingAdapter(attribute = "colorPickerSelection", event = "colorPickerSelectionChanged")
         fun getColor(view: DialogColorPickerView): String? {
             return if (view.hasSelection) {
@@ -159,7 +157,6 @@ class DialogColorPickerView @JvmOverloads constructor(
             } else null
         }
 
-        @JvmStatic
         @BindingAdapter(value = ["colorPickerSelectionChanged"], requireAll = false)
         fun bindPickerEvent(view: DialogColorPickerView, bindingListener: InverseBindingListener) {
             if (view.hasSelection) bindingListener.onChange()

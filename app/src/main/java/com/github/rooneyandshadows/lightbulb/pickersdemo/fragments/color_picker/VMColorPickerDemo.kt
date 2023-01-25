@@ -1,6 +1,12 @@
 package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.color_picker
 
+import androidx.databinding.Bindable
 import com.github.rooneyandshadows.lightbulb.commons.models.BaseObservableViewModel
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.ColorModel
+import com.github.rooneyandshadows.lightbulb.pickersdemo.BR
+import com.github.rooneyandshadows.lightbulb.pickersdemo.models.DemoModel
+import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color.AppColorUtils
 import java.util.HashMap
 
 class VMColorPickerDemo : BaseObservableViewModel() {
@@ -8,16 +14,28 @@ class VMColorPickerDemo : BaseObservableViewModel() {
     private var outlinedSelection: String? = null
     private var buttonSelection: String? = null
     private var imageButtonSelection: String? = null
-    private val dataSets: MutableMap<Int?, List<ColorModel>> = HashMap<Int?, List<ColorModel>>()
+    val dataSets: MutableMap<Int?, List<ColorModel>> = HashMap<Int?, List<ColorModel>>()
     fun initialize() {
-        dataSets[0] = AppColorUtils.getAllForPicker()
-        dataSets[1] = AppColorUtils.getAllForPicker()
-        dataSets[2] = AppColorUtils.getAllForPicker()
-        dataSets[3] = AppColorUtils.getAllForPicker()
-        boxedSelection = dataSets[0]!![0].getColorExternalName()
-        outlinedSelection = dataSets[1]!![0].getColorExternalName()
-        buttonSelection = dataSets[2]!![0].getColorExternalName()
-        imageButtonSelection = dataSets[3]!![0].getColorExternalName()
+        AppColorUtils.allForPicker.apply {
+            dataSets[0] = this
+            val firstColorName = get(0).externalName
+            boxedSelection = firstColorName
+        }
+        AppColorUtils.allForPicker.apply {
+            dataSets[1] = this
+            val firstColorName = get(0).externalName
+            outlinedSelection = firstColorName
+        }
+        AppColorUtils.allForPicker.apply {
+            dataSets[2] = this
+            val firstColorName = get(0).externalName
+            buttonSelection = firstColorName
+        }
+        AppColorUtils.allForPicker.apply {
+            dataSets[3] = this
+            val firstColorName = get(0).externalName
+            imageButtonSelection = firstColorName
+        }
     }
 
     fun setBoxedSelection(boxedSelection: String?) {
@@ -38,10 +56,6 @@ class VMColorPickerDemo : BaseObservableViewModel() {
     fun setImageButtonSelection(imageButtonSelection: String?) {
         this.imageButtonSelection = imageButtonSelection
         notifyPropertyChanged(BR.imageButtonSelection)
-    }
-
-    fun getDataSets(): Map<Int?, List<ColorModel>> {
-        return dataSets
     }
 
     @Bindable

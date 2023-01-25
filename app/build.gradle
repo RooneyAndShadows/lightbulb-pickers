@@ -35,16 +35,18 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.6'
+    coreLibraryDesugaring "com.android.tools:$versions.android.desugar"
     implementation "androidx.core:core-ktx:$versions.ktx.core"
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
-    implementation 'androidx.appcompat:appcompat:1.6.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.material:material:1.7.0'
-    implementation 'com.github.rooneyandshadows:java-commons:1.0.6'
-    implementation 'com.github.rooneyandshadows:lightbulb-commons:1.0.18'
-    implementation 'com.github.rooneyandshadows:lightbulb-application:1.2.8'
-    implementation 'com.github.rooneyandshadows:lightbulb-recycleradapters:1.0.14'
-    implementation 'com.github.rooneyandshadows:lightbulb-dialogs:2.0.0-RC4'
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$versions.android.lifecycle_viewmodel"
+    implementation "androidx.appcompat:appcompat:$versions.android.appcompat"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.android.constraintlayout"
+    implementation "com.google.android.material:material:$versions.android.material"
+    implementation "com.github.rooneyandshadows:java-commons:$versions.java.commons"
+    implementation "com.github.rooneyandshadows:lightbulb-commons:$versions.lightbulb.commons"
+    implementation "com.github.rooneyandshadows:lightbulb-application:$versions.lightbulb.application"
+    implementation "com.github.rooneyandshadows:lightbulb-recycleradapters:$versions.lightbulb.recycleradapters"
+    implementation "com.github.rooneyandshadows:lightbulb-dialogs:$versions.lightbulb.dialogs"
+    implementation "com.github.rooneyandshadows:lightbulb-annotation-processors:$versions.lightbulb.annotation_processors"
     implementation project(":lightbulb-pickers")
+    kapt "com.github.rooneyandshadows:lightbulb-annotation-processors:$versions.lightbulb.annotation_processors"
 }

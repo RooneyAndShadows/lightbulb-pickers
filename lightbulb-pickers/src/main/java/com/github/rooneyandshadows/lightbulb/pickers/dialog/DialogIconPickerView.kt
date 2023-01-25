@@ -138,7 +138,6 @@ class DialogIconPickerView @JvmOverloads constructor(
     }
 
     companion object {
-        @JvmStatic
         @BindingAdapter(value = ["iconPickerSelection"])
         fun setIcon(view: DialogIconPickerView, newIconName: String?) {
             if (newIconName.isNullOrBlank()) {
@@ -155,7 +154,6 @@ class DialogIconPickerView @JvmOverloads constructor(
             }
         }
 
-        @JvmStatic
         @InverseBindingAdapter(attribute = "iconPickerSelection", event = "iconPickerSelectionChanged")
         fun getIcon(view: DialogIconPickerView): String? {
             return if (view.hasSelection) {
@@ -163,7 +161,6 @@ class DialogIconPickerView @JvmOverloads constructor(
             } else null
         }
 
-        @JvmStatic
         @BindingAdapter(value = ["iconPickerSelectionChanged"], requireAll = false)
         fun bindPickerEvent(view: DialogIconPickerView, bindingListener: InverseBindingListener) {
             if (view.hasSelection) bindingListener.onChange()

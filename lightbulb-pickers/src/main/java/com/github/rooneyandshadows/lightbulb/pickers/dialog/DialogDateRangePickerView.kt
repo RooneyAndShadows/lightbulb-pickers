@@ -153,21 +153,19 @@ class DialogDateRangePickerView @JvmOverloads constructor(
     companion object {
         private const val DEFAULT_DATE_FORMAT = "yyyy/MM/dd"
 
-        @JvmStatic
         @BindingAdapter("dateRangePickerSelection")
         fun setDateRange(view: DialogDateRangePickerView, newDateRange: DateRange?) {
             view.selection = newDateRange
         }
 
-        @JvmStatic
         @InverseBindingAdapter(attribute = "dateRangePickerSelection", event = "dateRangeSelectionChanged")
         fun getDateRange(view: DialogDateRangePickerView): DateRange? {
             return view.selection
         }
 
-        @JvmStatic
         @BindingAdapter("dateRangeSelectionChanged")
         fun setListeners(view: DialogDateRangePickerView, attrChange: InverseBindingListener) {
+            if (view.hasSelection) attrChange.onChange()
             view.dataBindingListener = object : SelectionChangedListener<DateRange> {
                 override fun execute(newSelection: DateRange?, oldSelection: DateRange?) {
                     if (!view.compareValues(newSelection, oldSelection)) attrChange.onChange()

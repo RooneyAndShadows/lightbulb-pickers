@@ -1,23 +1,39 @@
 package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.adapter_picker
 
+import androidx.databinding.Bindable
 import com.github.rooneyandshadows.lightbulb.commons.models.BaseObservableViewModel
+import com.github.rooneyandshadows.lightbulb.pickersdemo.BR
+import com.github.rooneyandshadows.lightbulb.pickersdemo.models.DemoModel
 import java.util.*
 
 class VMAdapterPickerDemo : BaseObservableViewModel() {
-    private val boxedSelection: MutableList<UUID> = ArrayList()
-    private val outlinedSelection: MutableList<UUID> = ArrayList()
-    private val buttonSelection: MutableList<UUID> = ArrayList()
-    private val imageButtonSelection: MutableList<UUID> = ArrayList()
-    private val dataSets: MutableMap<Int?, List<DemoModel>> = HashMap<Int?, List<DemoModel>>()
+    private val boxedSelection: MutableList<UUID> = mutableListOf()
+    private val outlinedSelection: MutableList<UUID> = mutableListOf()
+    private val buttonSelection: MutableList<UUID> = mutableListOf()
+    private val imageButtonSelection: MutableList<UUID> = mutableListOf()
+    val dataSets: MutableMap<Int?, List<DemoModel>> = HashMap<Int?, List<DemoModel>>()
+
     fun initialize() {
-        dataSets[0] = DemoModel.Companion.generateDemoCollection()
-        dataSets[1] = DemoModel.Companion.generateDemoCollection()
-        dataSets[2] = DemoModel.Companion.generateDemoCollection()
-        dataSets[3] = DemoModel.Companion.generateDemoCollection()
-        boxedSelection.add(dataSets[0]!![0].getId())
-        outlinedSelection.add(dataSets[1]!![0].getId())
-        buttonSelection.add(dataSets[2]!![0].getId())
-        imageButtonSelection.add(dataSets[3]!![0].getId())
+        DemoModel.generateDemoCollection().apply {
+            dataSets[0] = this
+            val firstElementId = get(0).id
+            boxedSelection.add(firstElementId)
+        }
+        DemoModel.generateDemoCollection().apply {
+            dataSets[1] = this
+            val firstElementId = get(0).id
+            outlinedSelection.add(firstElementId)
+        }
+        DemoModel.generateDemoCollection().apply {
+            dataSets[2] = this
+            val firstElementId = get(0).id
+            buttonSelection.add(firstElementId)
+        }
+        DemoModel.generateDemoCollection().apply {
+            dataSets[3] = this
+            val firstElementId = get(0).id
+            imageButtonSelection.add(firstElementId)
+        }
     }
 
     fun setBoxedSelection(boxedSelection: List<UUID>?) {
@@ -42,10 +58,6 @@ class VMAdapterPickerDemo : BaseObservableViewModel() {
         this.imageButtonSelection.clear()
         this.imageButtonSelection.addAll(imageButtonSelection!!)
         notifyPropertyChanged(BR.imageButtonSelection)
-    }
-
-    fun getDataSets(): Map<Int?, List<DemoModel>> {
-        return dataSets
     }
 
     @Bindable
