@@ -21,7 +21,7 @@ class VMDatePickerDemo : BaseObservableViewModel() {
 
     fun setBoxedSelection(boxedSelection: OffsetDateTime?) {
         this.boxedSelection = boxedSelection
-        notifyPropertyChanged(BR.boxedSelection)
+        notifyPropertyChanged(BR.lightbulb.pickersdemo.BR.boxedSelection)
     }
 
     fun setOutlinedSelection(outlinedSelection: OffsetDateTime?) {
