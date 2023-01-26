@@ -28,6 +28,8 @@ class ButtonTriggerView @JvmOverloads constructor(
     private lateinit var buttonView: MaterialButton
     private lateinit var errorTextView: AppCompatTextView
     private var hasDefinedBoxBackgroundAttribute = false
+    private val defaultIconColor: Int
+        get() = ResourceUtils.getColorByAttribute(context, R.attr.colorOnPrimary)
     var pickerIcon: Drawable? = null
         set(value) {
             field = value
@@ -155,13 +157,15 @@ class ButtonTriggerView @JvmOverloads constructor(
                 getInt(R.styleable.ButtonTriggerView_btv_background_corner_radius, 5).apply {
                     cornerRadius = ResourceUtils.dpToPx(this)
                 }
-                getResourceId(R.styleable.ButtonTriggerView_btv_error_text_appearance,
-                    R.style.PickerViewErrorTextAppearance).apply {
+                getResourceId(
+                    R.styleable.ButtonTriggerView_btv_error_text_appearance,
+                    R.style.PickerViewErrorTextAppearance
+                ).apply {
                     errorAppearance = this
                 }
                 getColor(R.styleable.ButtonTriggerView_btv_start_icon_color, -1).apply {
                     pickerStartIconColor = when (this) {
-                        -1 -> ResourceUtils.getColorByAttribute(context, R.attr.colorOnPrimary)
+                        -1 -> defaultIconColor
                         else -> this
                     }
                 }

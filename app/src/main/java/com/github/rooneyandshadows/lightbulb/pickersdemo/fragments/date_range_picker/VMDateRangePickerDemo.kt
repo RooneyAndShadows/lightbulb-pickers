@@ -8,59 +8,43 @@ import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.Da
 import com.github.rooneyandshadows.lightbulb.pickersdemo.BR
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
+import java.util.*
 
 class VMDateRangePickerDemo : BaseObservableViewModel() {
-    private var boxedSelection: DateRange? = null
-    private var outlinedSelection: DateRange? = null
-    private var buttonSelection: DateRange? = null
-    private var imageButtonSelection: DateRange? = null
+    @get:Bindable
+    var boxedSelection: DateRange? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.boxedSelection)
+        }
 
-    fun initialize() {
+    @get:Bindable
+    var outlinedSelection: DateRange? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.outlinedSelection)
+        }
+
+    @get:Bindable
+    var buttonSelection: DateRange? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.buttonSelection)
+        }
+
+    @get:Bindable
+    var imageButtonSelection: DateRange? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.imageButtonSelection)
+        }
+
+    init {
         val from = DateUtilsOffsetDate.nowLocal()
         val to = from.plus(5, ChronoUnit.DAYS)
         boxedSelection = DateRange(from, to)
         outlinedSelection = DateRange(from, to)
         buttonSelection = DateRange(from, to)
         imageButtonSelection = DateRange(from, to)
-    }
-
-    fun setBoxedSelection(boxedSelection: DateRange?) {
-        this.boxedSelection = boxedSelection
-        notifyPropertyChanged(BR.boxedSelection)
-    }
-
-    fun setOutlinedSelection(outlinedSelection: DateRange?) {
-        this.outlinedSelection = outlinedSelection
-        notifyPropertyChanged(BR.outlinedSelection)
-    }
-
-    fun setButtonSelection(buttonSelection: DateRange?) {
-        this.buttonSelection = buttonSelection
-        notifyPropertyChanged(BR.buttonSelection)
-    }
-
-    fun setImageButtonSelection(imageButtonSelection: DateRange?) {
-        this.imageButtonSelection = imageButtonSelection
-        notifyPropertyChanged(BR.imageButtonSelection)
-    }
-
-    @Bindable
-    fun getBoxedSelection(): DateRange? {
-        return boxedSelection
-    }
-
-    @Bindable
-    fun getOutlinedSelection(): DateRange? {
-        return outlinedSelection
-    }
-
-    @Bindable
-    fun getButtonSelection(): DateRange? {
-        return buttonSelection
-    }
-
-    @Bindable
-    fun getImageButtonSelection(): DateRange? {
-        return imageButtonSelection
     }
 }

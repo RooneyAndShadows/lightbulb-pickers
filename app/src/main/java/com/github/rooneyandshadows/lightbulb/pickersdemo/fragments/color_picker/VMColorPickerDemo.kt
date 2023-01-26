@@ -10,12 +10,36 @@ import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color.AppColorUti
 import java.util.HashMap
 
 class VMColorPickerDemo : BaseObservableViewModel() {
-    private var boxedSelection: String? = null
-    private var outlinedSelection: String? = null
-    private var buttonSelection: String? = null
-    private var imageButtonSelection: String? = null
+    @get:Bindable
+    var boxedSelection: String? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.boxedSelection)
+        }
+
+    @get:Bindable
+    var outlinedSelection: String? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.outlinedSelection)
+        }
+
+    @get:Bindable
+    var buttonSelection: String? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.buttonSelection)
+        }
+
+    @get:Bindable
+    var imageButtonSelection: String? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.imageButtonSelection)
+        }
     val dataSets: MutableMap<Int?, List<ColorModel>> = HashMap<Int?, List<ColorModel>>()
-    fun initialize() {
+
+    init {
         AppColorUtils.allForPicker.apply {
             dataSets[0] = this
             val firstColorName = get(0).externalName
@@ -36,45 +60,5 @@ class VMColorPickerDemo : BaseObservableViewModel() {
             val firstColorName = get(0).externalName
             imageButtonSelection = firstColorName
         }
-    }
-
-    fun setBoxedSelection(boxedSelection: String?) {
-        this.boxedSelection = boxedSelection
-        notifyPropertyChanged(BR.boxedSelection)
-    }
-
-    fun setOutlinedSelection(outlinedSelection: String?) {
-        this.outlinedSelection = outlinedSelection
-        notifyPropertyChanged(BR.outlinedSelection)
-    }
-
-    fun setButtonSelection(buttonSelection: String?) {
-        this.buttonSelection = buttonSelection
-        notifyPropertyChanged(BR.buttonSelection)
-    }
-
-    fun setImageButtonSelection(imageButtonSelection: String?) {
-        this.imageButtonSelection = imageButtonSelection
-        notifyPropertyChanged(BR.imageButtonSelection)
-    }
-
-    @Bindable
-    fun getBoxedSelection(): String? {
-        return boxedSelection
-    }
-
-    @Bindable
-    fun getOutlinedSelection(): String? {
-        return outlinedSelection
-    }
-
-    @Bindable
-    fun getButtonSelection(): String? {
-        return buttonSelection
-    }
-
-    @Bindable
-    fun getImageButtonSelection(): String? {
-        return imageButtonSelection
     }
 }

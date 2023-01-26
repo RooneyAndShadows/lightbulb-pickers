@@ -127,18 +127,23 @@ class DialogTimePickerView @JvmOverloads constructor(
 
     companion object {
         private const val DEFAULT_TIME_FORMAT = "HH:mm"
+    }
 
+    object Databinding {
         @BindingAdapter("timePickerSelection")
+        @JvmStatic
         fun setTime(view: DialogTimePickerView, newSelection: Time?) {
             view.selection = newSelection
         }
 
         @InverseBindingAdapter(attribute = "timePickerSelection", event = "timePickerSelectionChanged")
+        @JvmStatic
         fun getTime(view: DialogTimePickerView): Time? {
             return view.selection
         }
 
         @BindingAdapter("timePickerSelectionChanged")
+        @JvmStatic
         fun setListeners(view: DialogTimePickerView, attrChange: InverseBindingListener) {
             if (view.hasSelection) attrChange.onChange()
             view.dataBindingListener = object : SelectionChangedListener<Time> {

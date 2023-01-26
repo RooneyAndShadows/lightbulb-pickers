@@ -16,6 +16,7 @@ import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogP
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView.InputTypes.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -30,6 +31,8 @@ class InputTriggerView @JvmOverloads constructor(
     private lateinit var textInputLayout: TextInputLayout
     private lateinit var textInputEditText: TextInputEditText
     private lateinit var inputType: InputTypes
+    private val defaultIconColor: Int
+        get() = ResourceUtils.getColorByAttribute(context, R.attr.colorOnPrimary)
     var pickerIcon: Drawable? = null
         set(value) {
             field = value
@@ -104,8 +107,8 @@ class InputTriggerView @JvmOverloads constructor(
 
     @Override
     override fun setTriggerIcon(icon: Drawable?, color: Int?) {
+        pickerStartIconColor = color ?: defaultIconColor
         pickerIcon = icon
-        pickerStartIconColor = color ?: -1
     }
 
     @Override
@@ -197,7 +200,7 @@ class InputTriggerView @JvmOverloads constructor(
                         return@let ColorUtils.setAlphaComponent(this, 30)
                     }
                 }
-                getInt(R.styleable.InputTriggerView_itv_layout_type, InputTypes.BOXED.value).apply {
+                getInt(R.styleable.InputTriggerView_itv_layout_type, BOXED.value).apply {
                     inputType = InputTypes.valueOf(this)
                 }
                 getResourceId(
@@ -233,10 +236,10 @@ class InputTriggerView @JvmOverloads constructor(
 
     private fun renderLayout() {
         when (inputType) {
-            InputTypes.BOXED -> inflate(context, R.layout.dialog_picker_boxed_layout, this) as LinearLayout
-            InputTypes.OUTLINED -> inflate(context, R.layout.dialog_picker_outlined_layout, this) as LinearLayout
+            BOXED -> inflate(context, R.layout.dialog_picker_boxed_layout, this) as LinearLayout
+            OUTLINED -> inflate(context, R.layout.dialog_picker_outlined_layout, this) as LinearLayout
         }
-        textInputLayout = rootView.findViewById(R.id.picker_view_input_layout_view)
+        textInputLayout = findViewById(R.id.picker_view_input_layout_view)
         textInputEditText = findViewById(R.id.picker_view_input_edit_text_view)
     }
 
@@ -249,7 +252,7 @@ class InputTriggerView @JvmOverloads constructor(
     }
 
     private fun setupBackground() {
-        if (inputType == InputTypes.BOXED)
+        if (inputType == BOXED)
             textInputLayout.boxBackgroundColor = triggerBackgroundColor
     }
 

@@ -7,15 +7,21 @@ import com.github.rooneyandshadows.lightbulb.pickersdemo.R
 
 @ActivityConfiguration
 class MainActivity : BaseActivity() {
-    private var router: AppRouter? = null
 
+    @Override
     override fun doBeforeCreate(savedInstanceState: Bundle?) {
         super.doBeforeCreate(savedInstanceState)
         setTheme(R.style.DemoTheme)
     }
 
+    @Override
     override fun doOnCreate(savedInstanceState: Bundle?) {
         super.doOnCreate(savedInstanceState)
-       // if (savedInstanceState == null) router!!.toAdapterPickerDemo(BaseApplicationRouter.NavigationCommands.NAVIGATE_TO_AND_CLEAR_BACKSTACK)
+        if (savedInstanceState == null) {
+            updateMenuConfiguration(this, MainActivity::class.java) { activity: BaseActivity ->
+                MenuConfigurations.getConfiguration(activity)
+            }
+            MainActivityNavigator.route().toDemoAdapter().newRootScreen()
+        }
     }
 }

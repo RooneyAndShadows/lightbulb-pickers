@@ -1,70 +1,46 @@
 package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.icon_picker
 
-import android.view.View
-import com.github.rooneyandshadows.lightbulb.application.activity.BaseActivity
+import android.os.Bundle
+import com.github.rooneyandshadows.lightbulb.annotation_processors.annotations.FragmentConfiguration
+import com.github.rooneyandshadows.lightbulb.annotation_processors.annotations.FragmentScreen
+import com.github.rooneyandshadows.lightbulb.application.fragment.base.BaseFragmentWithViewModelAndViewBinding
+import com.github.rooneyandshadows.lightbulb.application.fragment.cofiguration.ActionBarConfiguration
+import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
+import com.github.rooneyandshadows.lightbulb.pickersdemo.R
+import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentIconPickerDemoBinding
+import com.github.rooneyandshadows.lightbulb.pickersdemo.getShowMenuDrawable
 
-class FragmentIconPickerDemo : BaseFragment() {
-    private var viewModel: VMIconPickerDemo? = null
-    private var pickerViewBoxed: DialogIconPickerView? = null
-    private var pickerViewOutlined: DialogIconPickerView? = null
-    private var pickerViewButton: DialogIconPickerView? = null
-    private var pickerViewImageButton: DialogIconPickerView? = null
-    protected fun configureFragment(): BaseFragmentConfiguration {
-        val homeDrawable = ShowMenuDrawable(getContextActivity())
-        homeDrawable.setEnabled(false)
-        homeDrawable.setProgress(1)
-        return BaseFragmentConfiguration()
-            .withLeftDrawer(false)
-            .withActionBarConfiguration(
-                ActionBarConfiguration(R.id.toolbar)
-                    .withActionButtons(true)
-                    .attachToDrawer(false)
-                    .withHomeIcon(homeDrawable)
-                    .withSubTitle(ResourceUtils.getPhrase(getContextActivity(), R.string.icon_picker_demo_text))
-                    .withTitle(ResourceUtils.getPhrase(getContextActivity(), R.string.app_name))
-            )
-    }
+@FragmentScreen(screenName = "Icon", screenGroup = "Demo")
+@FragmentConfiguration(layoutName = "fragment_icon_picker_demo")
+class FragmentIconPickerDemo : BaseFragmentWithViewModelAndViewBinding<FragmentIconPickerDemoBinding, VMIconPickerDemo>() {
+    override val viewModelClass: Class<VMIconPickerDemo> = VMIconPickerDemo::class.java
 
-    protected fun create(savedInstanceState: Bundle?) {
-        super.create(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(VMIconPickerDemo::class.java)
-        if (savedInstanceState == null) viewModel!!.initialize()
-    }
-
-    fun createView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val binding: FragmentIconPickerDemoBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_icon_picker_demo, container, false)
-        binding.setModel(viewModel)
-        return binding.getRoot()
-    }
-
-    protected fun viewCreated(fragmentView: View, savedInstanceState: Bundle?) {
-        super.viewCreated(fragmentView, savedInstanceState)
-        if (getFragmentState() === FragmentStates.CREATED) {
-            BaseActivity.updateMenuConfiguration(
-                getContextActivity(),
-                MainActivity::class.java
-            ) { obj: MenuConfigurations?, activity: BaseActivity? -> MenuConfigurations.getConfiguration(activity) }
+    @Override
+    override fun configureActionBar(): ActionBarConfiguration {
+        val ctx = requireContext()
+        val title = ResourceUtils.getPhrase(ctx, R.string.app_name)
+        val subTitle = ResourceUtils.getPhrase(ctx, R.string.color_picker_demo_text)
+        val showMenuDrawable = getShowMenuDrawable(ctx)
+        return ActionBarConfiguration(R.id.toolbar).apply {
+            withHomeIcon(showMenuDrawable)
+            withActionButtons(true)
+            withTitle(title)
+            withSubTitle(subTitle)
         }
+    }
+
+    @Override
+    override fun doOnViewBound(
+        viewBinding: FragmentIconPickerDemoBinding,
+        viewModel: VMIconPickerDemo,
+        savedInstanceState: Bundle?
+    ) {
         if (savedInstanceState == null) {
-            pickerViewBoxed.data = viewModel!!.dataSets[0]
-            pickerViewOutlined.data = viewModel!!.dataSets[1]
-            pickerViewButton.data = viewModel!!.dataSets[2]
-            pickerViewImageButton.data = viewModel!!.dataSets[3]
+            viewBinding.pickerViewBoxed.data = viewModel.dataSets[0]!!
+            viewBinding.pickerViewOutlined.data = viewModel.dataSets[1]!!
+            viewBinding.pickerViewButton.data = viewModel.dataSets[2]!!
+            viewBinding.pickerViewImageButton.data = viewModel.dataSets[3]!!
         }
-    }
-
-    protected fun selectViews() {
-        super.selectViews()
-        if (getView() == null) return
-        pickerViewBoxed = getView().findViewById(R.id.pickerViewBoxed)
-        pickerViewOutlined = getView().findViewById(R.id.pickerViewOutlined)
-        pickerViewButton = getView().findViewById(R.id.pickerViewButton)
-        pickerViewImageButton = getView().findViewById(R.id.pickerViewImageButton)
-    }
-
-    companion object {
-        val newInstance: FragmentIconPickerDemo
-            get() = FragmentIconPickerDemo()
+        viewBinding.model = viewModel
     }
 }

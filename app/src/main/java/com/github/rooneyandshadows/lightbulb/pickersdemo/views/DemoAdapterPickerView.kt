@@ -23,6 +23,7 @@ import com.github.rooneyandshadows.lightbulb.pickersdemo.R
 import java.util.*
 import java.util.stream.Collectors
 
+@Suppress("unused")
 class DemoAdapterPickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -43,10 +44,12 @@ class DemoAdapterPickerView @JvmOverloads constructor(
         })
         itemDecoration = DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL)
     }
+
     @Override
     override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray> {
         return DemoSingleSelectionDialog()
     }
+
     @Override
     override fun readAttributes(context: Context, attrs: AttributeSet?) {
         super.readAttributes(context, attrs)
@@ -89,12 +92,15 @@ class DemoAdapterPickerView @JvmOverloads constructor(
         setPickerIcon(icon, color)
     }
 
-    companion object {
+
+    object Databinding {
+        @JvmStatic
         @InverseBindingAdapter(attribute = "pickerSelection", event = "pickerSelectionChanged")
         fun getSingleSelection(view: DialogAdapterPickerView<DemoModel>): UUID? {
             return if (view.hasSelection) view.selectedItems[0].id else null
         }
 
+        @JvmStatic
         @InverseBindingAdapter(attribute = "pickerSelection", event = "pickerSelectionChanged")
         fun getMultipleSelection(view: DialogAdapterPickerView<DemoModel>): List<UUID?> {
             return if (!view.hasSelection) ArrayList() else view.selectedItems
@@ -103,6 +109,7 @@ class DemoAdapterPickerView @JvmOverloads constructor(
                 .collect(Collectors.toList())
         }
 
+        @JvmStatic
         @BindingAdapter(value = ["pickerSelection"])
         fun setSingleSelection(view: DialogAdapterPickerView<DemoModel>, newSelection: UUID?) {
             if (newSelection == null) return
@@ -116,6 +123,7 @@ class DemoAdapterPickerView @JvmOverloads constructor(
             }
         }
 
+        @JvmStatic
         @BindingAdapter(value = ["pickerSelection"])
         fun setMultipleSelection(view: DialogAdapterPickerView<DemoModel>, newSelection: List<UUID?>?) {
             if (newSelection == null) return
@@ -136,11 +144,15 @@ class DemoAdapterPickerView @JvmOverloads constructor(
             view.selection = selection
         }
 
+        @JvmStatic
         @BindingAdapter(value = ["pickerSelectionChanged"], requireAll = false)
         fun bindPickerEvent(view: DialogAdapterPickerView<DemoModel>, bindingListener: InverseBindingListener) {
             if (view.hasSelection) bindingListener.onChange()
-            view.
-            view.addSelectionChangedListener(SelectionChangedListener<IntArray> { oldPositions: IntArray?, newPositions: IntArray? -> bindingListener.onChange() })
+            view.addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
+                override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
+                    bindingListener.onChange()
+                }
+            })
         }
     }
 }

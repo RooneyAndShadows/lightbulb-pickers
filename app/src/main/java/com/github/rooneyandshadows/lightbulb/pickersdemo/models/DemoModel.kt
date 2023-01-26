@@ -2,9 +2,10 @@ package com.github.rooneyandshadows.lightbulb.pickersdemo.models
 
 import android.os.Parcel
 import android.os.Parcelable.Creator
+import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
+import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils.Companion.writeString
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color.colors.DemoColors
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIcons
-import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils.Companion.writeString
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel
 import java.util.*
 
@@ -22,30 +23,28 @@ class DemoModel : EasyAdapterDataModel {
     }
 
     // Parcelling part
-    constructor(`in`: Parcel?) {
-        id = readUUID.readUUID(`in`)
-        itemName = readString.readString(`in`)
-        icon = DemoIcons.valueOf(readString.readString(`in`))
-        iconBackgroundColor = DemoColors.valueOf(readString.readString(`in`))
+    constructor(parcel: Parcel) {
+        id = ParcelUtils.readUUID(parcel)!!
+        itemName = ParcelUtils.readString(parcel)!!
+        icon = DemoIcons.valueOf(ParcelUtils.readString(parcel)!!)
+        iconBackgroundColor = DemoColors.valueOf(ParcelUtils.readString(parcel)!!)
     }
 
     override fun writeToParcel(parcel: Parcel, i: Int) {
-        writeString(parcel, iconBackgroundColor.getName())
+        writeString(parcel, iconBackgroundColor.colorName)
     }
 
     override fun describeContents(): Int {
         return 0
     }
 
-    companion object {
-        val CREATOR: Creator<DemoModel> = object : Creator<DemoModel?> {
-            override fun createFromParcel(`in`: Parcel): DemoModel? {
-                return DemoModel(`in`)
-            }
+    companion object CREATOR : Creator<DemoModel> {
+        override fun createFromParcel(parcel: Parcel): DemoModel {
+            return DemoModel(parcel)
+        }
 
-            override fun newArray(size: Int): Array<DemoModel?> {
-                return arrayOfNulls(size)
-            }
+        override fun newArray(size: Int): Array<DemoModel?> {
+            return arrayOfNulls(size)
         }
 
         fun generateDemoCollection(): List<DemoModel> {
@@ -56,8 +55,8 @@ class DemoModel : EasyAdapterDataModel {
                     DemoModel(
                         UUID.randomUUID(),
                         title,
-                        DemoIcons.Companion.getRandom(),
-                        DemoColors.Companion.getRandom()
+                        DemoIcons.random,
+                        DemoColors.random
                     )
                 )
             }

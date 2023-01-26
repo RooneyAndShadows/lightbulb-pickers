@@ -118,18 +118,24 @@ class DialogDateTimePickerView @JvmOverloads constructor(
 
     companion object {
         private const val DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm"
+    }
 
+    object Databinding {
         @BindingAdapter("datePickerSelection")
+        @JvmStatic
         fun setDateTime(view: DialogDateTimePickerView, newDateTime: OffsetDateTime?) {
             view.selection = newDateTime
         }
 
+
         @InverseBindingAdapter(attribute = "datePickerSelection", event = "dateSelectionChanged")
+        @JvmStatic
         fun getDateTime(view: DialogDateTimePickerView): OffsetDateTime? {
             return view.selection
         }
 
         @BindingAdapter("dateSelectionChanged")
+        @JvmStatic
         fun setListeners(view: DialogDateTimePickerView, attrChange: InverseBindingListener) {
             if (view.hasSelection) attrChange.onChange()
             view.dataBindingListener = object : SelectionChangedListener<OffsetDateTime> {

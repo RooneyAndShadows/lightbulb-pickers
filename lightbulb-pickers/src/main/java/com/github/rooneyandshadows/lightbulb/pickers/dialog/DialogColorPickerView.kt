@@ -97,7 +97,7 @@ class DialogColorPickerView @JvmOverloads constructor(
     private fun updatePickerIcon(selection: IntArray?) {
         if (selection == null || selection.isEmpty()) {
             val defaultDrawable = ResourceUtils.getDrawable(context, R.drawable.color_picker_default_icon)
-            pickerIcon = defaultDrawable
+            setPickerIcon(defaultDrawable)
         } else {
             val firstSelectedPosition = selection[0]
             val selectedModel: ColorModel = adapter.getItem(firstSelectedPosition)!!
@@ -132,8 +132,9 @@ class DialogColorPickerView @JvmOverloads constructor(
         }
     }
 
-    companion object {
+    object Databinding {
         @BindingAdapter(value = ["colorPickerSelection"])
+        @JvmStatic
         fun setColor(view: DialogColorPickerView, newColorName: String?) {
             if (newColorName.isNullOrBlank()) {
                 if (view.hasSelection) view.selection = null
@@ -151,6 +152,7 @@ class DialogColorPickerView @JvmOverloads constructor(
         }
 
         @InverseBindingAdapter(attribute = "colorPickerSelection", event = "colorPickerSelectionChanged")
+        @JvmStatic
         fun getColor(view: DialogColorPickerView): String? {
             return if (view.hasSelection) {
                 view.selectedItems[0].externalName
@@ -158,6 +160,7 @@ class DialogColorPickerView @JvmOverloads constructor(
         }
 
         @BindingAdapter(value = ["colorPickerSelectionChanged"], requireAll = false)
+        @JvmStatic
         fun bindPickerEvent(view: DialogColorPickerView, bindingListener: InverseBindingListener) {
             if (view.hasSelection) bindingListener.onChange()
             view.dataBindingListener = object : SelectionChangedListener<IntArray> {

@@ -1,57 +1,49 @@
 package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.month_picker
 
+import androidx.databinding.Bindable
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
+import com.github.rooneyandshadows.lightbulb.commons.models.BaseObservableViewModel
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog.Month
+import com.github.rooneyandshadows.lightbulb.pickersdemo.BR
 import java.time.OffsetDateTime
 
 class VMMonthPickerDemo : BaseObservableViewModel() {
-    private var boxedSelection: OffsetDateTime? = null
-    private var outlinedSelection: OffsetDateTime? = null
-    private var buttonSelection: OffsetDateTime? = null
-    private var imageButtonSelection: OffsetDateTime? = null
-    fun initialize() {
-        boxedSelection = DateUtilsOffsetDate.nowLocal()
-        outlinedSelection = DateUtilsOffsetDate.nowLocal()
-        buttonSelection = DateUtilsOffsetDate.nowLocal()
-        imageButtonSelection = DateUtilsOffsetDate.nowLocal()
-    }
+    @get:Bindable
+    var boxedSelection: Month? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.boxedSelection)
+        }
 
-    fun setBoxedSelection(boxedSelection: OffsetDateTime?) {
-        this.boxedSelection = boxedSelection
-        notifyPropertyChanged(BR.boxedSelection)
-    }
+    @get:Bindable
+    var outlinedSelection: Month? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.outlinedSelection)
+        }
 
-    fun setOutlinedSelection(outlinedSelection: OffsetDateTime?) {
-        this.outlinedSelection = outlinedSelection
-        notifyPropertyChanged(BR.outlinedSelection)
-    }
+    @get:Bindable
+    var buttonSelection: Month? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.buttonSelection)
+        }
 
-    fun setButtonSelection(buttonSelection: OffsetDateTime?) {
-        this.buttonSelection = buttonSelection
-        notifyPropertyChanged(BR.buttonSelection)
-    }
+    @get:Bindable
+    var imageButtonSelection: Month? = null
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.imageButtonSelection)
+        }
 
-    fun setImageButtonSelection(imageButtonSelection: OffsetDateTime?) {
-        this.imageButtonSelection = imageButtonSelection
-        notifyPropertyChanged(BR.imageButtonSelection)
-    }
-
-    @Bindable
-    fun getBoxedSelection(): OffsetDateTime? {
-        return boxedSelection
-    }
-
-    @Bindable
-    fun getOutlinedSelection(): OffsetDateTime? {
-        return outlinedSelection
-    }
-
-    @Bindable
-    fun getButtonSelection(): OffsetDateTime? {
-        return buttonSelection
-    }
-
-    @Bindable
-    fun getImageButtonSelection(): OffsetDateTime? {
-        return imageButtonSelection
+    init {
+        val now = DateUtilsOffsetDate.nowLocal()
+        val year = DateUtilsOffsetDate.extractYearFromDate(now)
+        val month = DateUtilsOffsetDate.extractMonthOfYearFromDate(now)
+        boxedSelection = Month(year,month)
+        outlinedSelection = Month(year,month)
+        buttonSelection = Month(year,month)
+        imageButtonSelection = Month(year,month)
     }
 }

@@ -5,7 +5,6 @@ import androidx.annotation.AttrRes
 import androidx.annotation.DimenRes
 import com.github.rooneyandshadows.lightbulb.commons.utils.IconUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter.*
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIcons
@@ -32,7 +31,7 @@ object AppIconUtils {
         get() {
             val result: ArrayList<IconModel> = ArrayList<IconModel>()
             for (icon in DemoIcons.values()) result.add(
-                IconModel(icon.name, IconSet.FONTAWESOME)
+                IconModel(icon.iconName, IconSet.FONTAWESOME)
             )
             return result
         }

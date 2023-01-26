@@ -7,13 +7,36 @@ import com.github.rooneyandshadows.lightbulb.pickersdemo.models.DemoModel
 import java.util.*
 
 class VMAdapterPickerDemo : BaseObservableViewModel() {
-    private val boxedSelection: MutableList<UUID> = mutableListOf()
-    private val outlinedSelection: MutableList<UUID> = mutableListOf()
-    private val buttonSelection: MutableList<UUID> = mutableListOf()
-    private val imageButtonSelection: MutableList<UUID> = mutableListOf()
+    @get:Bindable
+    var boxedSelection: MutableList<UUID> = mutableListOf()
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.boxedSelection)
+        }
+
+    @get:Bindable
+    var outlinedSelection: MutableList<UUID> = mutableListOf()
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.outlinedSelection)
+        }
+
+    @get:Bindable
+    var buttonSelection: MutableList<UUID> = mutableListOf()
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.buttonSelection)
+        }
+
+    @get:Bindable
+    var imageButtonSelection: MutableList<UUID> = mutableListOf()
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.imageButtonSelection)
+        }
     val dataSets: MutableMap<Int?, List<DemoModel>> = HashMap<Int?, List<DemoModel>>()
 
-    fun initialize() {
+    init {
         DemoModel.generateDemoCollection().apply {
             dataSets[0] = this
             val firstElementId = get(0).id
@@ -34,49 +57,5 @@ class VMAdapterPickerDemo : BaseObservableViewModel() {
             val firstElementId = get(0).id
             imageButtonSelection.add(firstElementId)
         }
-    }
-
-    fun setBoxedSelection(boxedSelection: List<UUID>?) {
-        this.boxedSelection.clear()
-        this.boxedSelection.addAll(boxedSelection!!)
-        notifyPropertyChanged(BR.boxedSelection)
-    }
-
-    fun setOutlinedSelection(outlinedSelection: List<UUID>?) {
-        this.outlinedSelection.clear()
-        this.outlinedSelection.addAll(outlinedSelection!!)
-        notifyPropertyChanged(BR.outlinedSelection)
-    }
-
-    fun setButtonSelection(buttonSelection: List<UUID>?) {
-        this.buttonSelection.clear()
-        this.buttonSelection.addAll(buttonSelection!!)
-        notifyPropertyChanged(BR.buttonSelection)
-    }
-
-    fun setImageButtonSelection(imageButtonSelection: List<UUID>?) {
-        this.imageButtonSelection.clear()
-        this.imageButtonSelection.addAll(imageButtonSelection!!)
-        notifyPropertyChanged(BR.imageButtonSelection)
-    }
-
-    @Bindable
-    fun getBoxedSelection(): List<UUID> {
-        return boxedSelection
-    }
-
-    @Bindable
-    fun getOutlinedSelection(): List<UUID> {
-        return outlinedSelection
-    }
-
-    @Bindable
-    fun getButtonSelection(): List<UUID> {
-        return buttonSelection
-    }
-
-    @Bindable
-    fun getImageButtonSelection(): List<UUID> {
-        return imageButtonSelection
     }
 }

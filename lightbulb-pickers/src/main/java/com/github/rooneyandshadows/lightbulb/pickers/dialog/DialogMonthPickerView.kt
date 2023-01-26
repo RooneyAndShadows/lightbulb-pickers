@@ -161,18 +161,23 @@ class DialogMonthPickerView @JvmOverloads constructor(
         private const val DEFAULT_DATE_FORMAT = "YYYY, MMM"
         private const val DEFAULT_MAX_YEAR = 2100
         private const val DEFAULT_MIN_YEAR = 1970
+    }
 
+    object Databinding {
         @BindingAdapter("monthPickerSelection")
+        @JvmStatic
         fun setMonth(view: DialogMonthPickerView, newSelection: Month?) {
             view.selection = newSelection
         }
 
         @InverseBindingAdapter(attribute = "monthPickerSelection", event = "monthPickerSelectionChanged")
+        @JvmStatic
         fun getMonth(view: DialogMonthPickerView): Month? {
             return view.selection
         }
 
         @BindingAdapter("monthPickerSelectionChanged")
+        @JvmStatic
         fun setListeners(view: DialogMonthPickerView, attrChange: InverseBindingListener) {
             if (view.hasSelection) attrChange.onChange()
             view.dataBindingListener = object : SelectionChangedListener<Month> {

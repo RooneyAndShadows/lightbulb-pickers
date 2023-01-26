@@ -60,7 +60,7 @@ afterEvaluate {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    coreLibraryDesugaring "com.android.tools:$versions.android.desugar"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.android.desugar"
     implementation "androidx.core:core-ktx:$versions.ktx.core"
     implementation "com.nex3z:flow-layout:$versions.flow_layout"
     implementation "androidx.appcompat:appcompat:$versions.android.appcompat"

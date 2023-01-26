@@ -12,6 +12,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                argument 'lightbulb.generate.root.package', applicationId
+            }
+        }
     }
     buildFeatures {
         dataBinding = true
@@ -31,11 +36,12 @@ android {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/io.netty.versions.properties'
         exclude 'META-INF/INDEX.LIST'
+        merge 'META-INF/gradle/incremental.annotation.processors'
     }
 }
 
 dependencies {
-    coreLibraryDesugaring "com.android.tools:$versions.android.desugar"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.android.desugar"
     implementation "androidx.core:core-ktx:$versions.ktx.core"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$versions.android.lifecycle_viewmodel"
     implementation "androidx.appcompat:appcompat:$versions.android.appcompat"

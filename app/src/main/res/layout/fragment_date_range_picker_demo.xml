@@ -50,48 +50,27 @@
                     android:layout_marginBottom="15dp"
                     android:orientation="vertical">
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center">
-
-                        <View
-                            style="@style/HorizontalDelimiter"
-                            android:layout_width="wrap_content"
-                            android:layout_weight="0.5" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp"
-                            android:text="@string/picker_trigger_input_boxed_text" />
-
-                        <View
-                            style="@style/HorizontalDelimiter"
-                            android:layout_width="wrap_content"
-                            android:layout_weight="0.5" />
-
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                    <include
+                        layout="@layout/layout_option_title"
+                        app:optionTitle="@{@string/picker_trigger_input_boxed_text}" />
 
                     <com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateRangePickerView
                         android:id="@+id/pickerViewBoxed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:pv_DialogAnimation="transition_from_left_to_right"
-                        app:pv_DialogButtonNegText="@string/picker_cancel_text"
-                        app:pv_DialogButtonPosText="@string/picker_ok_text"
-                        app:pv_DialogTag="DEMO_PICKER_TAG_BOXED"
-                        app:pv_HintText="@string/adapter_picker_pick_item_text"
-                        app:pv_Required="true"
-                        app:pv_RequiredText="@string/icon_picker_required_text"
-                        app:dateRangePickerSelection="@={model.buttonSelection}">
+                        app:dateRangePickerSelection="@={model.buttonSelection}"
+                        app:pv_dialog_animation="transition_from_left_to_right"
+                        app:pv_dialog_button_negative_text="@string/picker_cancel_text"
+                        app:pv_dialog_button_positive_text="@string/picker_ok_text"
+                        app:pv_dialog_tag="DEMO_PICKER_TAG_BOXED"
+                        app:pv_error_required_text="@string/icon_picker_required_text"
+                        app:pv_hint_text="@string/adapter_picker_pick_item_text"
+                        app:pv_required="true">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:itv_IconUseAlpha="false" />
+                            app:itv_icon_use_alpha="false" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateRangePickerView>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -102,49 +81,28 @@
                     android:layout_marginBottom="15dp"
                     android:orientation="vertical">
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center">
-
-                        <View
-                            style="@style/HorizontalDelimiter"
-                            android:layout_width="wrap_content"
-                            android:layout_weight="0.5" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp"
-                            android:text="@string/picker_trigger_input_outlined_text" />
-
-                        <View
-                            style="@style/HorizontalDelimiter"
-                            android:layout_width="wrap_content"
-                            android:layout_weight="0.5" />
-
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                    <include
+                        layout="@layout/layout_option_title"
+                        app:optionTitle="@{@string/picker_trigger_input_outlined_text}" />
 
                     <com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateRangePickerView
                         android:id="@+id/pickerViewOutlined"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:pv_DialogAnimation="transition_from_left_to_right"
-                        app:pv_DialogButtonNegText="@string/picker_cancel_text"
-                        app:pv_DialogButtonPosText="@string/picker_ok_text"
-                        app:pv_DialogTag="DEMO_PICKER_TAG_OUTLINED"
-                        app:pv_HintText="@string/adapter_picker_pick_item_text"
-                        app:pv_Required="true"
-                        app:pv_RequiredText="@string/icon_picker_required_text"
-                        app:dateRangePickerSelection="@={model.buttonSelection}">
+                        app:dateRangePickerSelection="@={model.buttonSelection}"
+                        app:pv_dialog_animation="transition_from_left_to_right"
+                        app:pv_dialog_button_negative_text="@string/picker_cancel_text"
+                        app:pv_dialog_button_positive_text="@string/picker_ok_text"
+                        app:pv_dialog_tag="DEMO_PICKER_TAG_OUTLINED"
+                        app:pv_error_required_text="@string/icon_picker_required_text"
+                        app:pv_hint_text="@string/adapter_picker_pick_item_text"
+                        app:pv_required="true">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:itv_IconUseAlpha="false"
-                            app:itv_LayoutType="OUTLINED" />
+                            app:itv_icon_use_alpha="false"
+                            app:itv_layout_type="OUTLINED" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateRangePickerView>
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -154,43 +112,22 @@
                     android:layout_marginBottom="15dp"
                     android:orientation="vertical">
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center">
-
-                        <View
-                            style="@style/HorizontalDelimiter"
-                            android:layout_width="wrap_content"
-                            android:layout_weight="0.5" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp"
-                            android:text="@string/picker_trigger_input_button_text" />
-
-                        <View
-                            style="@style/HorizontalDelimiter"
-                            android:layout_width="wrap_content"
-                            android:layout_weight="0.5" />
-
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                    <include
+                        layout="@layout/layout_option_title"
+                        app:optionTitle="@{@string/picker_trigger_input_button_text}" />
 
                     <com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateRangePickerView
                         android:id="@+id/pickerViewButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:pv_DialogAnimation="transition_from_left_to_right"
-                        app:pv_DialogButtonNegText="@string/picker_cancel_text"
-                        app:pv_DialogButtonPosText="@string/picker_ok_text"
-                        app:pv_DialogTag="DEMO_PICKER_TAG_BUTTON"
-                        app:pv_HintText="@string/adapter_picker_pick_item_text"
-                        app:pv_Required="true"
-                        app:pv_RequiredText="@string/icon_picker_required_text"
-                        app:dateRangePickerSelection="@={model.buttonSelection}">
+                        app:dateRangePickerSelection="@={model.buttonSelection}"
+                        app:pv_dialog_animation="transition_from_left_to_right"
+                        app:pv_dialog_button_negative_text="@string/picker_cancel_text"
+                        app:pv_dialog_button_positive_text="@string/picker_ok_text"
+                        app:pv_dialog_tag="DEMO_PICKER_TAG_BUTTON"
+                        app:pv_error_required_text="@string/icon_picker_required_text"
+                        app:pv_hint_text="@string/adapter_picker_pick_item_text"
+                        app:pv_required="true">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ButtonTriggerView
                             android:layout_width="match_parent"
@@ -206,44 +143,23 @@
                     android:clipToPadding="false"
                     android:orientation="vertical">
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center">
-
-                        <View
-                            style="@style/HorizontalDelimiter"
-                            android:layout_width="wrap_content"
-                            android:layout_weight="0.5" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp"
-                            android:text="@string/picker_trigger_input_image_button_text" />
-
-                        <View
-                            style="@style/HorizontalDelimiter"
-                            android:layout_width="wrap_content"
-                            android:layout_weight="0.5" />
-
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                    <include
+                        layout="@layout/layout_option_title"
+                        app:optionTitle="@{@string/picker_trigger_input_image_button_text}" />
 
                     <com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateRangePickerView
                         android:id="@+id/pickerViewImageButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        app:pv_DialogAnimation="transition_from_left_to_right"
-                        app:pv_DialogButtonNegText="@string/picker_cancel_text"
-                        app:pv_DialogButtonPosText="@string/picker_ok_text"
-                        app:pv_DialogTag="DEMO_PICKER_TAG_IMAGE_BUTTON"
-                        app:pv_HintText="@string/adapter_picker_pick_item_text"
-                        app:pv_Required="true"
-                        app:pv_RequiredText="@string/icon_picker_required_text"
-                        app:dateRangePickerSelection="@={model.buttonSelection}">
+                        app:dateRangePickerSelection="@={model.buttonSelection}"
+                        app:pv_dialog_animation="transition_from_left_to_right"
+                        app:pv_dialog_button_negative_text="@string/picker_cancel_text"
+                        app:pv_dialog_button_positive_text="@string/picker_ok_text"
+                        app:pv_dialog_tag="DEMO_PICKER_TAG_IMAGE_BUTTON"
+                        app:pv_error_required_text="@string/icon_picker_required_text"
+                        app:pv_hint_text="@string/adapter_picker_pick_item_text"
+                        app:pv_required="true">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ImageButtonTriggerView
                             android:layout_width="match_parent"
