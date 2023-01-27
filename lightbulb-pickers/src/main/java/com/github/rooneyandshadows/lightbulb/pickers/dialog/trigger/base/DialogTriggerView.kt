@@ -154,10 +154,6 @@ abstract class DialogTriggerView @JvmOverloads constructor(
         try {
             attrTypedArray.apply {
                 errorEnabled = getBoolean(R.styleable.DialogTriggerView_dtv_error_enabled, false)
-                getString(R.styleable.DialogTriggerView_dtv_required_text).apply {
-                    val default = ResourceUtils.getPhrase(context, R.string.picker_default_error_text)
-                    errorText = this ?: default
-                }
                 getString(R.styleable.DialogTriggerView_dtv_error_text).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_error_text)
                     errorText = this ?: default

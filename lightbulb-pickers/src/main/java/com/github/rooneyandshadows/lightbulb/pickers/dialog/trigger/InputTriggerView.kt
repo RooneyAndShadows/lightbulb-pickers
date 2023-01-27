@@ -2,7 +2,6 @@ package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
@@ -37,15 +36,13 @@ class InputTriggerView @JvmOverloads constructor(
     var startIconUseAlpha = false
         private set
     var pickerInputBoxStrokeColor: Int = -1
-        set(value) {
-            field = value
-            setupStroke()
-        }
+        private set
 
     init {
         isSaveEnabled = true
     }
 
+    @Override
     override fun inflateView() {
         when (inputType) {
             BOXED -> inflate(context, R.layout.dialog_picker_boxed_layout, this) as LinearLayout
@@ -70,68 +67,15 @@ class InputTriggerView @JvmOverloads constructor(
         textInputLayout.isErrorEnabled = errorEnabled
     }
 
+    @Override
     override fun onTextChange() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onHintTextChange() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onErrorTextChange() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onErrorTextAppearanceChange() {
-        textInputLayout.setErrorTextAppearance(errorTextAppearance)
-    }
-
-    override fun onHintTextAppearanceChange() {
-        textInputLayout.setHintTextAppearance(hintTextAppearance)
-    }
-
-    override fun onEnabledChange() {
-        TODO("Not yet implemented")
-    }
-
-    @Override
-    override fun setEnabled(enabled: Boolean) {
-        super.setEnabled(enabled)
-        textInputEditText.isEnabled = enabled
-        textInputLayout.isEnabled = enabled
-    }
-
-    @Override
-    override fun attachTo(pickerView: BaseDialogPickerView<*>) {
-        this.pickerView = pickerView
-        requirePickerView().apply {
-            textInputLayout.setEndIconOnClickListener { showPickerDialog() }
-            textInputLayout.isErrorEnabled = errorEnabled
-            if (textInputLayout.isErrorEnabled) textInputLayout.error = errorText
-            if (!pickerView.showSelectedTextValue && pickerHintText.isNullOrBlank()) {
-                textInputEditText.compoundDrawablePadding = -textInputEditText.paddingLeft
-                textInputEditText.minWidth = 0
-                textInputEditText.width = 0
-            }
-            textInputLayout.isEnabled = isEnabled
-            textInputEditText.isEnabled = isEnabled
-            setTriggerHintText(pickerHintText)
+        textInputEditText.apply {
+            setText(this@InputTriggerView.text)
         }
     }
 
     @Override
-    override fun setTriggerIcon(icon: Drawable?, color: Int?) {
-        pickerStartIconColor = color ?: defaultIconColor
-        pickerIcon = icon
-    }
-
-    @Override
-    override fun setTriggerErrorText(errorText: String?) {
-        textInputLayout.error = errorText
-    }
-
-    @Override
-    override fun setTriggerHintText(hintText: String?) {
+    override fun onHintTextChange() {
         val hasHint = !hintText.isNullOrBlank()
         textInputLayout.isHintEnabled = hasHint
         textInputLayout.hint = hintText
@@ -148,8 +92,39 @@ class InputTriggerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun setTriggerErrorEnabled(errorEnabled: Boolean) {
-        textInputLayout.isErrorEnabled = errorEnabled
+    override fun onErrorTextChange() {
+        textInputLayout.apply {
+            error = errorText
+        }
+    }
+
+    @Override
+    override fun onErrorTextAppearanceChange() {
+        textInputLayout.setErrorTextAppearance(errorTextAppearance)
+    }
+
+    @Override
+    override fun onHintTextAppearanceChange() {
+        textInputLayout.setHintTextAppearance(hintTextAppearance)
+    }
+
+    @Override
+    override fun onEnabledChange() {
+        textInputEditText.isEnabled = isEnabled
+        textInputLayout.isEnabled = isEnabled
+    }
+
+    @Override
+    override fun attachTo(pickerView: BaseDialogPickerView<*>) {
+        this.pickerView = pickerView
+        requirePickerView().apply {
+            textInputLayout.setEndIconOnClickListener { showPickerDialog() }
+            if (!pickerView.showSelectedTextValue && hintText.isNullOrBlank()) {
+                textInputEditText.compoundDrawablePadding = -textInputEditText.paddingLeft
+                textInputEditText.minWidth = 0
+                textInputEditText.width = 0
+            }
+        }
     }
 
     fun setInputBackgroundColor(inputBackgroundColor: Int) {
@@ -181,11 +156,14 @@ class InputTriggerView @JvmOverloads constructor(
     override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val myState = SavedState(superState)
-        myState.pickerBackgroundColor = inputBackgroundColor
-        myState.pickerInputBoxStrokeColor = pickerInputBoxStrokeColor
-        myState.pickerStartIconColor = pickerStartIconColor
-        myState.iconUseAlpha = startIconUseAlpha
-        myState.editTextSavedState = textInputEditText.onSaveInstanceState()
+        myState.apply {
+            val view = this@InputTriggerView
+            inputBackgroundColor = view.inputBackgroundColor
+            pickerInputBoxStrokeColor = view.pickerInputBoxStrokeColor
+            startIconUseAlpha = view.startIconUseAlpha
+            editTextSavedState = textInputEditText.onSaveInstanceState()
+        }
+
         return myState
     }
 
@@ -193,21 +171,16 @@ class InputTriggerView @JvmOverloads constructor(
     override fun onRestoreInstanceState(state: Parcelable) {
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
-        inputBackgroundColor = savedState.pickerBackgroundColor
-        pickerInputBoxStrokeColor = savedState.pickerInputBoxStrokeColor
-        pickerStartIconColor = savedState.pickerStartIconColor
-        startIconUseAlpha = savedState.iconUseAlpha
-        textInputEditText.onRestoreInstanceState(savedState.editTextSavedState)
-        setupInputLayout()
+        savedState.apply {
+            setInputBackgroundColor(savedState.inputBackgroundColor)
+            setInputBoxStrokeColor(savedState.pickerInputBoxStrokeColor)
+            setStartIconUseAlpha(savedState.startIconUseAlpha)
+            textInputEditText.onRestoreInstanceState(savedState.editTextSavedState)
+        }
     }
 
-    private fun requirePickerView(): BaseDialogPickerView<*> {
-        if (!this::pickerView.isInitialized)
-            throw Exception("ButtonTriggerView is not attached to picker.")
-        return pickerView
-    }
-
-    private fun readAttributes(context: Context, attrs: AttributeSet?) {
+    @Override
+    override fun readAttributes(context: Context, attrs: AttributeSet?) {
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.InputTriggerView, 0, 0)
         try {
             attrTypedArray.apply {
@@ -298,42 +271,32 @@ class InputTriggerView @JvmOverloads constructor(
         textInputLayout.errorIconDrawable = null
     }
 
-    private fun setupTextAppearances() {
-        textInputLayout.setHintTextAppearance(hintAppearance)
-        textInputLayout.setErrorTextAppearance(errorAppearance)
-    }
-
     private class SavedState : BaseSavedState {
-        var pickerBackgroundColor = 0
+        var inputBackgroundColor = 0
         var pickerInputBoxStrokeColor = 0
-        var pickerStartIconColor = 0
-        var hintAppearance = 0
-        var errorAppearance = 0
-        var iconUseAlpha = false
+        var startIconUseAlpha = false
         var editTextSavedState: Parcelable? = null
 
         constructor(superState: Parcelable?) : super(superState)
 
         private constructor(parcel: Parcel) : super(parcel) {
-            pickerBackgroundColor = parcel.readInt()
-            pickerInputBoxStrokeColor = parcel.readInt()
-            pickerStartIconColor = parcel.readInt()
-            hintAppearance = parcel.readInt()
-            errorAppearance = parcel.readInt()
-            iconUseAlpha = parcel.readByte().toInt() != 0
-            editTextSavedState = ParcelUtils.readParcelable(parcel, Bundle::class.java)
+            parcel.apply {
+                inputBackgroundColor = ParcelUtils.readInt(this)!!
+                pickerInputBoxStrokeColor = ParcelUtils.readInt(this)!!
+                startIconUseAlpha = ParcelUtils.readBoolean(this)!!
+                editTextSavedState = ParcelUtils.readParcelable(this, Bundle::class.java)
+            }
         }
 
         @Override
         override fun writeToParcel(out: Parcel, flags: Int) {
             super.writeToParcel(out, flags)
-            out.writeInt(pickerBackgroundColor)
-            out.writeInt(pickerInputBoxStrokeColor)
-            out.writeInt(pickerStartIconColor)
-            out.writeInt(hintAppearance)
-            out.writeInt(errorAppearance)
-            out.writeByte((if (iconUseAlpha) 1 else 0).toByte())
-            ParcelUtils.writeParcelable(out, editTextSavedState)
+            out.apply {
+                ParcelUtils.writeInt(this, inputBackgroundColor)
+                ParcelUtils.writeInt(this, pickerInputBoxStrokeColor)
+                ParcelUtils.writeBoolean(this, startIconUseAlpha)
+                ParcelUtils.writeParcelable(this, editTextSavedState)
+            }
         }
 
         @Override

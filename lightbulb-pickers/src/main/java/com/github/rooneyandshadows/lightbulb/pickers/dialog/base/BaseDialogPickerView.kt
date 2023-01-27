@@ -14,7 +14,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
+import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
@@ -26,8 +26,9 @@ import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes.N
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogButtonClickListener
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogCancelListener
 import com.github.rooneyandshadows.lightbulb.pickers.R
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 
-@Suppress("unused", "MemberVisibilityCanBePrivate")
+@Suppress("unused", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
 abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -44,12 +45,17 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         onDialogInitialized(dialog)
         return@lazy dialog
     }
+    private var errorEnabled: Boolean = false
+        set(value) {
+            triggerView?.setErrorEnabled(field)
+        }
+        get() = triggerView?.errorEnabled ?: false
     var showSelectedTextValue = false
         protected set(value) {
             field = value
             invalidate()
         }
-    var triggerView: DialogPickerTriggerLayout? = null
+    var triggerView: DialogTriggerView? = null
         set(value) {
             field = value
             addViewInternally(field as View)
@@ -97,6 +103,19 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             field = value
             pickerDialog.dialogAnimationType = field
         }
+    var hintText: String? = null
+        set(value) {
+            if (!showSelectedTextValue) return
+            triggerView?.setHintText(field)
+        }
+        get() = triggerView?.hintText
+    var errorText: String? = null
+        set(value) {
+            triggerView?.setErrorText(field)
+        }
+        get() = triggerView?.errorText
+    var requiredText: String? = null
+        private set
     var isValidationEnabled = false
         private set
     var required = false
@@ -104,7 +123,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     val isDialogShown: Boolean
         get() = pickerDialog.isDialogShown
     val text: String
-        get() = triggerView?.triggerText ?: ""
+        get() = triggerView?.text ?: ""
     val hasSelection: Boolean
         get() = pickerDialog.hasSelection()
     open var selection: SelectionType?
@@ -114,13 +133,12 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     protected abstract fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<SelectionType>
     protected abstract fun readAttributes(context: Context, attrs: AttributeSet?)
 
-
     protected open fun validate(): Boolean {
         var isValid = true
         if (isValidationEnabled) {
             if (required && !hasSelection) {
-                setErrorEnabled(true)
-                setErrorText(pickerRequiredText)
+                errorEnabled = true
+                errorText = requiredText
                 return false
             }
             validationCallbacks.forEach {
@@ -128,10 +146,10 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
                 if (!isValid) return@forEach
             }
         }
-        if (!isValid) setErrorEnabled(true)
+        if (!isValid) errorEnabled = true
         else {
-            setErrorEnabled(false)
-            setErrorText(null)
+            errorEnabled = false
+            errorText = null
         }
         return isValid
     }
@@ -157,7 +175,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
                 override fun onSelectionChanged(
                     dialog: BasePickerDialogFragment<SelectionType>,
                     oldValue: SelectionType?,
-                    newValue: SelectionType?
+                    newValue: SelectionType?,
                 ) {
                     updateTextAndValidate()
                     dispatchSelectionChangedEvents(oldValue, newValue)
@@ -177,7 +195,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     @Override
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
-        if (triggerView != null) triggerView!!.setEnabled(enabled)
+        triggerView?.isEnabled = enabled
     }
 
     @Override
@@ -186,9 +204,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     }
 
     protected fun updateTextAndValidate() {
-        if (!showSelectedTextValue) return
-        val newTextValue = viewText
-        triggerView?.triggerText = newTextValue
+        updateText()
         validate()
     }
 
@@ -224,11 +240,8 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         pickerDialog.show()
     }
 
-    fun setRequired(required: Boolean) {
-        setRequired(required, true)
-    }
-
-    fun setRequired(required: Boolean, validateOnCall: Boolean) {
+    @JvmOverloads
+    fun setRequired(required: Boolean, validateOnCall: Boolean = true) {
         this.required = required
         if (validateOnCall) validate()
     }
@@ -239,43 +252,33 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     }
 
     fun setRequiredText(text: String) {
-        pickerRequiredText = text
+        requiredText = text
     }
 
     @JvmOverloads
     fun setPickerIcon(icon: Drawable?, color: Int? = null) {
-        pickerIcon = icon
-        triggerView?.setTriggerIcon(icon, color)
+        triggerView?.setIcon(icon, color)
     }
 
-    fun setHintText(text: String?) {
+    private fun updateText() {
         if (!showSelectedTextValue) return
-        pickerHintText = text
-        triggerView?.setTriggerHintText(pickerHintText)
-    }
-
-    protected fun setErrorText(text: String?) {
-        errorText = text
-        triggerView?.setTriggerErrorText(errorText)
-    }
-
-    private fun setErrorEnabled(newValue: Boolean) {
-        triggerView?.setTriggerErrorEnabled(errorEnabled)
+        val newTextValue = viewText
+        triggerView?.setText(newTextValue)
     }
 
     private fun addViewInternally(child: View?) {
-        if (child == null) removeAllViews()
-        if (triggerView !is DialogPickerTriggerLayout) {
+        child ?: removeAllViews()
+        if (triggerView !is DialogTriggerView) {
             Log.w(
                 BaseDialogPickerView::class.java.name,
-                "Picker view child is ignored. All child views must implement com.rands.lightbulb.pickers.dialog.base.TriggerView"
+                "Picker view child is ignored. All child views must implement com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView"
             )
             return
         }
         removeAllViews()
         super.addView(child)
-        triggerView?.apply {
-            setEnabled(this@BaseDialogPickerView.isEnabled)
+        triggerView!!.apply {
+            isEnabled = this@BaseDialogPickerView.isEnabled
             attachTo(this@BaseDialogPickerView)
             triggerAttachedCallback.forEach {
                 it.onAttached(this, this@BaseDialogPickerView)
@@ -305,17 +308,10 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
                     val default = ""
                     pickerDialogMessage = this ?: default
                 }
-                getString(R.styleable.PickerView_pv_hint_text).apply {
-                    val default = ""
-                    pickerHintText = this ?: default
-                }
-                getString(R.styleable.PickerView_pv_error_text).apply {
-                    val default = ResourceUtils.getPhrase(context, R.string.picker_default_error_text)
-                    errorText = this ?: default
-                }
-                getString(R.styleable.PickerView_pv_error_required_text).apply {
+
+                getString(R.styleable.PickerView_pv_required_text).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_required_text)
-                    pickerRequiredText = this ?: default
+                    requiredText = this ?: default
                 }
                 getString(R.styleable.PickerView_pv_dialog_button_positive_text).apply {
                     pickerDialogPositiveButtonText = let {
@@ -373,11 +369,8 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         val superState = super.onSaveInstanceState()
         val myState = SavedState(superState)
         myState.isDialogShown = isDialogShown
-        myState.pickerHintText = pickerHintText
-        myState.pickerErrorText = errorText
-        myState.pickerRequiredText = pickerRequiredText
+        myState.pickerRequiredText = requiredText
         myState.pickerIsRequired = required
-        myState.pickerIsErrorEnabled = errorEnabled
         myState.pickerIsValidationEnabled = isValidationEnabled
         myState.pickerShowSelectedTextValue = showSelectedTextValue
         myState.dialogState = pickerDialog.saveDialogState()
@@ -389,11 +382,8 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
         val isPickerDialogShowing = savedState.isDialogShown
-        pickerHintText = savedState.pickerHintText
-        errorText = savedState.pickerErrorText
-        pickerRequiredText = savedState.pickerRequiredText
+        requiredText = savedState.pickerRequiredText
         required = savedState.pickerIsRequired
-        errorEnabled = savedState.pickerIsErrorEnabled
         isValidationEnabled = savedState.pickerIsValidationEnabled
         showSelectedTextValue = savedState.pickerShowSelectedTextValue
         pickerDialog.restoreDialogState(savedState.dialogState)
@@ -410,16 +400,13 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     }
 
     interface TriggerAttachedCallback<SelectionType> {
-        fun onAttached(triggerView: DialogPickerTriggerLayout, pickerView: BaseDialogPickerView<SelectionType>)
+        fun onAttached(triggerView: DialogTriggerView, pickerView: BaseDialogPickerView<SelectionType>)
     }
 
     private class SavedState : BaseSavedState {
         var isDialogShown = false
-        var pickerHintText: String? = null
-        var pickerErrorText: String? = null
         var pickerRequiredText: String? = null
         var pickerIsRequired = false
-        var pickerIsErrorEnabled = false
         var pickerIsValidationEnabled = false
         var pickerShowSelectedTextValue = false
         var dialogState: Bundle? = null
@@ -427,29 +414,27 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         constructor(superState: Parcelable?) : super(superState)
 
         private constructor(parcel: Parcel) : super(parcel) {
-            isDialogShown = parcel.readByte().toInt() != 0
-            pickerHintText = parcel.readString()
-            pickerErrorText = parcel.readString()
-            pickerRequiredText = parcel.readString()
-            pickerIsRequired = parcel.readByte().toInt() != 0
-            pickerIsErrorEnabled = parcel.readByte().toInt() != 0
-            pickerIsValidationEnabled = parcel.readByte().toInt() != 0
-            pickerShowSelectedTextValue = parcel.readByte().toInt() != 0
-            dialogState = parcel.readBundle(Bundle::class.java.classLoader)
+            parcel.apply {
+                isDialogShown = ParcelUtils.readBoolean(this)!!
+                pickerIsRequired = ParcelUtils.readBoolean(this)!!
+                pickerIsValidationEnabled = ParcelUtils.readBoolean(this)!!
+                pickerShowSelectedTextValue = ParcelUtils.readBoolean(this)!!
+                pickerRequiredText = ParcelUtils.readString(this)
+                dialogState = readBundle(Bundle::class.java.classLoader)
+            }
         }
 
         @Override
         override fun writeToParcel(parcel: Parcel, flags: Int) {
             super.writeToParcel(parcel, flags)
-            parcel.writeByte((if (isDialogShown) 1 else 0).toByte())
-            parcel.writeString(pickerHintText)
-            parcel.writeString(pickerErrorText)
-            parcel.writeString(pickerRequiredText)
-            parcel.writeByte((if (pickerIsRequired) 1 else 0).toByte())
-            parcel.writeByte((if (pickerIsErrorEnabled) 1 else 0).toByte())
-            parcel.writeByte((if (pickerIsValidationEnabled) 1 else 0).toByte())
-            parcel.writeByte((if (pickerShowSelectedTextValue) 1 else 0).toByte())
-            parcel.writeBundle(dialogState)
+            parcel.apply {
+                ParcelUtils.writeBoolean(this, isDialogShown)
+                    .writeBoolean(this, pickerIsRequired)
+                    .writeBoolean(this, pickerIsValidationEnabled)
+                    .writeBoolean(this, pickerShowSelectedTextValue)
+                    .writeString(this, pickerRequiredText)
+                writeBundle(dialogState)
+            }
         }
 
         @Override
