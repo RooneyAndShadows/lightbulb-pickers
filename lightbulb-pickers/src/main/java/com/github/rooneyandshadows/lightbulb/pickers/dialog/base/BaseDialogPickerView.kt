@@ -97,19 +97,9 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             field = value
             pickerDialog.dialogAnimationType = field
         }
-    var errorEnabled = false
-        private set
     var isValidationEnabled = false
         private set
-    var pickerRequiredText: String? = null
-        private set
     var required = false
-        private set
-    var pickerIcon: Drawable? = null
-        private set
-    var pickerHintText: String? = null
-        private set
-    var errorText: String? = null
         private set
     val isDialogShown: Boolean
         get() = pickerDialog.isDialogShown
@@ -250,29 +240,27 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
 
     fun setRequiredText(text: String) {
         pickerRequiredText = text
-        if (errorEnabled) validate()
     }
 
     @JvmOverloads
     fun setPickerIcon(icon: Drawable?, color: Int? = null) {
         pickerIcon = icon
-        triggerView!!.setTriggerIcon(icon, color)
+        triggerView?.setTriggerIcon(icon, color)
     }
 
     fun setHintText(text: String?) {
         if (!showSelectedTextValue) return
         pickerHintText = text
-        triggerView!!.setTriggerHintText(pickerHintText)
+        triggerView?.setTriggerHintText(pickerHintText)
     }
 
-    fun setErrorText(text: String?) {
+    protected fun setErrorText(text: String?) {
         errorText = text
-        triggerView!!.setTriggerErrorText(errorText)
+        triggerView?.setTriggerErrorText(errorText)
     }
 
     private fun setErrorEnabled(newValue: Boolean) {
-        errorEnabled = newValue
-        triggerView!!.setTriggerErrorEnabled(errorEnabled)
+        triggerView?.setTriggerErrorEnabled(errorEnabled)
     }
 
     private fun addViewInternally(child: View?) {
@@ -353,7 +341,6 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
                 getInt(R.styleable.PickerView_pv_dialog_animation, NO_ANIMATION.value).apply {
                     pickerDialogAnimationType = DialogAnimationTypes.valueOf(this)
                 }
-                errorEnabled = getBoolean(R.styleable.PickerView_pv_error_enabled, false)
                 required = getBoolean(R.styleable.PickerView_pv_required, false)
                 isValidationEnabled = getBoolean(R.styleable.PickerView_pv_validation_enabled, false)
                 pickerDialogCancelable = getBoolean(R.styleable.PickerView_pv_dialog_cancelable, true)

@@ -2,7 +2,6 @@ package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
 import android.os.Parcelable.Creator
@@ -11,10 +10,10 @@ import android.util.SparseArray
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatTextView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
-import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
+import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 
 @Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate")
 class ImageButtonTriggerView @JvmOverloads constructor(
@@ -22,83 +21,90 @@ class ImageButtonTriggerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
-) : LinearLayout(context, attrs, defStyleAttr, defStyleRes), DialogPickerTriggerLayout {
-    private lateinit var pickerView: BaseDialogPickerView<*>
+) : DialogTriggerView(context, attrs, defStyleAttr, defStyleRes) {
     private lateinit var iconButtonView: AppCompatImageButton
     private lateinit var errorTextView: AppCompatTextView
-    private var hasDefinedBoxBackgroundAttribute = false
-    var pickerIcon: Drawable? = null
-        set(value) {
-            field = value
-            setupStartIcon()
-        }
     var buttonBackgroundColor: Int = -1
-        set(value) {
-            field = value
-            setupBackground()
-        }
-    var pickerStartIconColor = -1
-        set(value) {
-            field = value
-            setupStartIcon()
-        }
-    var errorAppearance = 0
-        set(value) {
-            field = value
-            setupErrorAppearance()
-        }
-
-    //NOT SUPPORTED
-    override var triggerText: String
-        get() = ""
-        set(newTextValue) {
-            //NOT SUPPORTED
-        }
+        private set
 
     init {
-        readAttributes(context, attrs)
-        initView()
+        isSaveEnabled = true
+    }
+
+
+    @Override
+    override fun inflateView() {
+        inflate(context, R.layout.dialog_picker_image_button_layout, this) as LinearLayout
+        iconButtonView = findViewById(R.id.picker_view_image_button)
+        errorTextView = findViewById(R.id.picker_view_error_text_view)
     }
 
     @Override
-    override fun setEnabled(enabled: Boolean) {
-        super.setEnabled(enabled)
-        iconButtonView.isEnabled = enabled
+    override fun onIconChange() {
+        val color = if (iconColor == -1) defaultIconColor else iconColor
+        if (icon != null)
+            icon!!.setTint(color)
+        iconButtonView.setImageDrawable(icon)
+    }
+
+    @Override
+    override fun onIconColorChange() {
+        iconColor.apply color@{
+            iconButtonView.drawable?.apply {
+                val colorToSet = if (this@color == -1) defaultIconColor else this@color
+                setTint(colorToSet)
+            }
+        }
+    }
+
+    @Override
+    override fun onErrorEnabledChange() {
+        errorTextView.visibility = if (errorEnabled) VISIBLE else GONE
+    }
+
+    @Override
+    override fun onTextChange() {
+        // NOT SUPPORTED
+    }
+
+    @Override
+    override fun onHintTextChange() {
+        // NOT SUPPORTED
+    }
+
+    @Override
+    override fun onErrorTextChange() {
+        errorTextView.apply {
+            text = errorText
+        }
+    }
+
+    @Override
+    override fun onErrorTextAppearanceChange() {
+        errorTextView.apply {
+            setTextAppearance(errorTextAppearance)
+        }
+    }
+
+    @Override
+    override fun onHintTextAppearanceChange() {
+        // NOT SUPPORTED
+    }
+
+    @Override
+    override fun onEnabledChange() {
+        iconButtonView.isEnabled = isEnabled
     }
 
     @Override
     override fun attachTo(pickerView: BaseDialogPickerView<*>) {
         this.pickerView = pickerView
-        requirePickerView().apply {
-            iconButtonView.setOnClickListener { pickerView.showPickerDialog() }
-            iconButtonView.isEnabled = isEnabled
-            setTriggerErrorEnabled(errorEnabled)
-            if (errorEnabled)
-                errorTextView.error = errorText
-            setTriggerHintText(pickerHintText)
-        }
-
+        iconButtonView.setOnClickListener { requirePickerView().showPickerDialog() }
     }
 
     @Override
-    override fun setTriggerIcon(icon: Drawable?, color: Int?) {
-        pickerIcon = icon
-        pickerStartIconColor = color ?: -1
-    }
-
-    @Override
-    override fun setTriggerErrorText(errorText: String?) {
-        errorTextView.text = errorText
-    }
-
-    @Override
-    override fun setTriggerHintText(hintText: String?) {
-        //NOT SUPPORTED
-    }
-
-    @Override
-    override fun setTriggerErrorEnabled(errorEnabled: Boolean) {
-        errorTextView.visibility = if (errorEnabled) VISIBLE else GONE
+    override fun setupView() {
+        setupBackground()
     }
 
     @Override
@@ -112,52 +118,27 @@ class ImageButtonTriggerView @JvmOverloads constructor(
     }
 
     @Override
-    public override fun onSaveInstanceState(): Parcelable {
+    override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val myState = SavedState(superState)
-        myState.pickerBackgroundColor = buttonBackgroundColor
-        myState.pickerStartIconColor = pickerStartIconColor
-        myState.errorAppearance = errorAppearance
+        myState.buttonBackgroundColor = buttonBackgroundColor
         return myState
     }
 
     @Override
-    public override fun onRestoreInstanceState(state: Parcelable) {
+    override fun onRestoreInstanceState(state: Parcelable) {
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
-        buttonBackgroundColor = savedState.pickerBackgroundColor
-        pickerStartIconColor = savedState.pickerStartIconColor
-        errorAppearance = savedState.errorAppearance
-        setupViews()
+        setButtonBackgroundColor(savedState.buttonBackgroundColor)
     }
 
-    private fun requirePickerView(): BaseDialogPickerView<*> {
-        if (!this::pickerView.isInitialized)
-            throw Exception("ButtonTriggerView is not attached to picker.")
-        return pickerView
-    }
-
-    private fun readAttributes(context: Context, attrs: AttributeSet?) {
+    @Override
+    override fun readAttributes(context: Context, attrs: AttributeSet?) {
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ImageButtonTriggerView, 0, 0)
         try {
-            hasDefinedBoxBackgroundAttribute = attrTypedArray.hasValue(R.styleable.ButtonTriggerView_btv_background_color)
             attrTypedArray.apply {
-                getColor(R.styleable.ImageButtonTriggerView_ibtv_background_color, -1).apply {
-                    buttonBackgroundColor = when (this) {
-                        -1 -> Color.TRANSPARENT
-                        else -> this
-                    }
-                }
-                getResourceId(R.styleable.ImageButtonTriggerView_ibtv_error_text_appearance,
-                    R.style.PickerViewErrorTextAppearance
-                ).apply {
-                    errorAppearance = this
-                }
-                getColor(R.styleable.ImageButtonTriggerView_ibtv_start_icon_color, -1).apply {
-                    pickerStartIconColor = when (this) {
-                        -1 -> ResourceUtils.getColorByAttribute(context, R.attr.colorOnPrimary)
-                        else -> this
-                    }
+                getColor(R.styleable.ImageButtonTriggerView_ibtv_background_color, Color.TRANSPARENT).apply {
+                    buttonBackgroundColor = this
                 }
             }
         } finally {
@@ -165,60 +146,35 @@ class ImageButtonTriggerView @JvmOverloads constructor(
         }
     }
 
-    private fun initView() {
-        isSaveEnabled = true
-        renderLayout()
-        setupViews()
-    }
-
-    private fun renderLayout() {
-        inflate(context, R.layout.dialog_picker_image_button_layout, this) as LinearLayout
-        iconButtonView = findViewById(R.id.picker_view_image_button)
-        errorTextView = findViewById(R.id.picker_view_error_text_view)
-    }
-
-    private fun setupViews() {
+    fun setButtonBackgroundColor(backgroundColor: Int) {
+        buttonBackgroundColor = backgroundColor
         setupBackground()
-        setupStartIcon()
-        setupErrorAppearance()
     }
 
     private fun setupBackground() {
-        if (hasDefinedBoxBackgroundAttribute && buttonBackgroundColor == Color.TRANSPARENT)
-            iconButtonView.setBackgroundColor(Color.TRANSPARENT)
-    }
-
-    private fun setupStartIcon() {
-        if (pickerIcon != null) pickerIcon!!.setTint(pickerStartIconColor)
-        iconButtonView.setImageDrawable(pickerIcon)
-    }
-
-    private fun setupErrorAppearance() {
-        errorTextView.setTextAppearance(errorAppearance)
+        iconButtonView.apply {
+            if (buttonBackgroundColor == -1) setBackgroundColor(Color.TRANSPARENT)
+            else setBackgroundColor(buttonBackgroundColor)
+        }
     }
 
     private class SavedState : BaseSavedState {
-        var pickerBackgroundColor = -1
-        var errorAppearance = -1
-        var pickerStartIconColor = -1
-        var textColor = -1
+        var buttonBackgroundColor = -1
 
         constructor(superState: Parcelable?) : super(superState)
 
         private constructor(parcel: Parcel) : super(parcel) {
-            pickerBackgroundColor = parcel.readInt()
-            errorAppearance = parcel.readInt()
-            pickerStartIconColor = parcel.readInt()
-            textColor = parcel.readInt()
+            parcel.apply {
+                buttonBackgroundColor = ParcelUtils.readInt(this)!!
+            }
         }
 
         @Override
         override fun writeToParcel(out: Parcel, flags: Int) {
             super.writeToParcel(out, flags)
-            out.writeInt(pickerBackgroundColor)
-            out.writeInt(errorAppearance)
-            out.writeInt(pickerStartIconColor)
-            out.writeInt(textColor)
+            out.apply {
+                ParcelUtils.writeInt(this, buttonBackgroundColor)
+            }
         }
 
         @Override
@@ -235,6 +191,5 @@ class ImageButtonTriggerView @JvmOverloads constructor(
                 return arrayOfNulls(size)
             }
         }
-
     }
 }

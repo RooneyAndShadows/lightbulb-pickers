@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="DialogTriggerView">
+        <attr name="dtv_error_enabled" format="boolean" />
+        <attr name="dtv_required_text" format="string" />
+        <attr name="dtv_error_text" format="string" />
+        <attr name="dtv_hint_text" format="string" />
+        <attr name="dtv_error_text_appearance" format="reference" />
+        <attr name="dtv_hint_text_appearance" format="reference" />
+    </declare-styleable>
+
     <declare-styleable name="InputTriggerView">
         <attr name="itv_background_color" format="color" />
         <attr name="itv_stroke_color" format="color" />
-        <attr name="itv_start_icon_color" format="color" />
-        <attr name="itv_error_text_appearance" format="reference" />
-        <attr name="itv_hint_text_appearance" format="reference" />
         <attr name="itv_icon_use_alpha" format="boolean" />
         <attr name="itv_layout_type" format="enum">
             <enum name="BOXED" value="1" />
@@ -17,14 +23,10 @@
         <attr name="btv_background_color" format="color" />
         <attr name="btv_text_color" format="color" />
         <attr name="btv_background_corner_radius" format="integer" />
-        <attr name="btv_start_icon_color" format="color" />
-        <attr name="btv_error_text_appearance" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="ImageButtonTriggerView">
         <attr name="ibtv_background_color" format="color" />
-        <attr name="ibtv_error_text_appearance" format="reference" />
-        <attr name="ibtv_start_icon_color" format="color" />
     </declare-styleable>
 
     <declare-styleable name="PickerView">
@@ -49,7 +51,6 @@
         <attr name="pv_dialog_button_text_color" format="color" />
         <attr name="pv_dialog_button_corner_radius" format="integer" />
         <attr name="pv_validation_enabled" format="boolean" />
-        <attr name="pv_error_enabled" format="boolean" />
         <attr name="pv_required" format="boolean" />
         <attr name="pv_show_selected_text" format="boolean" />
         <attr name="pv_hint_text" format="string" />
