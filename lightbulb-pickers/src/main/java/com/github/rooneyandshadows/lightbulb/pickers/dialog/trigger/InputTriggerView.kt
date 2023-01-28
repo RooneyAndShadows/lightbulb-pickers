@@ -29,8 +29,6 @@ class InputTriggerView @JvmOverloads constructor(
     private lateinit var textInputLayout: TextInputLayout
     private lateinit var textInputEditText: TextInputEditText
     private lateinit var inputType: InputTypes
-    override val defaultIconColor: Int
-        get() = ResourceUtils.getColorByAttribute(context, R.attr.colorOnBackground)
     var inputBackgroundColor: Int = -1
         private set
     var startIconUseAlpha = false
@@ -40,6 +38,11 @@ class InputTriggerView @JvmOverloads constructor(
 
     init {
         isSaveEnabled = true
+    }
+
+    @Override
+    override fun initializeDefaultIconColor(): Int {
+        return ResourceUtils.getColorByAttribute(context, R.attr.colorOnBackground)
     }
 
     @Override

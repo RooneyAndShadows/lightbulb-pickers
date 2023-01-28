@@ -36,11 +36,8 @@ abstract class DialogTriggerView @JvmOverloads constructor(
         private set
     var hintTextAppearance = 0
         private set
-    protected open val defaultIconColor: Int by lazy {
-        return@lazy ResourceUtils.getColorByAttribute(
-            context,
-            R.attr.colorAccent
-        )
+    protected val defaultIconColor: Int by lazy {
+        initializeDefaultIconColor()
     }
 
     protected abstract fun inflateView()
@@ -55,8 +52,15 @@ abstract class DialogTriggerView @JvmOverloads constructor(
     protected abstract fun onHintTextAppearanceChange()
     protected abstract fun onEnabledChange()
     abstract fun attachTo(pickerView: BaseDialogPickerView<*>)
-    protected open fun setupView() {
 
+    protected open fun setupView() {
+    }
+
+    protected open fun initializeDefaultIconColor(): Int {
+        return ResourceUtils.getColorByAttribute(
+            context,
+            R.attr.colorPrimary
+        )
     }
 
     init {

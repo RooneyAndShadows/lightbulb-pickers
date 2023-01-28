@@ -18,9 +18,9 @@ import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPi
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 
 @Suppress("RedundantOverride", "UnnecessaryVariable", "unused")
 class DialogColorPickerView @JvmOverloads constructor(
@@ -37,7 +37,7 @@ class DialogColorPickerView @JvmOverloads constructor(
 
     init {
         addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray> {
-            override fun onAttached(triggerView: DialogPickerTriggerLayout, pickerView: BaseDialogPickerView<IntArray>) {
+            override fun onAttached(triggerView: DialogTriggerView, pickerView: BaseDialogPickerView<IntArray>) {
                 updatePickerIcon(null)
             }
         })

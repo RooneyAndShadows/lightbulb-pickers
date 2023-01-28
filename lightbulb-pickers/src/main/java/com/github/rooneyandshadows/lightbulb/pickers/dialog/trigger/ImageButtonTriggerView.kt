@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatTextView
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
+import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
@@ -31,6 +32,12 @@ class ImageButtonTriggerView @JvmOverloads constructor(
         isSaveEnabled = true
     }
 
+    override fun initializeDefaultIconColor(): Int {
+        return ResourceUtils.getColorByAttribute(
+            context,
+            R.attr.colorOnPrimary
+        )
+    }
 
     @Override
     override fun inflateView() {

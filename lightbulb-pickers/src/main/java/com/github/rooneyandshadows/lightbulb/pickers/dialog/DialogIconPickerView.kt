@@ -96,14 +96,13 @@ class DialogIconPickerView @JvmOverloads constructor(
     }
 
     private fun updatePickerIcon(selection: IntArray?) {
-        pickerIcon = if (selection != null && selection.isNotEmpty()) {
+        val icon = if (selection != null && selection.isNotEmpty()) {
             val firstSelectedPosition = selection[0]
             val selectedModel: IconModel = adapter.getItem(firstSelectedPosition)!!
             val drawable = adapter.getDrawable(context, selectedModel, selectedIconSize)
             drawable
-        } else {
-            null
-        }
+        } else null
+        setPickerIcon(icon)
     }
 
     private class SavedState : BaseSavedState {

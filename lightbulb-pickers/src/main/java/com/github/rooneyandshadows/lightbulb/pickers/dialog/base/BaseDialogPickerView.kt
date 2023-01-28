@@ -45,6 +45,8 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         onDialogInitialized(dialog)
         return@lazy dialog
     }
+    protected var triggerView: DialogTriggerView? = null
+        private set
     private var errorEnabled: Boolean = false
         set(value) {
             triggerView?.setErrorEnabled(field)
@@ -55,11 +57,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             field = value
             invalidate()
         }
-    var triggerView: DialogTriggerView? = null
-        set(value) {
-            field = value
-            addViewInternally(field as View)
-        }
+
     var pickerDialogTag: String = ""
         set(value) {
             field = value
@@ -200,7 +198,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
 
     @Override
     override fun addView(child: View, index: Int, params: ViewGroup.LayoutParams) {
-        addViewInternally(child)
+        addViewInternally(child, index, params)
     }
 
     protected fun updateTextAndValidate() {
@@ -266,9 +264,8 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         triggerView?.setText(newTextValue)
     }
 
-    private fun addViewInternally(child: View?) {
-        child ?: removeAllViews()
-        if (triggerView !is DialogTriggerView) {
+    private fun addViewInternally(child: View, index: Int, params: ViewGroup.LayoutParams) {
+        if (child !is DialogTriggerView) {
             Log.w(
                 BaseDialogPickerView::class.java.name,
                 "Picker view child is ignored. All child views must implement com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView"
@@ -276,7 +273,8 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             return
         }
         removeAllViews()
-        super.addView(child)
+        triggerView = child
+        super.addView(child, index, params)
         triggerView!!.apply {
             isEnabled = this@BaseDialogPickerView.isEnabled
             attachTo(this@BaseDialogPickerView)

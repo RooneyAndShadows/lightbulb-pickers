@@ -12,13 +12,15 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.*
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogPickerTriggerLayout
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
 import com.github.rooneyandshadows.lightbulb.pickersdemo.models.DemoModel
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.AppIconUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIconsUi
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialogBuilder
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogsdemo.dialogs.DemoSingleSelectionDialog
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R
 import java.util.*
 import java.util.stream.Collectors
@@ -28,26 +30,41 @@ class DemoAdapterPickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
+    defStyleRes: Int = 0,
 ) : DialogAdapterPickerView<DemoModel>(context, attrs, defStyleAttr, defStyleRes) {
 
     init {
+        addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray> {
+            override fun onAttached(triggerView: DialogTriggerView, pickerView: BaseDialogPickerView<IntArray>) {
+                setupIcon()
+            }
+        })
+    }
+
+    @Override
+    override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
+        super.onDialogInitialized(dialog)
+        val adapterDialog = dialog as DemoSingleSelectionDialog
         addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
             override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
                 setupIcon()
             }
         })
-        addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray> {
-            override fun onAttached(triggerView: DialogPickerTriggerLayout, pickerView: BaseDialogPickerView<IntArray>) {
-                setupIcon()
-            }
-        })
-        itemDecoration = DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL)
+        val newDecor = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        adapterDialog.setItemDecoration(newDecor)
     }
 
     @Override
     override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray> {
-        return DemoSingleSelectionDialog()
+        return AdapterPickerDialogBuilder(null,
+            fragmentManager,
+            pickerDialogTag,
+            object : AdapterPickerDialogBuilder.AdapterPickerDialogInitializer<DemoSingleSelectionDialog> {
+                override fun initialize(): DemoSingleSelectionDialog {
+                    return DemoSingleSelectionDialog()
+                }
+            })
+            .buildDialog()
     }
 
     @Override
@@ -75,8 +92,8 @@ class DemoAdapterPickerView @JvmOverloads constructor(
                 R.attr.colorOnSurface,
                 R.dimen.ICON_SIZE_MEDIUM
             )
-            if (triggerView is InputTriggerView) (triggerView as InputTriggerView).startIconUseAlpha = true
-            pickerIcon = icon
+            if (triggerView is InputTriggerView) (triggerView as InputTriggerView).setStartIconUseAlpha(true)
+            setPickerIcon(icon)
             return
         }
         val selectedItem = adapter.getItem(selectedPositions[0])!!
@@ -88,7 +105,7 @@ class DemoAdapterPickerView @JvmOverloads constructor(
             R.dimen.ICON_SIZE_RECYCLER_ITEM
         )
         val color = selectedItem.iconBackgroundColor.color
-        if (triggerView is InputTriggerView) (triggerView as InputTriggerView).startIconUseAlpha = false
+        if (triggerView is InputTriggerView) (triggerView as InputTriggerView).setStartIconUseAlpha(false)
         setPickerIcon(icon, color)
     }
 

@@ -25,15 +25,12 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
 ) : BaseDialogPickerView<IntArray>(context, attrs, defStyleAttr, defStyleRes) {
+    private val dialog: AdapterPickerDialog<ItemType>
+        get() = (pickerDialog as AdapterPickerDialog<ItemType>)
     protected open val adapter: EasyRecyclerAdapter<ItemType>
         get() {
             val dialog = (pickerDialog as AdapterPickerDialog<ItemType>)
             return dialog.adapter
-        }
-    var itemDecoration: ItemDecoration? = null
-        set(value) {
-            field = value
-            (pickerDialog as AdapterPickerDialog<ItemType>).setItemDecoration(field)
         }
     var data: List<ItemType>
         get() {
@@ -58,6 +55,7 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
             } ?: ""
         }
 
+
     @Override
     abstract override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray>
 
@@ -65,10 +63,6 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     @Override
     override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
         super.onDialogInitialized(dialog)
-        val adapterDialog = dialog as AdapterPickerDialog<ItemType>
-        adapterDialog.apply {
-            setItemDecoration(itemDecoration)
-        }
     }
 
     @Override
@@ -102,6 +96,10 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     override fun onRestoreInstanceState(state: Parcelable) {
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
+    }
+
+    fun setItemDecoration(itemDecoration: ItemDecoration) {
+        dialog.setItemDecoration(itemDecoration)
     }
 
     fun selectItemAt(position: Int) {

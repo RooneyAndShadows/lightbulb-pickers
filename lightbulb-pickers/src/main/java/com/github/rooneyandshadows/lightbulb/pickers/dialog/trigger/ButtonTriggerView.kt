@@ -26,12 +26,6 @@ class ButtonTriggerView @JvmOverloads constructor(
 ) : DialogTriggerView(context, attrs, defStyleAttr, defStyleRes) {
     private lateinit var buttonView: MaterialButton
     private lateinit var errorTextView: AppCompatTextView
-    override val defaultIconColor: Int by lazy {
-        return@lazy ResourceUtils.getColorByAttribute(
-            context,
-            R.attr.colorOnPrimary
-        )
-    }
     var buttonBackgroundColor: Int = -1
         private set
     var buttonTextColor: Int = -1
@@ -41,6 +35,14 @@ class ButtonTriggerView @JvmOverloads constructor(
 
     init {
         isSaveEnabled = true
+    }
+
+    @Override
+    override fun initializeDefaultIconColor(): Int {
+        return ResourceUtils.getColorByAttribute(
+            context,
+            R.attr.colorOnPrimary
+        )
     }
 
     @Override
