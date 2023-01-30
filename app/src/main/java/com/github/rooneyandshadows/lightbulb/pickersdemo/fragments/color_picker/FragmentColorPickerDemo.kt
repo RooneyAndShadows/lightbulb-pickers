@@ -7,13 +7,12 @@ import com.github.rooneyandshadows.lightbulb.application.fragment.base.BaseFragm
 import com.github.rooneyandshadows.lightbulb.application.fragment.cofiguration.ActionBarConfiguration
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R
-import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentAdapterPickerDemoBinding
 import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentColorPickerDemoBinding
-import com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.adapter_picker.VMAdapterPickerDemo
+import com.github.rooneyandshadows.lightbulb.pickersdemo.getMenuBackDrawable
 import com.github.rooneyandshadows.lightbulb.pickersdemo.getShowMenuDrawable
 
 @FragmentScreen(screenName = "Color", screenGroup = "Demo")
-@FragmentConfiguration(layoutName = "fragment_color_picker_demo")
+@FragmentConfiguration(layoutName = "fragment_color_picker_demo", hasLeftDrawer = true)
 class FragmentColorPickerDemo :
     BaseFragmentWithViewModelAndViewBinding<FragmentColorPickerDemoBinding, VMColorPickerDemo>() {
     override val viewModelClass: Class<VMColorPickerDemo> = VMColorPickerDemo::class.java
@@ -36,7 +35,7 @@ class FragmentColorPickerDemo :
     override fun doOnViewBound(
         viewBinding: FragmentColorPickerDemoBinding,
         viewModel: VMColorPickerDemo,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ) {
         if (savedInstanceState == null) {
             viewBinding.pickerViewBoxed.data = viewModel.dataSets[0]!!

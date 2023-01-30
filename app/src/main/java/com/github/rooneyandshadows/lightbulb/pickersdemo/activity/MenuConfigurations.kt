@@ -8,6 +8,7 @@ import com.github.rooneyandshadows.lightbulb.application.activity.slidermenu.con
 import com.github.rooneyandshadows.lightbulb.application.activity.slidermenu.items.PrimaryMenuItem
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R
+import com.github.rooneyandshadows.lightbulb.pickersdemo.activity.MainActivityNavigator.*
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.AppIconUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIconsUi
 
@@ -32,7 +33,7 @@ object MenuConfigurations {
                 1
             ) { slider: SliderMenu ->
                 slider.closeSlider()
-                MainActivityNavigator.route().toDemoAdapter()
+                route().toDemoAdapter().replace()
             }
         ).addMenuItem(
             PrimaryMenuItem(
@@ -48,7 +49,7 @@ object MenuConfigurations {
                 1
             ) { slider: SliderMenu ->
                 slider.closeSlider()
-                MainActivityNavigator.route().toDemoColor()
+                route().toDemoColor().replace()
             }
         ).addMenuItem(
             PrimaryMenuItem(
@@ -64,7 +65,7 @@ object MenuConfigurations {
                 1
             ) { slider: SliderMenu ->
                 slider.closeSlider()
-                MainActivityNavigator.route().toDemoIcon()
+                route().toDemoIcon().replace()
             }
         ).addMenuItem(
             PrimaryMenuItem(
@@ -80,7 +81,7 @@ object MenuConfigurations {
                 1
             ) { slider: SliderMenu ->
                 slider.closeSlider()
-                MainActivityNavigator.route().toDemoMonth()
+                route().toDemoMonth().replace()
             }
         ).addMenuItem(
             PrimaryMenuItem(
@@ -96,7 +97,7 @@ object MenuConfigurations {
                 1
             ) { slider: SliderMenu ->
                 slider.closeSlider()
-                MainActivityNavigator.route().toDemoDateAndTime()
+                route().toDemoDateAndTime().replace()
             }
         ).addMenuItem(
             PrimaryMenuItem(
@@ -112,7 +113,7 @@ object MenuConfigurations {
                 1
             ) { slider: SliderMenu ->
                 slider.closeSlider()
-                MainActivityNavigator.route().toDemoDateRange()
+                route().toDemoDateRange().replace()
             }
         )
         return configuration

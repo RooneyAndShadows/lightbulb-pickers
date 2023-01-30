@@ -7,9 +7,8 @@ import com.github.rooneyandshadows.lightbulb.application.fragment.base.BaseFragm
 import com.github.rooneyandshadows.lightbulb.application.fragment.cofiguration.ActionBarConfiguration
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R
-import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentColorPickerDemoBinding
 import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentDatePickerDemoBinding
-import com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.color_picker.VMColorPickerDemo
+import com.github.rooneyandshadows.lightbulb.pickersdemo.getMenuBackDrawable
 import com.github.rooneyandshadows.lightbulb.pickersdemo.getShowMenuDrawable
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.AppIconUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIconsUi.ICON_DATE_PICKER_INDICATOR
@@ -32,7 +31,6 @@ class FragmentDatePickerDemo : BaseFragmentWithViewModelAndViewBinding<FragmentD
             withSubTitle(subTitle)
         }
     }
-
     @Override
     override fun doOnViewBound(
         viewBinding: FragmentDatePickerDemoBinding,

@@ -8,6 +8,12 @@ import com.github.rooneyandshadows.lightbulb.application.activity.slidermenu.dra
 fun getShowMenuDrawable(context: Context): Drawable {
     return ShowMenuDrawable(context).apply {
         setEnabled(false)
+    }
+}
+
+fun getMenuBackDrawable(context: Context): Drawable {
+    return ShowMenuDrawable(context).apply {
+        setEnabled(false)
         progress = 1F
     }
 }

@@ -39,7 +39,7 @@ class DialogColorPickerView @JvmOverloads constructor(
     init {
         addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray> {
             override fun onAttached(triggerView: DialogTriggerView, pickerView: BaseDialogPickerView<IntArray>) {
-                updatePickerIcon(null)
+                updatePickerIcon(selection)
             }
         })
     }
@@ -69,7 +69,7 @@ class DialogColorPickerView @JvmOverloads constructor(
     @Override
     override fun initializeDialog(
         fragmentManager: FragmentManager,
-        fragmentTag: String
+        fragmentTag: String,
     ): BasePickerDialogFragment<IntArray> {
         return ColorPickerDialogBuilder(null, fragmentManager, fragmentTag)
             .buildDialog()

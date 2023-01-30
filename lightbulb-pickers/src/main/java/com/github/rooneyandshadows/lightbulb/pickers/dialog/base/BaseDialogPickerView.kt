@@ -132,7 +132,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
 
     protected abstract fun initializeDialog(
         fragmentManager: FragmentManager,
-        fragmentTag: String
+        fragmentTag: String,
     ): BasePickerDialogFragment<SelectionType>
 
     protected abstract fun readAttributes(context: Context, attrs: AttributeSet?)
@@ -178,11 +178,11 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             addOnSelectionChangedListener(object : BasePickerDialogFragment.SelectionChangedListener<SelectionType> {
                 override fun onSelectionChanged(
                     dialog: BasePickerDialogFragment<SelectionType>,
-                    oldValue: SelectionType?,
                     newValue: SelectionType?,
+                    oldValue: SelectionType?,
                 ) {
                     updateTextAndValidate()
-                    dispatchSelectionChangedEvents(oldValue, newValue)
+                    dispatchSelectionChangedEvents(newValue, oldValue)
                 }
             })
         }
