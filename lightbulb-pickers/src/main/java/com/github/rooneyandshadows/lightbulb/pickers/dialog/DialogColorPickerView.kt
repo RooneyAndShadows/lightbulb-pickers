@@ -95,8 +95,8 @@ class DialogColorPickerView @JvmOverloads constructor(
     @Override
     override fun onRestoreInstanceState(state: Parcelable) {
         val savedState = state as SavedState
-        updatePickerIcon(selection)
         super.onRestoreInstanceState(savedState.superState)
+        updatePickerIcon(selection)
     }
 
     private fun updatePickerIcon(selection: IntArray?) {

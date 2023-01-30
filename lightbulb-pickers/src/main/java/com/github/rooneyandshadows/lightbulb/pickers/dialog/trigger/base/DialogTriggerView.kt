@@ -80,9 +80,10 @@ abstract class DialogTriggerView @JvmOverloads constructor(
     }
 
     @JvmOverloads
-    fun setIcon(icon: Drawable?, iconColor: Int? = null) {
+    fun setIcon(icon: Drawable?, iconColor: Int = -1) {
+        this.iconColor = iconColor
         this.icon = icon?.apply {
-            val color = iconColor ?: defaultIconColor
+            val color = if (iconColor == -1) defaultIconColor else iconColor
             setTint(color)
         }
         onIconChange()

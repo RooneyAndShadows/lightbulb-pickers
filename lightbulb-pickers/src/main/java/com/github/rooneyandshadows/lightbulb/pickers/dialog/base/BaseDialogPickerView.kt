@@ -261,7 +261,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     }
 
     @JvmOverloads
-    fun setPickerIcon(icon: Drawable?, color: Int? = null) {
+    fun setPickerIcon(icon: Drawable?, color: Int = -1) {
         triggerView?.setIcon(icon, color)
     }
 

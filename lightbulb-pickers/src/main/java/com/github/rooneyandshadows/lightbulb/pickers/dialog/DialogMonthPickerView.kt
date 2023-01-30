@@ -43,13 +43,13 @@ class DialogMonthPickerView @JvmOverloads constructor(
     var minYear = DEFAULT_MIN_YEAR
         set(value) {
             field = value
-            dialog.minYear = field
+            dialog.setCalendarBounds(field, maxYear)
         }
         get() = dialog.minYear
     var maxYear = DEFAULT_MAX_YEAR
         set(value) {
             field = value
-            dialog.maxYear = field
+            dialog.setCalendarBounds(minYear, field)
         }
         get() = dialog.maxYear
     var disabledMonths: List<Month> = listOf()
@@ -94,7 +94,7 @@ class DialogMonthPickerView @JvmOverloads constructor(
     @Override
     override fun initializeDialog(
         fragmentManager: FragmentManager,
-        fragmentTag: String
+        fragmentTag: String,
     ): BasePickerDialogFragment<Month> {
         return MonthPickerDialogBuilder(null, fragmentManager, fragmentTag)
             .buildDialog()
