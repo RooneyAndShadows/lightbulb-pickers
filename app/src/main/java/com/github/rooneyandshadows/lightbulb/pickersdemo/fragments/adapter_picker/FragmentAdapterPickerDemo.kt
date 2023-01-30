@@ -11,7 +11,7 @@ import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentAda
 import com.github.rooneyandshadows.lightbulb.pickersdemo.getShowMenuDrawable
 
 @FragmentScreen(screenName = "Adapter", screenGroup = "Demo")
-@FragmentConfiguration(layoutName = "fragment_adapter_picker_demo")
+@FragmentConfiguration(layoutName = "fragment_adapter_picker_demo", hasLeftDrawer = true)
 class FragmentAdapterPickerDemo :
     BaseFragmentWithViewModelAndViewBinding<FragmentAdapterPickerDemoBinding, VMAdapterPickerDemo>() {
     override val viewModelClass: Class<VMAdapterPickerDemo> = VMAdapterPickerDemo::class.java

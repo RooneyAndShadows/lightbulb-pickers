@@ -13,11 +13,13 @@ import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter.IconModel
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.pickers.R
+import java.time.OffsetDateTime
 
 @Suppress("unused")
 class DialogIconPickerView @JvmOverloads constructor(
@@ -64,8 +66,11 @@ class DialogIconPickerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray> {
-        return IconPickerDialogBuilder(null, fragmentManager, pickerDialogTag)
+    override fun initializeDialog(
+        fragmentManager: FragmentManager,
+        fragmentTag: String
+    ): BasePickerDialogFragment<IntArray> {
+        return IconPickerDialogBuilder(null, fragmentManager, fragmentTag)
             .buildDialog()
     }
 

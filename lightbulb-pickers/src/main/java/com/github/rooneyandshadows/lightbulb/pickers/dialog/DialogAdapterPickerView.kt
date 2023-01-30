@@ -26,32 +26,23 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
 ) : BaseDialogPickerView<IntArray?>(context, attrs, defStyleAttr, defStyleRes) {
+    private val dialog
+        get() = (pickerDialog as AdapterPickerDialog<ItemType>)
     protected open val adapter: EasyRecyclerAdapter<ItemType>
-        get() {
-            val dialog = (pickerDialog as AdapterPickerDialog<ItemType>)
-            return dialog.adapter
-        }
+        get() = dialog.adapter
     var itemDecoration: ItemDecoration? = null
         set(value) {
             field = value
-            (pickerDialog as AdapterPickerDialog<ItemType>).setItemDecoration(field)
+            dialog.setItemDecoration(field)
         }
     var data: List<ItemType>
-        get() {
-            return adapter.getItems()
-        }
-        set(data) {
-            adapter.setCollection(data)
-        }
+        get() = adapter.getItems()
+        set(data) = adapter.setCollection(data)
     override var selection: IntArray?
-        set(value) {
-            (pickerDialog as AdapterPickerDialog<ItemType>).setSelection(value)
-        }
-        get() = pickerDialog.getSelection()
+        set(value) = dialog.setSelection(value)
+        get() = dialog.getSelection()
     val selectedItems: List<ItemType>
-        get() {
-            return adapter.getItems(selection)
-        }
+        get() = adapter.getItems(selection)
     override val viewText: String
         get() {
             return selection?.let {
@@ -60,7 +51,10 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
         }
 
     @Override
-    abstract override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray?>
+    abstract override fun initializeDialog(
+        fragmentManager: FragmentManager,
+        fragmentTag: String
+    ): BasePickerDialogFragment<IntArray?>
 
     @Suppress("UNCHECKED_CAST")
     @Override
@@ -74,7 +68,8 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
 
     @Override
     override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray: TypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogAdapterPickerView, 0, 0)
+        val attrTypedArray: TypedArray =
+            context.theme.obtainStyledAttributes(attrs, R.styleable.DialogAdapterPickerView, 0, 0)
         try {
         } finally {
             attrTypedArray.recycle()

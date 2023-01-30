@@ -17,6 +17,7 @@ import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPi
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import java.time.OffsetDateTime
 import java.util.*
@@ -91,8 +92,11 @@ class DialogMonthPickerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<Month> {
-        return MonthPickerDialogBuilder(null, fragmentManager, pickerDialogTag)
+    override fun initializeDialog(
+        fragmentManager: FragmentManager,
+        fragmentTag: String
+    ): BasePickerDialogFragment<Month> {
+        return MonthPickerDialogBuilder(null, fragmentManager, fragmentTag)
             .buildDialog()
     }
 

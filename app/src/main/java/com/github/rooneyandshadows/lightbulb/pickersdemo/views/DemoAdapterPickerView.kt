@@ -55,10 +55,13 @@ class DemoAdapterPickerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray> {
+    override fun initializeDialog(
+        fragmentManager: FragmentManager,
+        fragmentTag: String
+    ): BasePickerDialogFragment<IntArray> {
         return AdapterPickerDialogBuilder(null,
             fragmentManager,
-            pickerDialogTag,
+            fragmentTag,
             object : AdapterPickerDialogBuilder.AdapterPickerDialogInitializer<DemoSingleSelectionDialog> {
                 override fun initialize(): DemoSingleSelectionDialog {
                     return DemoSingleSelectionDialog()

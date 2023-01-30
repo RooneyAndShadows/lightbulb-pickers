@@ -173,9 +173,9 @@
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ImageButtonTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:dtv_hint_text="@string/adapter_picker_pick_item_text"
                             android:background="@drawable/bg_button_round_corners"
-                            android:elevation="@dimen/system_elevation" />
+                            android:elevation="@dimen/system_elevation"
+                            app:dtv_hint_text="@string/adapter_picker_pick_item_text" />
                     </com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView>
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>

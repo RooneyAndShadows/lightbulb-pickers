@@ -55,9 +55,11 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
             } ?: ""
         }
 
-
     @Override
-    abstract override fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<IntArray>
+    abstract override fun initializeDialog(
+        fragmentManager: FragmentManager,
+        fragmentTag: String
+    ): BasePickerDialogFragment<IntArray>
 
     @Suppress("UNCHECKED_CAST")
     @Override

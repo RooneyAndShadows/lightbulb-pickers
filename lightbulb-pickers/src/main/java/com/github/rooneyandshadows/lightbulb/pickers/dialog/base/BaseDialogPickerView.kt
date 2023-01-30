@@ -9,10 +9,11 @@ import android.os.Parcelable.Creator
 import android.util.AttributeSet
 import android.util.Log
 import android.util.SparseArray
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
@@ -41,7 +42,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     private val triggerAttachedCallback: MutableList<TriggerAttachedCallback<SelectionType>> = mutableListOf()
     protected var dataBindingListener: SelectionChangedListener<SelectionType>? = null
     protected val pickerDialog: BasePickerDialogFragment<SelectionType> by lazy {
-        val dialog = initializeDialog(fragmentManager)
+        val dialog = initializeDialog(fragmentManager, pickerDialogTag)
         onDialogInitialized(dialog)
         return@lazy dialog
     }
@@ -52,17 +53,17 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             triggerView?.setErrorEnabled(field)
         }
         get() = triggerView?.errorEnabled ?: false
+    private var pickerDialogTag: String = ""
+        set(value) {
+            field = value
+            pickerDialog.setDialogTag(field)
+        }
     var showSelectedTextValue = false
         protected set(value) {
             field = value
             invalidate()
         }
 
-    var pickerDialogTag: String = ""
-        set(value) {
-            field = value
-            pickerDialog.setDialogTag(field)
-        }
     var pickerDialogTitle: String? = null
         set(value) {
             field = value
@@ -128,7 +129,12 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         set(value) = pickerDialog.setSelection(value)
         get() = pickerDialog.getSelection()
     protected abstract val viewText: String
-    protected abstract fun initializeDialog(fragmentManager: FragmentManager): BasePickerDialogFragment<SelectionType>
+
+    protected abstract fun initializeDialog(
+        fragmentManager: FragmentManager,
+        fragmentTag: String
+    ): BasePickerDialogFragment<SelectionType>
+
     protected abstract fun readAttributes(context: Context, attrs: AttributeSet?)
 
     protected open fun validate(): Boolean {
@@ -184,8 +190,9 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
 
     init {
         isSaveEnabled = true
-        if (!isInEditMode)
-            fragmentManager = (context as FragmentActivity).supportFragmentManager
+        if (!isInEditMode) {
+            fragmentManager = getFragmentManager(context)!!
+        }
         readAttrs(context, attrs)
         orientation = VERTICAL
     }
@@ -258,6 +265,14 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         triggerView?.setIcon(icon, color)
     }
 
+    private fun getFragmentManager(context: Context?): FragmentManager? {
+        return when (context) {
+            is AppCompatActivity -> context.supportFragmentManager
+            is ContextThemeWrapper -> getFragmentManager(context.baseContext)
+            else -> null
+        }
+    }
+
     private fun updateText() {
         if (!showSelectedTextValue) return
         val newTextValue = viewText
@@ -298,6 +313,13 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.PickerView, 0, 0)
         try {
             attrTypedArray.apply {
+                //Must be the first attribute to be read in order to instantiate dialog with tag.
+                getString(R.styleable.PickerView_pv_dialog_tag).apply {
+                    pickerDialogTag = let {
+                        val default = ResourceUtils.getPhrase(context, R.string.picker_default_dialog_tag_text)
+                        return@let if (it.isNullOrBlank()) default else it
+                    }
+                }
                 getString(R.styleable.PickerView_pv_dialog_title).apply {
                     val default = ""
                     pickerDialogTitle = this ?: default
@@ -320,12 +342,6 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
                 getString(R.styleable.PickerView_pv_dialog_button_negative_text).apply {
                     pickerDialogNegativeButtonText = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_negative_button_text)
-                        return@let if (it.isNullOrBlank()) default else it
-                    }
-                }
-                getString(R.styleable.PickerView_pv_dialog_tag).apply {
-                    pickerDialogTag = let {
-                        val default = ResourceUtils.getPhrase(context, R.string.picker_default_dialog_tag_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
                 }
@@ -366,12 +382,15 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     public override fun onSaveInstanceState(): Parcelable? {
         val superState = super.onSaveInstanceState()
         val myState = SavedState(superState)
-        myState.isDialogShown = isDialogShown
-        myState.pickerRequiredText = requiredText
-        myState.pickerIsRequired = required
-        myState.pickerIsValidationEnabled = isValidationEnabled
-        myState.pickerShowSelectedTextValue = showSelectedTextValue
-        myState.dialogState = pickerDialog.saveDialogState()
+        myState.apply {
+            val view = this@BaseDialogPickerView
+            isDialogShown = view.isDialogShown
+            pickerRequiredText = view.requiredText
+            pickerIsRequired = view.required
+            pickerIsValidationEnabled = view.isValidationEnabled
+            pickerShowSelectedTextValue = view.showSelectedTextValue
+            dialogState = pickerDialog.saveDialogState()
+        }
         return myState
     }
 
@@ -379,14 +398,12 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     public override fun onRestoreInstanceState(state: Parcelable) {
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
-        val isPickerDialogShowing = savedState.isDialogShown
         requiredText = savedState.pickerRequiredText
         required = savedState.pickerIsRequired
         isValidationEnabled = savedState.pickerIsValidationEnabled
         showSelectedTextValue = savedState.pickerShowSelectedTextValue
         pickerDialog.restoreDialogState(savedState.dialogState)
         updateTextAndValidate()
-        if (isPickerDialogShowing) showPickerDialog()
     }
 
     interface SelectionChangedListener<SelectionType> {
