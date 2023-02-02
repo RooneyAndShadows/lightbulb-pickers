@@ -80,7 +80,7 @@ class ButtonTriggerView @JvmOverloads constructor(
     @Override
     override fun onTextChange() {
         buttonView.apply {
-            text = hintText
+            text = this@ButtonTriggerView.text
         }
     }
 

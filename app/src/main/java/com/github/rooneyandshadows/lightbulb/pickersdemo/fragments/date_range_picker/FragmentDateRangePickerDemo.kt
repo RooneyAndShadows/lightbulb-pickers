@@ -8,13 +8,12 @@ import com.github.rooneyandshadows.lightbulb.application.fragment.cofiguration.A
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R
 import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentDateRangePickerDemoBinding
-import com.github.rooneyandshadows.lightbulb.pickersdemo.getMenuBackDrawable
 import com.github.rooneyandshadows.lightbulb.pickersdemo.getShowMenuDrawable
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.AppIconUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIconsUi
 
 @FragmentScreen(screenName = "DateRange", screenGroup = "Demo")
-@FragmentConfiguration(layoutName = "fragment_date_range_picker_demo")
+@FragmentConfiguration(layoutName = "fragment_date_range_picker_demo", hasLeftDrawer = true)
 class FragmentDateRangePickerDemo :
     BaseFragmentWithViewModelAndViewBinding<FragmentDateRangePickerDemoBinding, VMDateRangePickerDemo>() {
     override val viewModelClass: Class<VMDateRangePickerDemo> = VMDateRangePickerDemo::class.java
@@ -41,19 +40,19 @@ class FragmentDateRangePickerDemo :
     ) {
         val color: Int = ResourceUtils.getColorByAttribute(requireContext(), R.attr.colorOnPrimary)
         viewBinding.pickerViewBoxed.apply {
-            val icon = AppIconUtils.getIconWithAttributeColor(context, DemoIconsUi.ICON_DATE_PICKER_INDICATOR)
+            val icon = AppIconUtils.getIconWithAttributeColor(context, DemoIconsUi.ICON_DATE_RANGE_PICKER_INDICATOR)
             setPickerIcon(icon, color)
         }
         viewBinding.pickerViewOutlined.apply {
-            val icon = AppIconUtils.getIconWithAttributeColor(context, DemoIconsUi.ICON_DATE_PICKER_INDICATOR)
+            val icon = AppIconUtils.getIconWithAttributeColor(context, DemoIconsUi.ICON_DATE_RANGE_PICKER_INDICATOR)
             setPickerIcon(icon, color)
         }
         viewBinding.pickerViewButton.apply {
-            val icon = AppIconUtils.getIconWithAttributeColor(context, DemoIconsUi.ICON_DATE_PICKER_INDICATOR)
+            val icon = AppIconUtils.getIconWithAttributeColor(context, DemoIconsUi.ICON_DATE_RANGE_PICKER_INDICATOR)
             setPickerIcon(icon, color)
         }
         viewBinding.pickerViewImageButton.apply {
-            val icon = AppIconUtils.getIconWithAttributeColor(context, DemoIconsUi.ICON_DATE_PICKER_INDICATOR)
+            val icon = AppIconUtils.getIconWithAttributeColor(context, DemoIconsUi.ICON_DATE_RANGE_PICKER_INDICATOR)
             setPickerIcon(icon, color)
         }
         viewBinding.model = viewModel

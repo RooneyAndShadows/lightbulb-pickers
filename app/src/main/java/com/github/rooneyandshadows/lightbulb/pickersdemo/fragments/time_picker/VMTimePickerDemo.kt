@@ -1,47 +1,47 @@
-package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.date_range_picker
+package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.time_picker
 
 import androidx.databinding.Bindable
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.lightbulb.commons.models.BaseObservableViewModel
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog.DateRange
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialog.*
 import com.github.rooneyandshadows.lightbulb.pickersdemo.BR
-import java.time.temporal.ChronoUnit
 
-class VMDateRangePickerDemo : BaseObservableViewModel() {
+class VMTimePickerDemo : BaseObservableViewModel() {
     @get:Bindable
-    var boxedSelection: DateRange? = null
+    var boxedSelection: Time? = null
         set(value) {
             field = value
             notifyPropertyChanged(BR.boxedSelection)
         }
 
     @get:Bindable
-    var outlinedSelection: DateRange? = null
+    var outlinedSelection: Time? = null
         set(value) {
             field = value
             notifyPropertyChanged(BR.outlinedSelection)
         }
 
     @get:Bindable
-    var buttonSelection: DateRange? = null
+    var buttonSelection: Time? = null
         set(value) {
             field = value
             notifyPropertyChanged(BR.buttonSelection)
         }
 
     @get:Bindable
-    var imageButtonSelection: DateRange? = null
+    var imageButtonSelection: Time? = null
         set(value) {
             field = value
             notifyPropertyChanged(BR.imageButtonSelection)
         }
 
     init {
-        val from = DateUtilsOffsetDate.nowLocal()
-        val to = from.plus(6, ChronoUnit.DAYS)
-        boxedSelection = DateRange(from, to)
-        outlinedSelection = DateRange(from, to)
-        buttonSelection = DateRange(from, to)
-        imageButtonSelection = DateRange(from, to)
+        val now = DateUtilsOffsetDate.nowLocal()
+        val hour = now.hour
+        val minutes = now.minute
+        boxedSelection = Time(hour, minutes)
+        outlinedSelection = Time(hour, minutes)
+        buttonSelection = Time(hour, minutes)
+        imageButtonSelection = Time(hour, minutes)
     }
 }

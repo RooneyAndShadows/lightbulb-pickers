@@ -10,15 +10,13 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.pickers.R
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import java.time.OffsetDateTime
 
 @Suppress("RedundantOverride", "UnnecessaryVariable", "unused")
@@ -30,10 +28,10 @@ class DialogDateTimePickerView @JvmOverloads constructor(
 ) : BaseDialogPickerView<OffsetDateTime>(context, attrs, defStyleAttr, defStyleRes) {
     private val dialog: DateTimePickerDialog
         get() = pickerDialog as DateTimePickerDialog
-    private var datePickerFormat: String = DEFAULT_DATE_FORMAT
+    var datePickerFormat: String = DEFAULT_DATE_FORMAT
         set(value) {
             field = value
-            dialog.dialogDateFormat = field
+            dialog.setDialogDateFormat(field)
             updateTextAndValidate()
         }
         get() = dialog.dialogDateFormat

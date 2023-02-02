@@ -33,4 +33,6 @@
     <string name="date_picker_demo_text">Date picker demo</string>
     <!-- DATE RANGE PICKER DEMO STRINGS -->
     <string name="date_range_picker_demo_text">Date range picker demo</string>
+    <!-- TIME PICKER DEMO STRINGS -->
+    <string name="time_picker_demo_text">Time picker demo</string>
 </resources>

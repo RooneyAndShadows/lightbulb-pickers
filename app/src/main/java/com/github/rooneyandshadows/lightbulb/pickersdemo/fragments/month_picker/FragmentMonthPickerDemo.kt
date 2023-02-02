@@ -8,13 +8,13 @@ import com.github.rooneyandshadows.lightbulb.application.fragment.cofiguration.A
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R
 import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentMonthPickerDemoBinding
-import com.github.rooneyandshadows.lightbulb.pickersdemo.getMenuBackDrawable
+import com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.time_picker.VMTimePickerDemo
 import com.github.rooneyandshadows.lightbulb.pickersdemo.getShowMenuDrawable
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.AppIconUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIconsUi
 
 @FragmentScreen(screenName = "Month", screenGroup = "Demo")
-@FragmentConfiguration(layoutName = "fragment_month_picker_demo")
+@FragmentConfiguration(layoutName = "fragment_month_picker_demo", hasLeftDrawer = true)
 class FragmentMonthPickerDemo :
     BaseFragmentWithViewModelAndViewBinding<FragmentMonthPickerDemoBinding, VMMonthPickerDemo>() {
     override val viewModelClass: Class<VMMonthPickerDemo> = VMMonthPickerDemo::class.java

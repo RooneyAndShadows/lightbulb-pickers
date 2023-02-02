@@ -1,24 +1,22 @@
 package com.github.rooneyandshadows.lightbulb.pickers.dialog
 
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import android.util.SparseArray
-import android.os.Parcelable
-import android.os.Parcel
-import android.os.Parcelable.Creator
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingListener
 import android.content.Context
+import android.os.Parcel
+import android.os.Parcelable
+import android.os.Parcelable.Creator
 import android.util.AttributeSet
+import android.util.SparseArray
+import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialog.*
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.pickers.R
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -153,7 +151,7 @@ class DialogTimePickerView @JvmOverloads constructor(
             if (view.hasSelection) attrChange.onChange()
             view.dataBindingListener = object : SelectionChangedListener<Time> {
                 override fun execute(newSelection: Time?, oldSelection: Time?) {
-                    if (view.compareValues(newSelection, newSelection)) return
+                    if (view.compareValues(newSelection, oldSelection)) return
                     attrChange.onChange()
                 }
             }

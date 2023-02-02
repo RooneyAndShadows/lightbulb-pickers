@@ -8,7 +8,6 @@ import com.github.rooneyandshadows.lightbulb.application.fragment.cofiguration.A
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R
 import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentColorPickerDemoBinding
-import com.github.rooneyandshadows.lightbulb.pickersdemo.getMenuBackDrawable
 import com.github.rooneyandshadows.lightbulb.pickersdemo.getShowMenuDrawable
 
 @FragmentScreen(screenName = "Color", screenGroup = "Demo")

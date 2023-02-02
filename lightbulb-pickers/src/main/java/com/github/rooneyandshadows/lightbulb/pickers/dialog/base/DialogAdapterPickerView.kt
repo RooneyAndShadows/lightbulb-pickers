@@ -28,26 +28,15 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     private val dialog: AdapterPickerDialog<ItemType>
         get() = (pickerDialog as AdapterPickerDialog<ItemType>)
     protected open val adapter: EasyRecyclerAdapter<ItemType>
-        get() {
-            val dialog = (pickerDialog as AdapterPickerDialog<ItemType>)
-            return dialog.adapter
-        }
+        get() = dialog.adapter
     var data: List<ItemType>
-        get() {
-            return adapter.getItems()
-        }
-        set(data) {
-            adapter.setCollection(data)
-        }
+        get() = adapter.getItems()
+        set(value) = adapter.setCollection(value)
     override var selection: IntArray?
-        set(value) {
-            (pickerDialog as AdapterPickerDialog<ItemType>).setSelection(value)
-        }
+        set(value) = dialog.setSelection(value)
         get() = pickerDialog.getSelection()
     val selectedItems: List<ItemType>
-        get() {
-            return adapter.getItems(selection)
-        }
+        get() = adapter.getItems(selection)
     override val viewText: String
         get() {
             return selection?.let {

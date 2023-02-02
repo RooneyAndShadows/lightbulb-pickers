@@ -5,7 +5,7 @@ import android.graphics.Color
 import java.util.*
 
 @Suppress("unused")
-enum class DemoColors(val colorName: String, val colorHex: String) : IDemoColor {
+enum class DemoColors(val colorName: String, val hexCode: String) : IDemoColor {
     BROWN("BROWN", "#795548"),
     BROWN_DARK("BROWN_DARK", "#5D4037"),
     DEEP_ORANGE("DEEP_ORANGE", "#FF5722"),
@@ -42,7 +42,7 @@ enum class DemoColors(val colorName: String, val colorHex: String) : IDemoColor 
     RED_DARK("RED_DARK", "#D32F2F");
 
     override val color: Int
-        get() = Color.parseColor(colorHex)
+        get() = Color.parseColor(hexCode)
 
     companion object {
         fun valueOf(colorName: String): DemoColors {

@@ -67,24 +67,24 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     var pickerDialogTitle: String? = null
         set(value) {
             field = value
-            pickerDialog.dialogTitle = field
+            pickerDialog.setDialogTitle(field)
         }
         get() = pickerDialog.dialogTitle
     var pickerDialogMessage: String? = null
         set(value) {
             field = value
-            pickerDialog.dialogMessage = field
+            pickerDialog.setDialogMessage(field)
         }
-        get() = pickerDialog.dialogTitle
+        get() = pickerDialog.dialogMessage
     var pickerDialogPositiveButtonText: String? = null
         set(value) {
             field = value
-            pickerDialog.dialogPositiveButton = generateButtonConfig(field)
+            pickerDialog.setDialogPositiveButton(generateButtonConfig(field))
         }
     var pickerDialogNegativeButtonText: String? = null
         set(value) {
             field = value
-            pickerDialog.dialogNegativeButton = generateButtonConfig(field)
+            pickerDialog.setDialogNegativeButton(generateButtonConfig(field))
         }
     var pickerDialogCancelable = false
         set(value) {
@@ -276,6 +276,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     private fun updateText() {
         if (!showSelectedTextValue) return
         val newTextValue = viewText
+        println(newTextValue)
         triggerView?.setText(newTextValue)
     }
 
@@ -310,51 +311,51 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     }
 
     private fun readBaseAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.PickerView, 0, 0)
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.BaseDialogPickerView, 0, 0)
         try {
             attrTypedArray.apply {
                 //Must be the first attribute to be read in order to instantiate dialog with tag.
-                getString(R.styleable.PickerView_pv_dialog_tag).apply {
+                getString(R.styleable.BaseDialogPickerView_pv_dialog_tag).apply {
                     pickerDialogTag = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_dialog_tag_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
                 }
-                getString(R.styleable.PickerView_pv_dialog_title).apply {
+                getString(R.styleable.BaseDialogPickerView_pv_dialog_title).apply {
                     val default = ""
                     pickerDialogTitle = this ?: default
                 }
-                getString(R.styleable.PickerView_pv_dialog_message).apply {
+                getString(R.styleable.BaseDialogPickerView_pv_dialog_message).apply {
                     val default = ""
                     pickerDialogMessage = this ?: default
                 }
 
-                getString(R.styleable.PickerView_pv_required_text).apply {
+                getString(R.styleable.BaseDialogPickerView_pv_required_text).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_required_text)
                     requiredText = this ?: default
                 }
-                getString(R.styleable.PickerView_pv_dialog_button_positive_text).apply {
+                getString(R.styleable.BaseDialogPickerView_pv_dialog_button_positive_text).apply {
                     pickerDialogPositiveButtonText = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_positive_button_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
                 }
-                getString(R.styleable.PickerView_pv_dialog_button_negative_text).apply {
+                getString(R.styleable.BaseDialogPickerView_pv_dialog_button_negative_text).apply {
                     pickerDialogNegativeButtonText = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_negative_button_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
                 }
-                getInt(R.styleable.PickerView_pv_dialog_type, NORMAL.value).apply {
+                getInt(R.styleable.BaseDialogPickerView_pv_dialog_type, NORMAL.value).apply {
                     pickerDialogType = DialogTypes.valueOf(this)
                 }
-                getInt(R.styleable.PickerView_pv_dialog_animation, NO_ANIMATION.value).apply {
+                getInt(R.styleable.BaseDialogPickerView_pv_dialog_animation, NO_ANIMATION.value).apply {
                     pickerDialogAnimationType = DialogAnimationTypes.valueOf(this)
                 }
-                required = getBoolean(R.styleable.PickerView_pv_required, false)
-                isValidationEnabled = getBoolean(R.styleable.PickerView_pv_validation_enabled, false)
-                pickerDialogCancelable = getBoolean(R.styleable.PickerView_pv_dialog_cancelable, true)
-                showSelectedTextValue = getBoolean(R.styleable.PickerView_pv_show_selected_text, true)
+                required = getBoolean(R.styleable.BaseDialogPickerView_pv_required, false)
+                isValidationEnabled = getBoolean(R.styleable.BaseDialogPickerView_pv_validation_enabled, false)
+                pickerDialogCancelable = getBoolean(R.styleable.BaseDialogPickerView_pv_dialog_cancelable, true)
+                showSelectedTextValue = getBoolean(R.styleable.BaseDialogPickerView_pv_show_selected_text, true)
             }
         } finally {
             attrTypedArray.recycle()

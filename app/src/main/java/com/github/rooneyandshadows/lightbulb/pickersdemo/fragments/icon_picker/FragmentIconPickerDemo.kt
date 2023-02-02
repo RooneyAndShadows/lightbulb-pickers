@@ -8,11 +8,10 @@ import com.github.rooneyandshadows.lightbulb.application.fragment.cofiguration.A
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R
 import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentIconPickerDemoBinding
-import com.github.rooneyandshadows.lightbulb.pickersdemo.getMenuBackDrawable
 import com.github.rooneyandshadows.lightbulb.pickersdemo.getShowMenuDrawable
 
 @FragmentScreen(screenName = "Icon", screenGroup = "Demo")
-@FragmentConfiguration(layoutName = "fragment_icon_picker_demo")
+@FragmentConfiguration(layoutName = "fragment_icon_picker_demo", hasLeftDrawer = true)
 class FragmentIconPickerDemo : BaseFragmentWithViewModelAndViewBinding<FragmentIconPickerDemoBinding, VMIconPickerDemo>() {
     override val viewModelClass: Class<VMIconPickerDemo> = VMIconPickerDemo::class.java
 
@@ -20,7 +19,7 @@ class FragmentIconPickerDemo : BaseFragmentWithViewModelAndViewBinding<FragmentI
     override fun configureActionBar(): ActionBarConfiguration {
         val ctx = requireContext()
         val title = ResourceUtils.getPhrase(ctx, R.string.app_name)
-        val subTitle = ResourceUtils.getPhrase(ctx, R.string.color_picker_demo_text)
+        val subTitle = ResourceUtils.getPhrase(ctx, R.string.icon_picker_demo_text)
         val showMenuDrawable = getShowMenuDrawable(ctx)
         return ActionBarConfiguration(R.id.toolbar).apply {
             withHomeIcon(showMenuDrawable)

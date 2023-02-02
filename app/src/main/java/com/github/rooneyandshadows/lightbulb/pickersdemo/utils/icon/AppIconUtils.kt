@@ -27,12 +27,11 @@ object AppIconUtils {
         return IconUtils.getIconWithAttributeColor(context, icon.icon, R.attr.colorPrimary, sizeInPx)
     }
 
-    val allForPicker: ArrayList<IconModel>
+    val allForPicker: List<IconModel>
         get() {
-            val result: ArrayList<IconModel> = ArrayList<IconModel>()
-            for (icon in DemoIcons.values()) result.add(
-                IconModel(icon.iconName, IconSet.FONTAWESOME)
-            )
+            val result: MutableList<IconModel> = mutableListOf()
+            for (demoIcon in DemoIcons.values())
+                result.add(IconModel(demoIcon.icon.name, IconSet.FONTAWESOME))
             return result
         }
 }

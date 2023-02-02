@@ -11,8 +11,9 @@ object AppColorUtils {
 
     val allForPicker: ArrayList<ColorModel>
         get() {
-            val result: ArrayList<ColorModel> = ArrayList<ColorModel>()
-            for (color in DemoColors.values()) result.add(ColorModel(color.colorHex, color.colorName))
+            val result = ArrayList<ColorModel>()
+            for (color in DemoColors.values())
+                result.add(ColorModel(color.hexCode, color.colorName))
             return result
         }
 }

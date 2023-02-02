@@ -2,12 +2,9 @@ package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.color_picker
 
 import androidx.databinding.Bindable
 import com.github.rooneyandshadows.lightbulb.commons.models.BaseObservableViewModel
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.ColorModel
 import com.github.rooneyandshadows.lightbulb.pickersdemo.BR
-import com.github.rooneyandshadows.lightbulb.pickersdemo.models.DemoModel
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color.AppColorUtils
-import java.util.HashMap
 
 class VMColorPickerDemo : BaseObservableViewModel() {
     @get:Bindable

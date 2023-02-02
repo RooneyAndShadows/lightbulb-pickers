@@ -10,15 +10,14 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
+import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
+import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog.*
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialogBuilder
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
-import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
-import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.pickers.R
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -36,7 +35,7 @@ class DialogMonthPickerView @JvmOverloads constructor(
     var monthPickerFormat: String = DEFAULT_DATE_FORMAT
         set(value) {
             field = value
-            dialog.dialogDateFormat = field
+            dialog.setDialogDateFormat(field)
             updateTextAndValidate()
         }
         get() = dialog.dialogDateFormat
@@ -55,13 +54,13 @@ class DialogMonthPickerView @JvmOverloads constructor(
     var disabledMonths: List<Month> = listOf()
         set(value) {
             field = value
-            dialog.disabledMonths = field
+            dialog.setDisabledMonths(field)
         }
         get() = dialog.disabledMonths
     var enabledMonths: List<Month> = listOf()
         set(value) {
             field = value
-            dialog.enabledMonths = field
+            dialog.setEnabledMonths(field)
         }
         get() = dialog.enabledMonths
     val selectionAsDate: OffsetDateTime?
