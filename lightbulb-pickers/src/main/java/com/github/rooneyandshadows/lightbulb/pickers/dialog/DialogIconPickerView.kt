@@ -26,11 +26,8 @@ class DialogIconPickerView @JvmOverloads constructor(
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
 ) : DialogAdapterPickerView<IconModel>(context, attrs, defStyleAttr, defStyleRes) {
-    private var selectedIconSize = 0
-        set(value) {
-            field = value
-            updatePickerIcon(selection)
-        }
+    var selectedIconSize = 0
+        private set
     override val adapter: IconPickerAdapter
         get() {
             val dialog = (pickerDialog as IconPickerDialog)
@@ -66,7 +63,7 @@ class DialogIconPickerView @JvmOverloads constructor(
     @Override
     override fun initializeDialog(
         fragmentManager: FragmentManager,
-        fragmentTag: String
+        fragmentTag: String,
     ): BasePickerDialogFragment<IntArray> {
         return IconPickerDialogBuilder(null, fragmentManager, fragmentTag)
             .buildDialog()
@@ -95,6 +92,11 @@ class DialogIconPickerView @JvmOverloads constructor(
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
         selectedIconSize = savedState.selectedIconSize
+        updatePickerIcon(selection)
+    }
+
+    fun setSelectedIconSize(size: Int) {
+        this.selectedIconSize = size
         updatePickerIcon(selection)
     }
 

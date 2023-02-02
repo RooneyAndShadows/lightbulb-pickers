@@ -29,11 +29,7 @@ class DialogDateTimePickerView @JvmOverloads constructor(
     private val dialog: DateTimePickerDialog
         get() = pickerDialog as DateTimePickerDialog
     var datePickerFormat: String = DEFAULT_DATE_FORMAT
-        set(value) {
-            field = value
-            dialog.setDialogDateFormat(field)
-            updateTextAndValidate()
-        }
+        private set
         get() = dialog.dialogDateFormat
     override val viewText: String
         get() {
@@ -46,10 +42,9 @@ class DialogDateTimePickerView @JvmOverloads constructor(
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogDatePickerView, 0, 0)
         try {
             attrTypedArray.apply {
-                datePickerFormat = getString(R.styleable.DialogDatePickerView_dpv_date_format).let {
+                getString(R.styleable.DialogDatePickerView_dpv_date_format).apply {
                     val default = DEFAULT_DATE_FORMAT
-                    if (it.isNullOrBlank()) return@let default
-                    else return@let it
+                    dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
                 }
             }
         } finally {
@@ -60,12 +55,13 @@ class DialogDateTimePickerView @JvmOverloads constructor(
     @Override
     override fun initializeDialog(
         fragmentManager: FragmentManager,
-        fragmentTag: String
+        fragmentTag: String,
     ): BasePickerDialogFragment<OffsetDateTime> {
         return DateTimePickerDialogBuilder(null, fragmentManager, fragmentTag)
             .buildDialog()
     }
 
+    @Override
     override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val myState = SavedState(superState)
@@ -86,6 +82,12 @@ class DialogDateTimePickerView @JvmOverloads constructor(
     @Override
     override fun dispatchRestoreInstanceState(container: SparseArray<Parcelable>) {
         dispatchThawSelfOnly(container)
+    }
+
+    fun setDatePickerFormat(format: String?) {
+        this.datePickerFormat = format ?: DEFAULT_DATE_FORMAT
+        dialog.setDialogDateFormat(datePickerFormat)
+        updateTextAndValidate()
     }
 
     private fun compareValues(v1: OffsetDateTime?, v2: OffsetDateTime?): Boolean {

@@ -32,44 +32,13 @@ class DialogMonthPickerView @JvmOverloads constructor(
         get() {
             return pickerDialog as MonthPickerDialog
         }
-    var monthPickerFormat: String = DEFAULT_DATE_FORMAT
-        set(value) {
-            field = value
-            dialog.setDialogDateFormat(field)
-            updateTextAndValidate()
-        }
-        get() = dialog.dialogDateFormat
-    var minYear = DEFAULT_MIN_YEAR
-        set(value) {
-            field = value
-            dialog.setCalendarBounds(field, maxYear)
-        }
-        get() = dialog.minYear
-    var maxYear = DEFAULT_MAX_YEAR
-        set(value) {
-            field = value
-            dialog.setCalendarBounds(minYear, field)
-        }
-        get() = dialog.maxYear
-    var disabledMonths: List<Month> = listOf()
-        set(value) {
-            field = value
-            dialog.setDisabledMonths(field)
-        }
-        get() = dialog.disabledMonths
-    var enabledMonths: List<Month> = listOf()
-        set(value) {
-            field = value
-            dialog.setEnabledMonths(field)
-        }
-        get() = dialog.enabledMonths
     val selectionAsDate: OffsetDateTime?
         get() = selection?.toDate()
     override val viewText: String
         get() {
             val defaut = ResourceUtils.getPhrase(context, R.string.dialog_month_picker_empty_text)
             return if (!hasSelection) defaut
-            else DateUtilsOffsetDate.getDateString(monthPickerFormat, selectionAsDate)
+            else DateUtilsOffsetDate.getDateString(getMonthPickerFormat(), selectionAsDate)
         }
 
     @Override
@@ -77,13 +46,16 @@ class DialogMonthPickerView @JvmOverloads constructor(
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogMonthPickerView, 0, 0)
         try {
             attrTypedArray.apply {
-                monthPickerFormat = attrTypedArray.getString(R.styleable.DialogMonthPickerView_mpv_date_format).let {
+                attrTypedArray.getString(R.styleable.DialogMonthPickerView_mpv_date_format).apply {
                     val default = DEFAULT_DATE_FORMAT
-                    if (it.isNullOrBlank()) return@let default
-                    else return@let it
+                    dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
                 }
-                minYear = getInteger(R.styleable.DialogMonthPickerView_mpv_min_year, DEFAULT_MIN_YEAR)
-                maxYear = getInteger(R.styleable.DialogMonthPickerView_mpv_max_year, DEFAULT_MAX_YEAR)
+                getInteger(R.styleable.DialogMonthPickerView_mpv_min_year, DEFAULT_MIN_YEAR).apply {
+                    dialog.setMinYear(this)
+                }
+                getInteger(R.styleable.DialogMonthPickerView_mpv_max_year, DEFAULT_MAX_YEAR).apply {
+                    dialog.setMaxYear(this)
+                }
             }
         } finally {
             attrTypedArray.recycle()
@@ -126,6 +98,47 @@ class DialogMonthPickerView @JvmOverloads constructor(
         selection = date?.let {
             return@let Month.fromDate(it)
         }
+    }
+
+    fun setMonthPickerFormat(format: String?) {
+        dialog.setDialogDateFormat(format ?: DEFAULT_DATE_FORMAT)
+        updateTextAndValidate()
+    }
+
+    fun setMinYear(year: Int) {
+        dialog.setCalendarBounds(year, getMaxYear())
+    }
+
+    fun setMaxYear(year: Int) {
+        dialog.setCalendarBounds(getMinYear(), year)
+    }
+
+    fun setDisabledMonths(disabledMonths: List<Month>) {
+        dialog.setDisabledMonths(disabledMonths)
+    }
+
+    fun setEnabledMonths(enabledMonths: List<Month>) {
+        dialog.setEnabledMonths(enabledMonths)
+    }
+
+    fun getMonthPickerFormat(): String {
+        return dialog.dialogDateFormat
+    }
+
+    fun getMinYear(): Int {
+        return dialog.minYear
+    }
+
+    fun getMaxYear(): Int {
+        return dialog.maxYear
+    }
+
+    fun getDisabledMonths(): List<Month> {
+        return dialog.disabledMonths
+    }
+
+    fun getEnabledMonths(): List<Month> {
+        return dialog.enabledMonths
     }
 
     private fun compareValues(v1: Month?, v2: Month?): Boolean {

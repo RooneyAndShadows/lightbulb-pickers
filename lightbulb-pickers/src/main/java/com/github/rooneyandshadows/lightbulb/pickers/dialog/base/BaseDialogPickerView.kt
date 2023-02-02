@@ -41,84 +41,20 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     private val selectionChangedListeners: MutableList<SelectionChangedListener<SelectionType>> = mutableListOf()
     private val triggerAttachedCallback: MutableList<TriggerAttachedCallback<SelectionType>> = mutableListOf()
     protected var dataBindingListener: SelectionChangedListener<SelectionType>? = null
-    protected val pickerDialog: BasePickerDialogFragment<SelectionType> by lazy {
-        val dialog = initializeDialog(fragmentManager, pickerDialogTag)
-        onDialogInitialized(dialog)
-        return@lazy dialog
-    }
     protected var triggerView: DialogTriggerView? = null
         private set
-    private var errorEnabled: Boolean = false
-        set(value) {
-            triggerView?.setErrorEnabled(field)
-        }
-        get() = triggerView?.errorEnabled ?: false
-    private var pickerDialogTag: String = ""
-        set(value) {
-            field = value
-            pickerDialog.setDialogTag(field)
-        }
     var showSelectedTextValue = false
-        protected set(value) {
-            field = value
-            invalidate()
-        }
-
-    var pickerDialogTitle: String? = null
-        set(value) {
-            field = value
-            pickerDialog.setDialogTitle(field)
-        }
-        get() = pickerDialog.dialogTitle
-    var pickerDialogMessage: String? = null
-        set(value) {
-            field = value
-            pickerDialog.setDialogMessage(field)
-        }
-        get() = pickerDialog.dialogMessage
-    var pickerDialogPositiveButtonText: String? = null
-        set(value) {
-            field = value
-            pickerDialog.setDialogPositiveButton(generateButtonConfig(field))
-        }
-    var pickerDialogNegativeButtonText: String? = null
-        set(value) {
-            field = value
-            pickerDialog.setDialogNegativeButton(generateButtonConfig(field))
-        }
-    var pickerDialogCancelable = false
-        set(value) {
-            field = value
-            pickerDialog.isCancelable = field
-        }
-    var pickerDialogType: DialogTypes = NORMAL
-        set(value) {
-            field = value
-            pickerDialog.dialogType = field
-        }
-        get() = pickerDialog.dialogType
-    var pickerDialogAnimationType: DialogAnimationTypes = NO_ANIMATION
-        set(value) {
-            field = value
-            pickerDialog.dialogAnimationType = field
-        }
-    var hintText: String? = null
-        set(value) {
-            if (!showSelectedTextValue) return
-            triggerView?.setHintText(field)
-        }
-        get() = triggerView?.hintText
-    var errorText: String? = null
-        set(value) {
-            triggerView?.setErrorText(field)
-        }
-        get() = triggerView?.errorText
-    var requiredText: String? = null
+        protected set
+    protected lateinit var pickerDialog: BasePickerDialogFragment<SelectionType>
         private set
-    var isValidationEnabled = false
-        private set
-    var required = false
-        private set
+    private var errorEnabled: Boolean = false
+        set(value) = triggerView?.setErrorEnabled(field) ?: Unit
+        get() = triggerView?.errorEnabled ?: false
+    private var requiredText: String? = null
+    private var isValidationEnabled = false
+    private var required = false
+    private var hintText: String? = null
+    private var errorText: String? = null
     val isDialogShown: Boolean
         get() = pickerDialog.isDialogShown
     val text: String
@@ -129,7 +65,6 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         set(value) = pickerDialog.setSelection(value)
         get() = pickerDialog.getSelection()
     protected abstract val viewText: String
-
     protected abstract fun initializeDialog(
         fragmentManager: FragmentManager,
         fragmentTag: String,
@@ -190,12 +125,11 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
 
     init {
         isSaveEnabled = true
-        if (!isInEditMode) {
-            fragmentManager = getFragmentManager(context)!!
-        }
-        readAttrs(context, attrs)
         orientation = VERTICAL
+        if (!isInEditMode) fragmentManager = getFragmentManager(context)!!
+        readAttrs(context, attrs)
     }
+
 
     @Override
     override fun setEnabled(enabled: Boolean) {
@@ -206,11 +140,6 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     @Override
     override fun addView(child: View, index: Int, params: ViewGroup.LayoutParams) {
         addViewInternally(child, index, params)
-    }
-
-    protected fun updateTextAndValidate() {
-        updateText()
-        validate()
     }
 
     fun addSelectionChangedListener(listener: SelectionChangedListener<SelectionType>) {
@@ -245,6 +174,82 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         pickerDialog.show()
     }
 
+
+    fun setDialogTag(dialogTag: String) {
+        pickerDialog.setDialogTag(dialogTag)
+    }
+
+    fun setDialogTitle(dialogTitle: String?) {
+        pickerDialog.setDialogTitle(dialogTitle)
+    }
+
+    fun setDialogMessage(dialogMessage: String?) {
+        pickerDialog.setDialogMessage(dialogMessage)
+    }
+
+    fun setDialogPositiveButtonText(buttonText: String?) {
+        pickerDialog.setDialogPositiveButton(generateButtonConfig(buttonText))
+    }
+
+    fun setDialogNegativeButtonText(buttonText: String?) {
+        pickerDialog.setDialogNegativeButton(generateButtonConfig(buttonText))
+    }
+
+    fun setDialogCancelable(isCancelable: Boolean) {
+        pickerDialog.isCancelable = isCancelable
+    }
+
+    fun setDialogType(dialogType: DialogTypes) {
+        pickerDialog.dialogType = dialogType
+    }
+
+    fun setDialogAnimationType(dialogAnimationType: DialogAnimationTypes) {
+        pickerDialog.dialogAnimationType = dialogAnimationType
+    }
+
+    fun setHintText(hintText: String?) {
+        this.hintText = hintText
+        if (!showSelectedTextValue) return
+        triggerView?.setHintText(hintText)
+    }
+
+    fun setErrorText(errorText: String?) {
+        this.errorText = errorText
+        triggerView?.setErrorText(errorText)
+    }
+
+    fun getDialogTag(): String? {
+        return pickerDialog.tag
+    }
+
+    fun getDialogTitle(): String? {
+        return pickerDialog.dialogTitle
+    }
+
+    fun getDialogMessage(): String? {
+        return pickerDialog.dialogMessage
+    }
+
+    fun isDialogCancelable(): Boolean {
+        return pickerDialog.isCancelable
+    }
+
+    fun getDialogType(): DialogTypes {
+        return pickerDialog.dialogType
+    }
+
+    fun getDialogAnimationType(): DialogAnimationTypes {
+        return pickerDialog.dialogAnimationType
+    }
+
+    fun getHintText(): String? {
+        return triggerView?.hintText
+    }
+
+    fun getErrorText(): String? {
+        return triggerView?.errorText
+    }
+
     @JvmOverloads
     fun setRequired(required: Boolean, validateOnCall: Boolean = true) {
         this.required = required
@@ -265,6 +270,16 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         triggerView?.setIcon(icon, color)
     }
 
+    protected fun updateTextAndValidate() {
+        updateText()
+        validate()
+    }
+
+    protected fun setShowSelectionText(showSelectedTextValue: Boolean) {
+        this.showSelectedTextValue = showSelectedTextValue
+        invalidate()
+    }
+
     private fun getFragmentManager(context: Context?): FragmentManager? {
         return when (context) {
             is AppCompatActivity -> context.supportFragmentManager
@@ -276,7 +291,6 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     private fun updateText() {
         if (!showSelectedTextValue) return
         val newTextValue = viewText
-        println(newTextValue)
         triggerView?.setText(newTextValue)
     }
 
@@ -314,20 +328,21 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.BaseDialogPickerView, 0, 0)
         try {
             attrTypedArray.apply {
-                //Must be the first attribute to be read in order to instantiate dialog with tag.
                 getString(R.styleable.BaseDialogPickerView_pv_dialog_tag).apply {
-                    pickerDialogTag = let {
+                    val dialogTag = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_dialog_tag_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
+                    pickerDialog = initializeDialog(fragmentManager, dialogTag)
+                    onDialogInitialized(pickerDialog)
                 }
                 getString(R.styleable.BaseDialogPickerView_pv_dialog_title).apply {
                     val default = ""
-                    pickerDialogTitle = this ?: default
+                    pickerDialog.setDialogTitle(this ?: default)
                 }
                 getString(R.styleable.BaseDialogPickerView_pv_dialog_message).apply {
                     val default = ""
-                    pickerDialogMessage = this ?: default
+                    pickerDialog.setDialogMessage(this ?: default)
                 }
 
                 getString(R.styleable.BaseDialogPickerView_pv_required_text).apply {
@@ -335,26 +350,28 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
                     requiredText = this ?: default
                 }
                 getString(R.styleable.BaseDialogPickerView_pv_dialog_button_positive_text).apply {
-                    pickerDialogPositiveButtonText = let {
+                    val positiveButtonText = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_positive_button_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
+                    pickerDialog.setDialogPositiveButton(generateButtonConfig(positiveButtonText))
                 }
                 getString(R.styleable.BaseDialogPickerView_pv_dialog_button_negative_text).apply {
-                    pickerDialogNegativeButtonText = let {
+                    val negativeButtonText = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_negative_button_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
+                    pickerDialog.setDialogNegativeButton(generateButtonConfig(negativeButtonText))
                 }
                 getInt(R.styleable.BaseDialogPickerView_pv_dialog_type, NORMAL.value).apply {
-                    pickerDialogType = DialogTypes.valueOf(this)
+                    pickerDialog.dialogType = DialogTypes.valueOf(this)
                 }
                 getInt(R.styleable.BaseDialogPickerView_pv_dialog_animation, NO_ANIMATION.value).apply {
-                    pickerDialogAnimationType = DialogAnimationTypes.valueOf(this)
+                    pickerDialog.dialogAnimationType = DialogAnimationTypes.valueOf(this)
                 }
+                pickerDialog.isCancelable = getBoolean(R.styleable.BaseDialogPickerView_pv_dialog_cancelable, true)
                 required = getBoolean(R.styleable.BaseDialogPickerView_pv_required, false)
                 isValidationEnabled = getBoolean(R.styleable.BaseDialogPickerView_pv_validation_enabled, false)
-                pickerDialogCancelable = getBoolean(R.styleable.BaseDialogPickerView_pv_dialog_cancelable, true)
                 showSelectedTextValue = getBoolean(R.styleable.BaseDialogPickerView_pv_show_selected_text, true)
             }
         } finally {

@@ -23,7 +23,7 @@ buildscript {
                         application          : "1.3.0",
                         commons              : "1.0.18",
                         textinputview        : "1.0.11",
-                        recycleradapters     : "2.0.0-RC7",
+                        recycleradapters     : "2.0.0-RC8",
                         dialogs              : "2.0.0-RC8",
                         annotation_processors: "1.0.6-RC2"
                 ],

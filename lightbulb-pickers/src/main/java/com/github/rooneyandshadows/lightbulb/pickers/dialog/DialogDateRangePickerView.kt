@@ -30,31 +30,13 @@ class DialogDateRangePickerView @JvmOverloads constructor(
 ) : BaseDialogPickerView<DateRange>(context, attrs, defStyleAttr, defStyleRes) {
     private val dialog: DateRangePickerDialog
         get() = pickerDialog as DateRangePickerDialog
-    private var datePickerFormat: String = DEFAULT_DATE_FORMAT
-        set(value) {
-            field = value
-            dialog.dialogDateFormat
-            updateTextAndValidate()
-        }
-        get() = dialog.dialogDateFormat
-    private var datePickerFromText: String? = null
-        set(value) {
-            field = value
-            dialog.setDialogTextFrom(field)
-        }
-        get() = dialog.dialogTextFrom
-    private var datePickerToText: String? = null
-        set(value) {
-            field = value
-            dialog.setDialogTextTo(field)
-        }
-        get() = dialog.dialogTextTo
     override val viewText: String
         get() {
             val default = ResourceUtils.getPhrase(context, R.string.dialog_date_picker_empty_text)
             if (!hasSelection) return default
-            val from = DateUtilsOffsetDate.getDateString(datePickerFormat, selection!!.from)
-            val to = DateUtilsOffsetDate.getDateString(datePickerFormat, selection!!.to)
+            val format = getDatePickerFormat()
+            val from = DateUtilsOffsetDate.getDateString(format, selection!!.from)
+            val to = DateUtilsOffsetDate.getDateString(format, selection!!.to)
             val viewTextFormat = "{from} - {to}"
             return viewTextFormat.replace("{from}", from).replace("{to}", to)
         }
@@ -64,20 +46,17 @@ class DialogDateRangePickerView @JvmOverloads constructor(
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogDateRangePickerView, 0, 0)
         try {
             attrTypedArray.apply {
-                datePickerFormat = getString(R.styleable.DialogDateRangePickerView_drpv_date_format).let {
+                getString(R.styleable.DialogDateRangePickerView_drpv_date_format).apply {
                     val default = DEFAULT_DATE_FORMAT
-                    if (it.isNullOrBlank()) return@let default
-                    else return@let it
+                    dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
                 }
-                datePickerFromText = getString(R.styleable.DialogDateRangePickerView_drpv_text_from).let {
+                getString(R.styleable.DialogDateRangePickerView_drpv_text_from).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_date_from_text)
-                    if (it.isNullOrBlank()) return@let default
-                    else return@let it
+                    dialog.setDialogTextFrom(if (isNullOrBlank()) default else this)
                 }
-                datePickerToText = getString(R.styleable.DialogDateRangePickerView_drpv_text_to).let {
+                getString(R.styleable.DialogDateRangePickerView_drpv_text_to).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_date_to_text)
-                    if (it.isNullOrBlank()) return@let default
-                    else return@let it
+                    dialog.setDialogTextFrom(if (isNullOrBlank()) default else this)
                 }
             }
         } finally {
@@ -88,7 +67,7 @@ class DialogDateRangePickerView @JvmOverloads constructor(
     @Override
     override fun initializeDialog(
         fragmentManager: FragmentManager,
-        fragmentTag: String
+        fragmentTag: String,
     ): BasePickerDialogFragment<DateRange> {
         return DateRangePickerDialogBuilder(null, fragmentManager, fragmentTag)
             .buildDialog()
@@ -119,6 +98,31 @@ class DialogDateRangePickerView @JvmOverloads constructor(
 
     fun setRange(start: OffsetDateTime, end: OffsetDateTime) {
         selection = DateRange(start, end)
+    }
+
+    fun setDatePickerFormat(format: String?) {
+        dialog.setDialogDateFormat(format ?: DEFAULT_DATE_FORMAT)
+        updateTextAndValidate()
+    }
+
+    fun setDatePickerFromText(text: String?) {
+        dialog.setDialogTextFrom(text)
+    }
+
+    fun setDatePickerToText(text: String?) {
+        dialog.setDialogTextFrom(text)
+    }
+
+    fun getDatePickerFormat(): String {
+        return dialog.dialogDateFormat
+    }
+
+    fun getDatePickerFromText(): String? {
+        return dialog.dialogTextFrom
+    }
+
+    fun getDatePickerToText(): String? {
+        return dialog.dialogTextTo
     }
 
     private fun compareValues(v1: DateRange?, v2: DateRange?): Boolean {

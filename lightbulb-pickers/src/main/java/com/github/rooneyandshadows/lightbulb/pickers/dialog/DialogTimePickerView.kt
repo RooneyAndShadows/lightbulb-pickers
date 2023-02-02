@@ -30,10 +30,7 @@ class DialogTimePickerView @JvmOverloads constructor(
     private val dialog: TimePickerDialog
         get() = pickerDialog as TimePickerDialog
     var timeFormat = DEFAULT_TIME_FORMAT
-        set(value) {
-            field = value
-            updateTextAndValidate()
-        }
+        private set
     private val selectionAsDate: OffsetDateTime?
         get() {
             return if (!hasSelection) null
@@ -64,7 +61,7 @@ class DialogTimePickerView @JvmOverloads constructor(
     @Override
     override fun initializeDialog(
         fragmentManager: FragmentManager,
-        fragmentTag: String
+        fragmentTag: String,
     ): BasePickerDialogFragment<Time> {
         return TimePickerDialogBuilder(null, fragmentManager, fragmentTag)
             .buildDialog()
@@ -95,6 +92,11 @@ class DialogTimePickerView @JvmOverloads constructor(
 
     fun setSelection(hour: Int, minutes: Int) {
         selection = Time(hour, minutes)
+    }
+
+    fun setTimeFormat(format: String?) {
+        timeFormat = format ?: DEFAULT_TIME_FORMAT
+        updateTextAndValidate()
     }
 
     private fun compareValues(v1: Time?, v2: Time?): Boolean {

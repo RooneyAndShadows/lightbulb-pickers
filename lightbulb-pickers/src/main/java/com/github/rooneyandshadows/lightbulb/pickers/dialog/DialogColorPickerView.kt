@@ -35,7 +35,6 @@ class DialogColorPickerView @JvmOverloads constructor(
             return dialog.adapter as ColorPickerAdapter
         }
 
-
     init {
         addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray> {
             override fun onAttached(triggerView: DialogTriggerView, pickerView: BaseDialogPickerView<IntArray>) {
