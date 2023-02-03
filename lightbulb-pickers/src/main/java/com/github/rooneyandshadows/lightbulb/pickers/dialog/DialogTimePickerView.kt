@@ -42,20 +42,8 @@ class DialogTimePickerView @JvmOverloads constructor(
             else DateUtilsOffsetDate.getDateString(timeFormat, selectionAsDate)
         }
 
-    @Override
-    override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogTimePickerView, 0, 0)
-        try {
-            attrTypedArray.apply {
-                timeFormat = attrTypedArray.getString(R.styleable.DialogTimePickerView_tpv_time_format).let {
-                    val default = DEFAULT_TIME_FORMAT
-                    if (it.isNullOrBlank()) return@let default
-                    else return@let it
-                }
-            }
-        } finally {
-            attrTypedArray.recycle()
-        }
+    init {
+        readAttributes(context, attrs)
     }
 
     @Override
@@ -103,6 +91,21 @@ class DialogTimePickerView @JvmOverloads constructor(
         if (v1 == null && v2 == null) return true
         if (v1 == null || v2 == null) return false
         return (v1.hour == v2.hour && v1.minute == v2.minute)
+    }
+
+    private fun readAttributes(context: Context, attrs: AttributeSet?) {
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogTimePickerView, 0, 0)
+        try {
+            attrTypedArray.apply {
+                timeFormat = attrTypedArray.getString(R.styleable.DialogTimePickerView_tpv_time_format).let {
+                    val default = DEFAULT_TIME_FORMAT
+                    if (it.isNullOrBlank()) return@let default
+                    else return@let it
+                }
+            }
+        } finally {
+            attrTypedArray.recycle()
+        }
     }
 
     private class SavedState : BaseSavedState {

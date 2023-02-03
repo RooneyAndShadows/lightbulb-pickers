@@ -34,6 +34,10 @@ class DialogIconPickerView @JvmOverloads constructor(
             return dialog.adapter as IconPickerAdapter
         }
 
+    init {
+        readAttributes(context, attrs)
+    }
+
     @Override
     override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
         super.onDialogInitialized(dialog)
@@ -43,20 +47,6 @@ class DialogIconPickerView @JvmOverloads constructor(
                     updatePickerIcon(newSelection)
                 }
             })
-        }
-    }
-
-    @Override
-    override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogIconPickerView, 0, 0)
-        try {
-            attrTypedArray.apply {
-                val default = ResourceUtils.getDimenPxById(context, R.dimen.icon_picker_selected_size)
-                selectedIconSize = getDimensionPixelSize(R.styleable.DialogIconPickerView_ipv_selected_icon_size, default)
-            }
-            showSelectedTextValue = false
-        } finally {
-            attrTypedArray.recycle()
         }
     }
 
@@ -108,6 +98,19 @@ class DialogIconPickerView @JvmOverloads constructor(
             drawable
         } else null
         setPickerIcon(icon)
+    }
+
+    private fun readAttributes(context: Context, attrs: AttributeSet?) {
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogIconPickerView, 0, 0)
+        try {
+            attrTypedArray.apply {
+                val default = ResourceUtils.getDimenPxById(context, R.dimen.icon_picker_selected_size)
+                selectedIconSize = getDimensionPixelSize(R.styleable.DialogIconPickerView_ipv_selected_icon_size, default)
+            }
+            showSelectedTextValue = false
+        } finally {
+            attrTypedArray.recycle()
+        }
     }
 
     private class SavedState : BaseSavedState {

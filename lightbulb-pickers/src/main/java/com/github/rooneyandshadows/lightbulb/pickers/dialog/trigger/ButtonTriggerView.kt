@@ -35,6 +35,12 @@ class ButtonTriggerView @JvmOverloads constructor(
 
     init {
         isSaveEnabled = true
+        readAttributes(context, attrs)
+        inflateView()
+        syncUserInterface()
+        setupBackground()
+        setupCornerRadius()
+        setupButtonTextColor()
     }
 
     @Override
@@ -45,12 +51,6 @@ class ButtonTriggerView @JvmOverloads constructor(
         )
     }
 
-    @Override
-    override fun inflateView() {
-        inflate(context, R.layout.dialog_picker_button_layout, this) as LinearLayout
-        buttonView = findViewById(R.id.picker_view_button)
-        errorTextView = findViewById(R.id.picker_view_error_text_view)
-    }
 
     @Override
     override fun onIconChange() {
@@ -122,13 +122,6 @@ class ButtonTriggerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun setupView() {
-        setupBackground()
-        setupCornerRadius()
-        setupButtonTextColor()
-    }
-
-    @Override
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {
         dispatchFreezeSelfOnly(container)
     }
@@ -155,28 +148,6 @@ class ButtonTriggerView @JvmOverloads constructor(
         setButtonBackgroundColor(savedState.buttonBackgroundColor)
         setButtonBackgroundCornerRadius(savedState.buttonBackgroundCornerRadius)
         setButtonTextColor(savedState.buttonTextColor)
-    }
-
-    @Override
-    override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ButtonTriggerView, 0, 0)
-        try {
-            attrTypedArray.apply {
-                val defBackgroundColor = ResourceUtils.getColorByAttribute(context, R.attr.colorPrimary)
-                val defTextColor = ResourceUtils.getColorByAttribute(context, R.attr.colorOnPrimary)
-                getColor(R.styleable.ButtonTriggerView_btv_background_color, defBackgroundColor).apply {
-                    buttonBackgroundColor = this
-                }
-                getColor(R.styleable.ButtonTriggerView_btv_text_color, defBackgroundColor).apply {
-                    buttonTextColor = defTextColor
-                }
-                getInt(R.styleable.ButtonTriggerView_btv_background_corner_radius, 5).apply {
-                    buttonBackgroundCornerRadius = ResourceUtils.dpToPx(this)
-                }
-            }
-        } finally {
-            attrTypedArray.recycle()
-        }
     }
 
     fun setButtonBackgroundColor(backgroundColor: Int) {
@@ -209,6 +180,33 @@ class ButtonTriggerView @JvmOverloads constructor(
 
     private fun setupCornerRadius() {
         buttonView.cornerRadius = buttonBackgroundCornerRadius
+    }
+
+    private fun inflateView() {
+        inflate(context, R.layout.dialog_picker_button_layout, this) as LinearLayout
+        buttonView = findViewById(R.id.picker_view_button)
+        errorTextView = findViewById(R.id.picker_view_error_text_view)
+    }
+
+    private fun readAttributes(context: Context, attrs: AttributeSet?) {
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ButtonTriggerView, 0, 0)
+        try {
+            attrTypedArray.apply {
+                val defBackgroundColor = ResourceUtils.getColorByAttribute(context, R.attr.colorPrimary)
+                val defTextColor = ResourceUtils.getColorByAttribute(context, R.attr.colorOnPrimary)
+                getColor(R.styleable.ButtonTriggerView_btv_background_color, defBackgroundColor).apply {
+                    buttonBackgroundColor = this
+                }
+                getColor(R.styleable.ButtonTriggerView_btv_text_color, defBackgroundColor).apply {
+                    buttonTextColor = defTextColor
+                }
+                getInt(R.styleable.ButtonTriggerView_btv_background_corner_radius, 5).apply {
+                    buttonBackgroundCornerRadius = ResourceUtils.dpToPx(this)
+                }
+            }
+        } finally {
+            attrTypedArray.recycle()
+        }
     }
 
     private class SavedState : BaseSavedState {

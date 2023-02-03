@@ -41,25 +41,8 @@ class DialogMonthPickerView @JvmOverloads constructor(
             else DateUtilsOffsetDate.getDateString(getMonthPickerFormat(), selectionAsDate)
         }
 
-    @Override
-    override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogMonthPickerView, 0, 0)
-        try {
-            attrTypedArray.apply {
-                attrTypedArray.getString(R.styleable.DialogMonthPickerView_mpv_date_format).apply {
-                    val default = DEFAULT_DATE_FORMAT
-                    dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
-                }
-                getInteger(R.styleable.DialogMonthPickerView_mpv_min_year, DEFAULT_MIN_YEAR).apply {
-                    dialog.setMinYear(this)
-                }
-                getInteger(R.styleable.DialogMonthPickerView_mpv_max_year, DEFAULT_MAX_YEAR).apply {
-                    dialog.setMaxYear(this)
-                }
-            }
-        } finally {
-            attrTypedArray.recycle()
-        }
+    init {
+        readAttributes(context, attrs)
     }
 
     @Override
@@ -145,6 +128,26 @@ class DialogMonthPickerView @JvmOverloads constructor(
         if (v1 == null && v2 == null) return true
         if (v1 == null || v2 == null) return false
         return (v1.year == v2.year && v1.month == v2.month)
+    }
+
+    private fun readAttributes(context: Context, attrs: AttributeSet?) {
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogMonthPickerView, 0, 0)
+        try {
+            attrTypedArray.apply {
+                attrTypedArray.getString(R.styleable.DialogMonthPickerView_mpv_date_format).apply {
+                    val default = DEFAULT_DATE_FORMAT
+                    dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
+                }
+                getInteger(R.styleable.DialogMonthPickerView_mpv_min_year, DEFAULT_MIN_YEAR).apply {
+                    dialog.setMinYear(this)
+                }
+                getInteger(R.styleable.DialogMonthPickerView_mpv_max_year, DEFAULT_MAX_YEAR).apply {
+                    dialog.setMaxYear(this)
+                }
+            }
+        } finally {
+            attrTypedArray.recycle()
+        }
     }
 
     private class SavedState : BaseSavedState {

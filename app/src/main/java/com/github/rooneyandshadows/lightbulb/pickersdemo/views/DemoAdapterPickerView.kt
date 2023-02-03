@@ -33,6 +33,7 @@ class DemoAdapterPickerView @JvmOverloads constructor(
 ) : DialogAdapterPickerView<DemoModel>(context, attrs, defStyleAttr, defStyleRes) {
 
     init {
+        readAttributes(context, attrs)
         addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray> {
             override fun onAttached(triggerView: DialogTriggerView, pickerView: BaseDialogPickerView<IntArray>) {
                 setupIcon()
@@ -70,16 +71,6 @@ class DemoAdapterPickerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        super.readAttributes(context, attrs)
-        val a = context.theme.obtainStyledAttributes(attrs, R.styleable.DemoAdapterPickerView, 0, 0)
-        try {
-        } finally {
-            a.recycle()
-        }
-    }
-
-    @Override
     override fun onRestoreInstanceState(state: Parcelable) {
         super.onRestoreInstanceState(state)
         setupIcon()
@@ -111,6 +102,13 @@ class DemoAdapterPickerView @JvmOverloads constructor(
         setPickerIcon(icon, color)
     }
 
+    private fun readAttributes(context: Context, attrs: AttributeSet?) {
+        val a = context.theme.obtainStyledAttributes(attrs, R.styleable.DemoAdapterPickerView, 0, 0)
+        try {
+        } finally {
+            a.recycle()
+        }
+    }
 
     object Databinding {
         @JvmStatic

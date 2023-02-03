@@ -40,8 +40,6 @@ abstract class DialogTriggerView @JvmOverloads constructor(
         initializeDefaultIconColor()
     }
 
-    protected abstract fun inflateView()
-    protected abstract fun readAttributes(context: Context, attrs: AttributeSet?)
     protected abstract fun onIconChange()
     protected abstract fun onIconColorChange()
     protected abstract fun onErrorEnabledChange()
@@ -53,9 +51,6 @@ abstract class DialogTriggerView @JvmOverloads constructor(
     protected abstract fun onEnabledChange()
     abstract fun attachTo(pickerView: BaseDialogPickerView<*>)
 
-    protected open fun setupView() {
-    }
-
     protected open fun initializeDefaultIconColor(): Int {
         return ResourceUtils.getColorByAttribute(
             context,
@@ -65,7 +60,7 @@ abstract class DialogTriggerView @JvmOverloads constructor(
 
     init {
         isSaveEnabled = true
-        initializeView(context, attrs)
+        readBaseAttributes(context, attrs)
     }
 
     @Override
@@ -130,14 +125,7 @@ abstract class DialogTriggerView @JvmOverloads constructor(
         return pickerView
     }
 
-    private fun initializeView(context: Context, attrs: AttributeSet?) {
-        readAttrs(context, attrs)
-        inflateView()
-        setupView()
-        syncUserInterface()
-    }
-
-    private fun syncUserInterface() {
+    protected fun syncUserInterface() {
         onIconChange()
         onIconColorChange()
         onErrorEnabledChange()
@@ -147,11 +135,6 @@ abstract class DialogTriggerView @JvmOverloads constructor(
         onErrorTextAppearanceChange()
         onHintTextAppearanceChange()
         onEnabledChange()
-    }
-
-    private fun readAttrs(context: Context, attrs: AttributeSet?) {
-        readBaseAttributes(context, attrs)
-        readAttributes(context, attrs)
     }
 
     private fun readBaseAttributes(context: Context, attrs: AttributeSet?) {
@@ -241,20 +224,6 @@ abstract class DialogTriggerView @JvmOverloads constructor(
 
         private constructor(parcel: Parcel) : super(parcel) {
             parcel.apply {
-                ParcelUtils.writeBoolean(this, errorEnabled)
-                    .writeString(this, text)
-                    .writeString(this, hintText)
-                    .writeString(this, errorText)
-                    .writeInt(this, errorTextAppearance)
-                    .writeInt(this, hintTextAppearance)
-                    .writeInt(this, iconColor)
-            }
-        }
-
-        @Override
-        override fun writeToParcel(out: Parcel, flags: Int) {
-            super.writeToParcel(out, flags)
-            out.apply {
                 errorEnabled = ParcelUtils.readBoolean(this)!!
                 text = ParcelUtils.readString(this)
                 hintText = ParcelUtils.readString(this)
@@ -262,6 +231,20 @@ abstract class DialogTriggerView @JvmOverloads constructor(
                 errorTextAppearance = ParcelUtils.readInt(this)!!
                 hintTextAppearance = ParcelUtils.readInt(this)!!
                 iconColor = ParcelUtils.readInt(this)!!
+            }
+        }
+
+        @Override
+        override fun writeToParcel(out: Parcel, flags: Int) {
+            super.writeToParcel(out, flags)
+            out.apply {
+                ParcelUtils.writeBoolean(this, errorEnabled)
+                    .writeString(this, text)
+                    .writeString(this, hintText)
+                    .writeString(this, errorText)
+                    .writeInt(this, errorTextAppearance)
+                    .writeInt(this, hintTextAppearance)
+                    .writeInt(this, iconColor)
             }
         }
 

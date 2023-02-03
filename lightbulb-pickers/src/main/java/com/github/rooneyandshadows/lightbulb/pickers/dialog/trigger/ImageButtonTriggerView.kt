@@ -30,20 +30,18 @@ class ImageButtonTriggerView @JvmOverloads constructor(
 
     init {
         isSaveEnabled = true
+        readAttributes(context, attrs)
+        inflateView()
+        syncUserInterface()
+        setupBackground()
     }
 
+    @Override
     override fun initializeDefaultIconColor(): Int {
         return ResourceUtils.getColorByAttribute(
             context,
             R.attr.colorOnPrimary
         )
-    }
-
-    @Override
-    override fun inflateView() {
-        inflate(context, R.layout.dialog_picker_image_button_layout, this) as LinearLayout
-        iconButtonView = findViewById(R.id.picker_view_image_button)
-        errorTextView = findViewById(R.id.picker_view_error_text_view)
     }
 
     @Override
@@ -110,11 +108,6 @@ class ImageButtonTriggerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun setupView() {
-        setupBackground()
-    }
-
-    @Override
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {
         dispatchFreezeSelfOnly(container)
     }
@@ -139,20 +132,6 @@ class ImageButtonTriggerView @JvmOverloads constructor(
         setButtonBackgroundColor(savedState.buttonBackgroundColor)
     }
 
-    @Override
-    override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ImageButtonTriggerView, 0, 0)
-        try {
-            attrTypedArray.apply {
-                getColor(R.styleable.ImageButtonTriggerView_ibtv_background_color, Color.TRANSPARENT).apply {
-                    buttonBackgroundColor = this
-                }
-            }
-        } finally {
-            attrTypedArray.recycle()
-        }
-    }
-
     fun setButtonBackgroundColor(backgroundColor: Int) {
         buttonBackgroundColor = backgroundColor
         setupBackground()
@@ -162,6 +141,25 @@ class ImageButtonTriggerView @JvmOverloads constructor(
         iconButtonView.apply {
             if (buttonBackgroundColor == -1) setBackgroundColor(Color.TRANSPARENT)
             else setBackgroundColor(buttonBackgroundColor)
+        }
+    }
+
+    private fun inflateView() {
+        inflate(context, R.layout.dialog_picker_image_button_layout, this) as LinearLayout
+        iconButtonView = findViewById(R.id.picker_view_image_button)
+        errorTextView = findViewById(R.id.picker_view_error_text_view)
+    }
+
+    private fun readAttributes(context: Context, attrs: AttributeSet?) {
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ImageButtonTriggerView, 0, 0)
+        try {
+            attrTypedArray.apply {
+                getColor(R.styleable.ImageButtonTriggerView_ibtv_background_color, Color.TRANSPARENT).apply {
+                    buttonBackgroundColor = this
+                }
+            }
+        } finally {
+            attrTypedArray.recycle()
         }
     }
 

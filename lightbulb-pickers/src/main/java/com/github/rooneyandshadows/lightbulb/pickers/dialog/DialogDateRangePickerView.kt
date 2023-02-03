@@ -41,27 +41,8 @@ class DialogDateRangePickerView @JvmOverloads constructor(
             return viewTextFormat.replace("{from}", from).replace("{to}", to)
         }
 
-    @Override
-    override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogDateRangePickerView, 0, 0)
-        try {
-            attrTypedArray.apply {
-                getString(R.styleable.DialogDateRangePickerView_drpv_date_format).apply {
-                    val default = DEFAULT_DATE_FORMAT
-                    dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
-                }
-                getString(R.styleable.DialogDateRangePickerView_drpv_text_from).apply {
-                    val default = ResourceUtils.getPhrase(context, R.string.picker_default_date_from_text)
-                    dialog.setDialogTextFrom(if (isNullOrBlank()) default else this)
-                }
-                getString(R.styleable.DialogDateRangePickerView_drpv_text_to).apply {
-                    val default = ResourceUtils.getPhrase(context, R.string.picker_default_date_to_text)
-                    dialog.setDialogTextFrom(if (isNullOrBlank()) default else this)
-                }
-            }
-        } finally {
-            attrTypedArray.recycle()
-        }
+    init {
+        readAttributes(context, attrs)
     }
 
     @Override
@@ -129,6 +110,28 @@ class DialogDateRangePickerView @JvmOverloads constructor(
         if ((v1 == null) && (v2 == null)) return true
         if ((v1 == null) || (v2 == null)) return false
         return v1.compare(v2)
+    }
+
+    private fun readAttributes(context: Context, attrs: AttributeSet?) {
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogDateRangePickerView, 0, 0)
+        try {
+            attrTypedArray.apply {
+                getString(R.styleable.DialogDateRangePickerView_drpv_date_format).apply {
+                    val default = DEFAULT_DATE_FORMAT
+                    dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
+                }
+                getString(R.styleable.DialogDateRangePickerView_drpv_text_from).apply {
+                    val default = ResourceUtils.getPhrase(context, R.string.picker_default_date_from_text)
+                    dialog.setDialogTextFrom(if (isNullOrBlank()) default else this)
+                }
+                getString(R.styleable.DialogDateRangePickerView_drpv_text_to).apply {
+                    val default = ResourceUtils.getPhrase(context, R.string.picker_default_date_to_text)
+                    dialog.setDialogTextFrom(if (isNullOrBlank()) default else this)
+                }
+            }
+        } finally {
+            attrTypedArray.recycle()
+        }
     }
 
     private class SavedState : BaseSavedState {

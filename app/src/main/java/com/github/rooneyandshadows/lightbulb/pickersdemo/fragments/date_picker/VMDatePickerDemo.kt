@@ -8,37 +8,13 @@ import java.time.OffsetDateTime
 
 class VMDatePickerDemo : BaseObservableViewModel() {
     @get:Bindable
-    var boxedSelection: OffsetDateTime? = null
+    var currentSelection: OffsetDateTime? = null
         set(value) {
             field = value
-            notifyPropertyChanged(BR.boxedSelection)
-        }
-
-    @get:Bindable
-    var outlinedSelection: OffsetDateTime? = null
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.outlinedSelection)
-        }
-
-    @get:Bindable
-    var buttonSelection: OffsetDateTime? = null
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.buttonSelection)
-        }
-
-    @get:Bindable
-    var imageButtonSelection: OffsetDateTime? = null
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.imageButtonSelection)
+            notifyPropertyChanged(BR.currentSelection)
         }
 
     init {
-        boxedSelection = DateUtilsOffsetDate.nowLocal()
-        outlinedSelection = DateUtilsOffsetDate.nowLocal()
-        buttonSelection = DateUtilsOffsetDate.nowLocal()
-        imageButtonSelection = DateUtilsOffsetDate.nowLocal()
+        currentSelection = DateUtilsOffsetDate.nowLocal()
     }
 }

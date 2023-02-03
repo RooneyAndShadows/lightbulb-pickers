@@ -38,18 +38,8 @@ class DialogDateTimePickerView @JvmOverloads constructor(
             return DateUtilsOffsetDate.getDateString(datePickerFormat, selection)
         }
 
-    override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogDatePickerView, 0, 0)
-        try {
-            attrTypedArray.apply {
-                getString(R.styleable.DialogDatePickerView_dpv_date_format).apply {
-                    val default = DEFAULT_DATE_FORMAT
-                    dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
-                }
-            }
-        } finally {
-            attrTypedArray.recycle()
-        }
+    init {
+        readAttributes(context, attrs)
     }
 
     @Override
@@ -92,6 +82,20 @@ class DialogDateTimePickerView @JvmOverloads constructor(
 
     private fun compareValues(v1: OffsetDateTime?, v2: OffsetDateTime?): Boolean {
         return DateUtilsOffsetDate.isDateEqual(v1, v2, true)
+    }
+
+    private fun readAttributes(context: Context, attrs: AttributeSet?) {
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogDatePickerView, 0, 0)
+        try {
+            attrTypedArray.apply {
+                getString(R.styleable.DialogDatePickerView_dpv_date_format).apply {
+                    val default = DEFAULT_DATE_FORMAT
+                    dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
+                }
+            }
+        } finally {
+            attrTypedArray.recycle()
+        }
     }
 
     private class SavedState : BaseSavedState {

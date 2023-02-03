@@ -37,10 +37,10 @@ class FragmentColorPickerDemo :
         savedInstanceState: Bundle?,
     ) {
         if (savedInstanceState == null) {
-            viewBinding.pickerViewBoxed.data = viewModel.dataSets[0]!!
-            viewBinding.pickerViewOutlined.data = viewModel.dataSets[1]!!
-            viewBinding.pickerViewButton.data = viewModel.dataSets[2]!!
-            viewBinding.pickerViewImageButton.data = viewModel.dataSets[3]!!
+            viewBinding.pickerViewBoxed.data = viewModel.dataSet
+            viewBinding.pickerViewOutlined.data = viewModel.dataSet
+            viewBinding.pickerViewButton.data = viewModel.dataSet
+            viewBinding.pickerViewImageButton.data = viewModel.dataSet
         }
         viewBinding.model = viewModel
     }

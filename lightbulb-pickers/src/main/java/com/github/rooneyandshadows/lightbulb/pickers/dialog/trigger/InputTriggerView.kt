@@ -38,21 +38,17 @@ class InputTriggerView @JvmOverloads constructor(
 
     init {
         isSaveEnabled = true
+        readAttributes(context, attrs)
+        inflateView()
+        syncUserInterface()
+        setupBackground()
+        setupStroke()
+        setupEndIcon()
     }
 
     @Override
     override fun initializeDefaultIconColor(): Int {
         return ResourceUtils.getColorByAttribute(context, R.attr.colorOnBackground)
-    }
-
-    @Override
-    override fun inflateView() {
-        when (inputType) {
-            BOXED -> inflate(context, R.layout.dialog_picker_boxed_layout, this) as LinearLayout
-            OUTLINED -> inflate(context, R.layout.dialog_picker_outlined_layout, this) as LinearLayout
-        }
-        textInputLayout = findViewById(R.id.picker_view_input_layout_view)
-        textInputEditText = findViewById(R.id.picker_view_input_edit_text_view)
     }
 
     @Override
@@ -130,21 +126,6 @@ class InputTriggerView @JvmOverloads constructor(
         }
     }
 
-    fun setInputBackgroundColor(inputBackgroundColor: Int) {
-        this.inputBackgroundColor = inputBackgroundColor
-        setupBackground()
-    }
-
-    fun setStartIconUseAlpha(useAlpha: Boolean) {
-        this.startIconUseAlpha = useAlpha
-        setupStartIcon()
-    }
-
-    fun setInputBoxStrokeColor(strokeColor: Int) {
-        this.pickerInputBoxStrokeColor = strokeColor
-        setupStroke()
-    }
-
     @Override
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {
         dispatchFreezeSelfOnly(container)
@@ -182,8 +163,31 @@ class InputTriggerView @JvmOverloads constructor(
         }
     }
 
-    @Override
-    override fun readAttributes(context: Context, attrs: AttributeSet?) {
+    fun setInputBackgroundColor(inputBackgroundColor: Int) {
+        this.inputBackgroundColor = inputBackgroundColor
+        setupBackground()
+    }
+
+    fun setStartIconUseAlpha(useAlpha: Boolean) {
+        this.startIconUseAlpha = useAlpha
+        setupStartIcon()
+    }
+
+    fun setInputBoxStrokeColor(strokeColor: Int) {
+        this.pickerInputBoxStrokeColor = strokeColor
+        setupStroke()
+    }
+
+    private fun inflateView() {
+        when (inputType) {
+            BOXED -> inflate(context, R.layout.dialog_picker_boxed_layout, this) as LinearLayout
+            OUTLINED -> inflate(context, R.layout.dialog_picker_outlined_layout, this) as LinearLayout
+        }
+        textInputLayout = findViewById(R.id.picker_view_input_layout_view)
+        textInputEditText = findViewById(R.id.picker_view_input_edit_text_view)
+    }
+
+    private fun readAttributes(context: Context, attrs: AttributeSet?) {
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.InputTriggerView, 0, 0)
         try {
             attrTypedArray.apply {
@@ -207,14 +211,6 @@ class InputTriggerView @JvmOverloads constructor(
         } finally {
             attrTypedArray.recycle()
         }
-    }
-
-    @Override
-    override fun setupView() {
-        super.setupView()
-        setupBackground()
-        setupStroke()
-        setupEndIcon()
     }
 
     private fun setupBackground() {

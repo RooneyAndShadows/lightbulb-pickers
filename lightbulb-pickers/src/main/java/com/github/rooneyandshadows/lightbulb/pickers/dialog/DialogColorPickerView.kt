@@ -36,6 +36,7 @@ class DialogColorPickerView @JvmOverloads constructor(
         }
 
     init {
+        readAttributes(context, attrs)
         addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray> {
             override fun onAttached(triggerView: DialogTriggerView, pickerView: BaseDialogPickerView<IntArray>) {
                 updatePickerIcon(selection)
@@ -52,16 +53,6 @@ class DialogColorPickerView @JvmOverloads constructor(
                     updatePickerIcon(newSelection)
                 }
             })
-        }
-    }
-
-    @Override
-    override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val a = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogColorPickerView, 0, 0)
-        try {
-            showSelectedTextValue = false
-        } finally {
-            a.recycle()
         }
     }
 
@@ -108,6 +99,15 @@ class DialogColorPickerView @JvmOverloads constructor(
             val drawable = adapter.getColorDrawable(context, selectedModel)
             val color = Color.parseColor(selectedModel.colorHex)
             setPickerIcon(drawable, color)
+        }
+    }
+
+    private fun readAttributes(context: Context, attrs: AttributeSet?) {
+        val a = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogColorPickerView, 0, 0)
+        try {
+            showSelectedTextValue = false
+        } finally {
+            a.recycle()
         }
     }
 

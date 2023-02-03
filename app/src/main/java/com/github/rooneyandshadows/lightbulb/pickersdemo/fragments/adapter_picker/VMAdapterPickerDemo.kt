@@ -8,54 +8,18 @@ import java.util.*
 
 class VMAdapterPickerDemo : BaseObservableViewModel() {
     @get:Bindable
-    var boxedSelection: MutableList<UUID> = mutableListOf()
+    var currentSelection: MutableList<UUID> = mutableListOf()
         set(value) {
             field = value
-            notifyPropertyChanged(BR.boxedSelection)
+            notifyPropertyChanged(BR.currentSelection)
         }
-
-    @get:Bindable
-    var outlinedSelection: MutableList<UUID> = mutableListOf()
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.outlinedSelection)
-        }
-
-    @get:Bindable
-    var buttonSelection: MutableList<UUID> = mutableListOf()
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.buttonSelection)
-        }
-
-    @get:Bindable
-    var imageButtonSelection: MutableList<UUID> = mutableListOf()
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.imageButtonSelection)
-        }
-    val dataSets: MutableMap<Int?, List<DemoModel>> = HashMap<Int?, List<DemoModel>>()
+    val dataSet: MutableList<DemoModel> = mutableListOf()
 
     init {
         DemoModel.generateDemoCollection().apply {
-            dataSets[0] = this
+            dataSet.addAll(this)
             val firstElementId = get(0).id
-            boxedSelection.add(firstElementId)
-        }
-        DemoModel.generateDemoCollection().apply {
-            dataSets[1] = this
-            val firstElementId = get(0).id
-            outlinedSelection.add(firstElementId)
-        }
-        DemoModel.generateDemoCollection().apply {
-            dataSets[2] = this
-            val firstElementId = get(0).id
-            buttonSelection.add(firstElementId)
-        }
-        DemoModel.generateDemoCollection().apply {
-            dataSets[3] = this
-            val firstElementId = get(0).id
-            imageButtonSelection.add(firstElementId)
+            currentSelection.add(firstElementId)
         }
     }
 }

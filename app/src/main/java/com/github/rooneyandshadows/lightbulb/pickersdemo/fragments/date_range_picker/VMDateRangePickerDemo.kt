@@ -9,39 +9,15 @@ import java.time.temporal.ChronoUnit
 
 class VMDateRangePickerDemo : BaseObservableViewModel() {
     @get:Bindable
-    var boxedSelection: DateRange? = null
+    var currentSelection: DateRange? = null
         set(value) {
             field = value
-            notifyPropertyChanged(BR.boxedSelection)
-        }
-
-    @get:Bindable
-    var outlinedSelection: DateRange? = null
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.outlinedSelection)
-        }
-
-    @get:Bindable
-    var buttonSelection: DateRange? = null
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.buttonSelection)
-        }
-
-    @get:Bindable
-    var imageButtonSelection: DateRange? = null
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.imageButtonSelection)
+            notifyPropertyChanged(BR.currentSelection)
         }
 
     init {
         val from = DateUtilsOffsetDate.nowLocal()
         val to = from.plus(6, ChronoUnit.DAYS)
-        boxedSelection = DateRange(from, to)
-        outlinedSelection = DateRange(from, to)
-        buttonSelection = DateRange(from, to)
-        imageButtonSelection = DateRange(from, to)
+        currentSelection = DateRange(from, to)
     }
 }

@@ -44,6 +44,10 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
             } ?: ""
         }
 
+    init {
+        readAttributes(context, attrs)
+    }
+
     @Override
     abstract override fun initializeDialog(
         fragmentManager: FragmentManager,
@@ -54,16 +58,6 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     @Override
     override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
         super.onDialogInitialized(dialog)
-    }
-
-    @Override
-    override fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray: TypedArray =
-            context.theme.obtainStyledAttributes(attrs, R.styleable.DialogAdapterPickerView, 0, 0)
-        try {
-        } finally {
-            attrTypedArray.recycle()
-        }
     }
 
     @Override
@@ -107,6 +101,15 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     fun refresh() {
         adapter.notifyDataSetChanged()
         updateTextAndValidate()
+    }
+
+    private fun readAttributes(context: Context, attrs: AttributeSet?) {
+        val attrTypedArray: TypedArray =
+            context.theme.obtainStyledAttributes(attrs, R.styleable.DialogAdapterPickerView, 0, 0)
+        try {
+        } finally {
+            attrTypedArray.recycle()
+        }
     }
 
     private class SavedState : BaseSavedState {
