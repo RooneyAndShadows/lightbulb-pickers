@@ -30,6 +30,7 @@ import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 
 @Suppress("unused", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
+@JvmSuppressWildcards
 abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
