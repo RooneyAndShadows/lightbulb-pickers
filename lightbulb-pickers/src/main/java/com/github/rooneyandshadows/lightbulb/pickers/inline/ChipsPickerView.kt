@@ -36,10 +36,11 @@ import java.util.*
 abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ) : LinearLayoutCompat(context, attrs, defStyleAttr) {
     //private PopupWindow popupWindow;
-    private lateinit var adapter: SelectableFilterOptionAdapter<ModelType>
+    lateinit var adapter: SelectableFilterOptionAdapter<ModelType>
+        private set
     private lateinit var recyclerView: RecyclerView
     private lateinit var filterInput: TextInputView
     private lateinit var flowLayout: FlowLayout
@@ -246,6 +247,14 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
 
     fun addOption(option: ModelType) {
         adapter.addItem(option)
+    }
+
+    fun selectPositions(positions: List<Int>) {
+        selectedPositions = positions.toIntArray()
+    }
+
+    fun selectPositions(positions: IntArray) {
+        selectedPositions = positions
     }
 
     fun selectItemAt(selection: Int) {
