@@ -12,6 +12,7 @@ import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog.*
@@ -45,13 +46,18 @@ class DialogDateRangePickerView @JvmOverloads constructor(
         readAttributes(context, attrs)
     }
 
+
     @Override
-    override fun initializeDialog(
+    override fun getDialogBuilder(
         fragmentManager: FragmentManager,
         fragmentTag: String,
-    ): BasePickerDialogFragment<DateRange> {
+    ): BaseDialogBuilder<out BasePickerDialogFragment<DateRange>> {
         return DateRangePickerDialogBuilder(null, fragmentManager, fragmentTag)
-            .buildDialog()
+    }
+
+    @Override
+    override fun initializeDialog(): BasePickerDialogFragment<DateRange> {
+        return DateRangePickerDialog()
     }
 
     @Override

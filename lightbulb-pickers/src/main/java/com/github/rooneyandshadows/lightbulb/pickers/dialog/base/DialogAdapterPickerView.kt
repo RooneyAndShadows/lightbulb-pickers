@@ -9,10 +9,12 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView.*
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment.*
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes.*
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter
@@ -50,10 +52,22 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     }
 
     @Override
-    abstract override fun initializeDialog(
+    abstract override fun initializeDialog(): AdapterPickerDialog<ItemType>
+
+    override fun getDialogBuilder(
         fragmentManager: FragmentManager,
         fragmentTag: String,
-    ): BasePickerDialogFragment<IntArray>
+    ): BaseDialogBuilder<out BasePickerDialogFragment<IntArray>> {
+        return AdapterPickerDialogBuilder(
+            null,
+            fragmentManager,
+            fragmentTag,
+            object : AdapterPickerDialogBuilder.AdapterPickerDialogInitializer<AdapterPickerDialog<ItemType>> {
+                override fun initialize(): AdapterPickerDialog<ItemType> {
+                    return initializeDialog()
+                }
+            })
+    }
 
     @Suppress("UNCHECKED_CAST")
     @Override

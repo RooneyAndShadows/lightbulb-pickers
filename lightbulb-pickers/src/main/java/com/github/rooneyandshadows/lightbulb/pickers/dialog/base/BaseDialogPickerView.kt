@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogAnimationTypes
@@ -26,6 +27,7 @@ import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes.NORMAL
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogButtonClickListener
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogCancelListener
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 
@@ -64,10 +66,12 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         get() = pickerDialog.getSelection()
     protected abstract val viewText: String
 
-    protected abstract fun initializeDialog(
+    protected abstract fun getDialogBuilder(
         fragmentManager: FragmentManager,
-        fragmentTag: String
-    ): BasePickerDialogFragment<SelectionType>
+        fragmentTag: String,
+    ): BaseDialogBuilder<out BasePickerDialogFragment<SelectionType>>
+
+    protected abstract fun initializeDialog(): BasePickerDialogFragment<SelectionType>
 
     init {
         isSaveEnabled = true
@@ -330,7 +334,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_dialog_tag_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
-                    pickerDialog = initializeDialog(fragmentManager, dialogTag)
+                    pickerDialog = getDialogBuilder(fragmentManager, dialogTag).buildDialog()
                     onDialogInitialized(pickerDialog)
                 }
                 getString(R.styleable.BaseDialogPickerView_pv_dialog_title).apply {

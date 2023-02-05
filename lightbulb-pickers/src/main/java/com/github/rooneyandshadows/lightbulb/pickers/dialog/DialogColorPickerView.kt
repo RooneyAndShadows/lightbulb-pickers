@@ -19,6 +19,8 @@ import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPi
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 
@@ -57,12 +59,16 @@ class DialogColorPickerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun initializeDialog(
+    override fun getDialogBuilder(
         fragmentManager: FragmentManager,
         fragmentTag: String,
-    ): BasePickerDialogFragment<IntArray> {
+    ): BaseDialogBuilder<out BasePickerDialogFragment<IntArray>> {
         return ColorPickerDialogBuilder(null, fragmentManager, fragmentTag)
-            .buildDialog()
+    }
+
+    @Override
+    override fun initializeDialog(): AdapterPickerDialog<ColorModel> {
+        return ColorPickerDialog()
     }
 
     @Override

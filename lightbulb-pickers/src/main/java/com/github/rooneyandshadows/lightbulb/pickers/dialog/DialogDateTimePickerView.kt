@@ -12,7 +12,9 @@ import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.pickers.R
@@ -43,12 +45,16 @@ class DialogDateTimePickerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun initializeDialog(
+    override fun getDialogBuilder(
         fragmentManager: FragmentManager,
         fragmentTag: String,
-    ): BasePickerDialogFragment<OffsetDateTime> {
+    ): BaseDialogBuilder<out BasePickerDialogFragment<OffsetDateTime>> {
         return DateTimePickerDialogBuilder(null, fragmentManager, fragmentTag)
-            .buildDialog()
+    }
+
+    @Override
+    override fun initializeDialog(): BasePickerDialogFragment<OffsetDateTime> {
+        return DateTimePickerDialog()
     }
 
     @Override

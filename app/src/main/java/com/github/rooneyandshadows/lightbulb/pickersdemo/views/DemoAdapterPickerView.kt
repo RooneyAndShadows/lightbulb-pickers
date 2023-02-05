@@ -7,11 +7,10 @@ import android.util.AttributeSet
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.*
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialogBuilder
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogsdemo.dialogs.DemoSingleSelectionDialog
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
@@ -55,19 +54,8 @@ class DemoAdapterPickerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun initializeDialog(
-        fragmentManager: FragmentManager,
-        fragmentTag: String
-    ): BasePickerDialogFragment<IntArray> {
-        return AdapterPickerDialogBuilder(null,
-            fragmentManager,
-            fragmentTag,
-            object : AdapterPickerDialogBuilder.AdapterPickerDialogInitializer<DemoSingleSelectionDialog> {
-                override fun initialize(): DemoSingleSelectionDialog {
-                    return DemoSingleSelectionDialog()
-                }
-            })
-            .buildDialog()
+    override fun initializeDialog(): AdapterPickerDialog<DemoModel> {
+        return DemoSingleSelectionDialog()
     }
 
     @Override

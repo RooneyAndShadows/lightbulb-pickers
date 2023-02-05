@@ -12,6 +12,7 @@ import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_month.MonthPickerDialog.*
@@ -46,12 +47,16 @@ class DialogMonthPickerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun initializeDialog(
+    override fun getDialogBuilder(
         fragmentManager: FragmentManager,
         fragmentTag: String,
-    ): BasePickerDialogFragment<Month> {
+    ): BaseDialogBuilder<out BasePickerDialogFragment<Month>> {
         return MonthPickerDialogBuilder(null, fragmentManager, fragmentTag)
-            .buildDialog()
+    }
+
+    @Override
+    override fun initializeDialog(): BasePickerDialogFragment<Month> {
+        return MonthPickerDialog()
     }
 
     @Override
