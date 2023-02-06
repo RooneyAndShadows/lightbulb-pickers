@@ -30,11 +30,10 @@ class SelectableFilterOptionAdapter<ItemType : EasyAdapterDataModel> : EasyRecyc
 
     @Override
     override fun onSaveInstanceState(outState: Bundle): Bundle {
-        val state: Bundle = super.saveAdapterState()
+        val state: Bundle = super.onSaveInstanceState(outState)
         outState.apply {
             BundleUtils.putParcelableArrayList(ADAPTER_FILETERED_ITEMS_KEY, this, filteredItems as ArrayList<ItemType>)
         }
-
         return state
     }
 
