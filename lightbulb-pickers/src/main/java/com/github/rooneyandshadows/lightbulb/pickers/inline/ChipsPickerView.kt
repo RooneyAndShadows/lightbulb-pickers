@@ -338,6 +338,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
 
     private fun initializeViews() {
         setupBackground(pickerBackgroundColor)
+        setupAddButton()
         setupInput()
         setupChips()
         setupRecyclerView()
@@ -353,6 +354,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
     private fun setupInput() {
         filterInput!!.removeTextChangedCallback(textWatcher)
         filterInput!!.addTextChangedCallback(textWatcher)
+        filterInput!!.setHintText(pickerHintText)
         filterInput!!.onFocusChangeListener = object : OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if (hasFocus && !isPickerShowing) showPicker()
@@ -366,7 +368,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
             setPadding(pickerGroupPadding)
             itemAnimator = null
             layoutManager = LinearLayoutManager(context)
-            adapter = this.adapter
+            adapter = this@ChipsPickerView.adapter
         }
     }
 
@@ -378,6 +380,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
             val newOptionName = filterInput!!.text
             val newOption = optionCreator.createOption(newOptionName)
             adapter.addItem(newOption)
+            filterInput?.text = ""
             dispatchOptionCreatedEvent(newOption)
         }
         handleAddOptionVisibility()
