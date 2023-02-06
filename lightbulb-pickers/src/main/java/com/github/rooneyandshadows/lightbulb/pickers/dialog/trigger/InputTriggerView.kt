@@ -10,14 +10,15 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.widget.LinearLayout
 import androidx.core.graphics.ColorUtils
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView.InputTypes.*
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+
 
 @Suppress("MemberVisibilityCanBePrivate")
 class InputTriggerView @JvmOverloads constructor(
@@ -40,7 +41,6 @@ class InputTriggerView @JvmOverloads constructor(
         isSaveEnabled = true
         readAttributes(context, attrs)
         inflateView()
-        syncUserInterface()
         setupBackground()
         setupStroke()
         setupEndIcon()
@@ -63,7 +63,11 @@ class InputTriggerView @JvmOverloads constructor(
 
     @Override
     override fun onErrorEnabledChange() {
-        textInputLayout.isErrorEnabled = errorEnabled
+        textInputLayout.apply {
+            post {
+                isErrorEnabled = errorEnabled
+            }
+        }
     }
 
     @Override

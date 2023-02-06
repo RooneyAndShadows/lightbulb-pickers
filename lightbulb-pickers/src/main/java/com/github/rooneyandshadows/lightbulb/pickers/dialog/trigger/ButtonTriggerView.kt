@@ -37,7 +37,6 @@ class ButtonTriggerView @JvmOverloads constructor(
         isSaveEnabled = true
         readAttributes(context, attrs)
         inflateView()
-        syncUserInterface()
         setupBackground()
         setupCornerRadius()
         setupButtonTextColor()

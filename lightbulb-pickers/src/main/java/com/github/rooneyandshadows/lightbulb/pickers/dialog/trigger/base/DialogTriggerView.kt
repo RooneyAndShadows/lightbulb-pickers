@@ -64,6 +64,12 @@ abstract class DialogTriggerView @JvmOverloads constructor(
     }
 
     @Override
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        syncUserInterface()
+    }
+
+    @Override
     override fun isEnabled(): Boolean {
         return super.isEnabled()
     }

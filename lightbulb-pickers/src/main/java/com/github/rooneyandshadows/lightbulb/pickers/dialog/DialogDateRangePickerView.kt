@@ -97,7 +97,7 @@ class DialogDateRangePickerView @JvmOverloads constructor(
     }
 
     fun setDatePickerToText(text: String?) {
-        dialog.setDialogTextFrom(text)
+        dialog.setDialogTextTo(text)
     }
 
     fun getDatePickerFormat(): String {

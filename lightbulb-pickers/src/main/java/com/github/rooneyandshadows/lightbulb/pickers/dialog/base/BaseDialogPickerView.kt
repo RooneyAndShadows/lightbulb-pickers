@@ -217,11 +217,19 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
 
     fun setHintText(hintText: String?) {
         if (!showSelectedTextValue) return
-        triggerView?.setHintText(hintText)
+        triggerView?.apply {
+            post {
+                setHintText(hintText)
+            }
+        }
     }
 
     fun setErrorText(errorText: String?) {
-        triggerView?.setErrorText(errorText)
+        triggerView?.apply {
+            post {
+                setErrorText(errorText)
+            }
+        }
     }
 
     fun getDialogTag(): String? {
@@ -313,6 +321,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         super.addView(child, index, params)
         triggerView!!.apply {
             isEnabled = this@BaseDialogPickerView.isEnabled
+            setText(viewText)
             attachTo(this@BaseDialogPickerView)
             triggerAttachedCallback.forEach {
                 it.onAttached(this, this@BaseDialogPickerView)
