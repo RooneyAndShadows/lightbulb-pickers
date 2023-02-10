@@ -25,9 +25,8 @@ import java.util.*
 abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-    defStyleRes: Int = 0,
-) : BaseDialogPickerView<IntArray>(context, attrs, defStyleAttr, defStyleRes) {
+    defStyleAttr: Int = 0
+) : BaseDialogPickerView<IntArray>(context, attrs, defStyleAttr) {
     private val dialog: AdapterPickerDialog<ItemType>
         get() = (pickerDialog as AdapterPickerDialog<ItemType>)
     protected open val adapter: EasyRecyclerAdapter<ItemType>

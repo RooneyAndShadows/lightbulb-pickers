@@ -21,9 +21,8 @@ import com.google.android.material.button.MaterialButton
 class ButtonTriggerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-    defStyleRes: Int = 0,
-) : DialogTriggerView(context, attrs, defStyleAttr, defStyleRes) {
+    defStyleAttr: Int = 0
+) : DialogTriggerView(context, attrs, defStyleAttr) {
     private lateinit var buttonView: MaterialButton
     private lateinit var errorTextView: AppCompatTextView
     var buttonBackgroundColor: Int = -1

@@ -7,6 +7,7 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.widget.LinearLayout
+import androidx.appcompat.widget.LinearLayoutCompat
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
@@ -16,9 +17,8 @@ import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPicke
 abstract class DialogTriggerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-    defStyleRes: Int = 0,
-) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
+    defStyleAttr: Int = 0
+) : LinearLayoutCompat(context, attrs, defStyleAttr) {
     protected lateinit var pickerView: BaseDialogPickerView<*>
     var icon: Drawable? = null
         private set

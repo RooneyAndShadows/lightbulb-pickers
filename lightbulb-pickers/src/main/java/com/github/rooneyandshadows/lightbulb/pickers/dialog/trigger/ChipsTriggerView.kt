@@ -1,6 +1,7 @@
 package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Parcel
 import android.os.Parcelable
@@ -8,23 +9,26 @@ import android.os.Parcelable.Creator
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatTextView
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
+import com.google.android.material.button.MaterialButton
 
-@Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate")
-class ImageButtonTriggerView @JvmOverloads constructor(
+@Suppress("MemberVisibilityCanBePrivate")
+class ChipsTriggerView @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    attrs: AttributeSet? = null
 ) : DialogTriggerView<SelectionType>(context, attrs, defStyleAttr) {
-    private lateinit var iconButtonView: AppCompatImageButton
+    private lateinit var buttonView: MaterialButton
     private lateinit var errorTextView: AppCompatTextView
     var buttonBackgroundColor: Int = -1
+        private set
+    var buttonTextColor: Int = -1
+        private set
+    var buttonBackgroundCornerRadius = 0
         private set
 
     init {
@@ -32,6 +36,8 @@ class ImageButtonTriggerView @JvmOverloads constructor(
         readAttributes(context, attrs)
         inflateView()
         setupBackground()
+        setupCornerRadius()
+        setupButtonTextColor()
     }
 
     @Override
@@ -44,35 +50,41 @@ class ImageButtonTriggerView @JvmOverloads constructor(
 
     @Override
     override fun onIconChange() {
-        val color = if (iconColor == -1) defaultIconColor else iconColor
-        if (icon != null)
-            icon!!.setTint(color)
-        iconButtonView.setImageDrawable(icon)
+        buttonView.apply {
+            iconTint = ColorStateList(arrayOf(intArrayOf()), intArrayOf(iconColor))
+            icon = this@ChipsTriggerView.icon
+        }
     }
 
     @Override
     override fun onIconColorChange() {
         iconColor.apply color@{
-            iconButtonView.drawable?.apply {
+            buttonView.apply {
                 val colorToSet = if (this@color == -1) defaultIconColor else this@color
-                setTint(colorToSet)
+                iconTint = ColorStateList(arrayOf(intArrayOf()), intArrayOf(colorToSet))
             }
         }
     }
 
     @Override
     override fun onErrorEnabledChange() {
-        errorTextView.visibility = if (errorEnabled) VISIBLE else GONE
+        errorTextView.apply {
+            visibility = if (errorEnabled) VISIBLE else GONE
+        }
     }
 
     @Override
     override fun onTextChange() {
-        // NOT SUPPORTED
+        buttonView.apply {
+            text = this@ChipsTriggerView.text
+        }
     }
 
     @Override
     override fun onHintTextChange() {
-        // NOT SUPPORTED
+        buttonView.apply {
+            text = hintText
+        }
     }
 
     @Override
@@ -91,18 +103,18 @@ class ImageButtonTriggerView @JvmOverloads constructor(
 
     @Override
     override fun onHintTextAppearanceChange() {
-        // NOT SUPPORTED
+        //NOT SUPPORTED
     }
 
     @Override
     override fun onEnabledChange() {
-        iconButtonView.isEnabled = isEnabled
+        buttonView.isEnabled = isEnabled
     }
 
     @Override
     override fun attachTo(pickerView: BaseDialogPickerView<*>) {
         this.pickerView = pickerView
-        iconButtonView.setOnClickListener { requirePickerView().showPickerDialog() }
+        buttonView.setOnClickListener { requirePickerView().showPickerDialog() }
     }
 
     @Override
@@ -120,6 +132,8 @@ class ImageButtonTriggerView @JvmOverloads constructor(
         val superState = super.onSaveInstanceState()
         val myState = SavedState(superState)
         myState.buttonBackgroundColor = buttonBackgroundColor
+        myState.buttonTextColor = buttonTextColor
+        myState.buttonBackgroundCornerRadius = buttonBackgroundCornerRadius
         return myState
     }
 
@@ -128,6 +142,8 @@ class ImageButtonTriggerView @JvmOverloads constructor(
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
         setButtonBackgroundColor(savedState.buttonBackgroundColor)
+        setButtonBackgroundCornerRadius(savedState.buttonBackgroundCornerRadius)
+        setButtonTextColor(savedState.buttonTextColor)
     }
 
     fun setButtonBackgroundColor(backgroundColor: Int) {
@@ -135,25 +151,53 @@ class ImageButtonTriggerView @JvmOverloads constructor(
         setupBackground()
     }
 
+    fun setButtonTextColor(textColor: Int) {
+        this.buttonTextColor = textColor
+        setupButtonTextColor()
+    }
+
+    fun setButtonBackgroundCornerRadius(cornerRadius: Int) {
+        this.buttonBackgroundCornerRadius = cornerRadius
+        setupCornerRadius()
+    }
+
     private fun setupBackground() {
-        iconButtonView.apply {
+        buttonView.apply {
             if (buttonBackgroundColor == -1) setBackgroundColor(Color.TRANSPARENT)
             else setBackgroundColor(buttonBackgroundColor)
         }
     }
 
+    private fun setupButtonTextColor() {
+        buttonView.apply {
+            setTextColor(buttonTextColor)
+        }
+    }
+
+    private fun setupCornerRadius() {
+        buttonView.cornerRadius = buttonBackgroundCornerRadius
+    }
+
     private fun inflateView() {
-        inflate(context, R.layout.dialog_picker_image_button_layout, this) as LinearLayout
-        iconButtonView = findViewById(R.id.picker_view_image_button)
+        inflate(context, R.layout.dialog_picker_button_layout, this) as LinearLayout
+        buttonView = findViewById(R.id.picker_view_button)
         errorTextView = findViewById(R.id.picker_view_error_text_view)
     }
 
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ImageButtonTriggerView, 0, 0)
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ButtonTriggerView, 0, 0)
         try {
             attrTypedArray.apply {
-                getColor(R.styleable.ImageButtonTriggerView_ibtv_background_color, Color.TRANSPARENT).apply {
+                val defBackgroundColor = ResourceUtils.getColorByAttribute(context, R.attr.colorPrimary)
+                val defTextColor = ResourceUtils.getColorByAttribute(context, R.attr.colorOnPrimary)
+                getColor(R.styleable.ButtonTriggerView_btv_background_color, defBackgroundColor).apply {
                     buttonBackgroundColor = this
+                }
+                getColor(R.styleable.ButtonTriggerView_btv_text_color, defBackgroundColor).apply {
+                    buttonTextColor = defTextColor
+                }
+                getInt(R.styleable.ButtonTriggerView_btv_background_corner_radius, 5).apply {
+                    buttonBackgroundCornerRadius = ResourceUtils.dpToPx(this)
                 }
             }
         } finally {
@@ -162,13 +206,17 @@ class ImageButtonTriggerView @JvmOverloads constructor(
     }
 
     private class SavedState : BaseSavedState {
+        var buttonTextColor = -1
         var buttonBackgroundColor = -1
+        var buttonBackgroundCornerRadius = -1
 
         constructor(superState: Parcelable?) : super(superState)
 
         private constructor(parcel: Parcel) : super(parcel) {
             parcel.apply {
+                buttonTextColor = ParcelUtils.readInt(this)!!
                 buttonBackgroundColor = ParcelUtils.readInt(this)!!
+                buttonBackgroundCornerRadius = ParcelUtils.readInt(this)!!
             }
         }
 
@@ -176,7 +224,9 @@ class ImageButtonTriggerView @JvmOverloads constructor(
         override fun writeToParcel(out: Parcel, flags: Int) {
             super.writeToParcel(out, flags)
             out.apply {
+                ParcelUtils.writeInt(this, buttonTextColor)
                 ParcelUtils.writeInt(this, buttonBackgroundColor)
+                ParcelUtils.writeInt(this, buttonBackgroundCornerRadius)
             }
         }
 

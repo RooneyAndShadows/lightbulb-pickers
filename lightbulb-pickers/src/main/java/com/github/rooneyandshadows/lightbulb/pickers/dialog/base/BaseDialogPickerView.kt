@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
@@ -37,8 +38,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    defStyleRes: Int = 0,
-) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
+) : LinearLayoutCompat(context, attrs, defStyleAttr) {
     private lateinit var fragmentManager: FragmentManager
     private val validationCallbacks: MutableList<ValidationCheck<SelectionType>> = mutableListOf()
     private val selectionChangedListeners: MutableList<SelectionChangedListener<SelectionType>> = mutableListOf()
@@ -46,7 +46,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     protected lateinit var pickerDialog: BasePickerDialogFragment<SelectionType>
         private set
     protected var dataBindingListener: SelectionChangedListener<SelectionType>? = null
-    protected var triggerView: DialogTriggerView? = null
+    protected var triggerView: DialogTriggerView<SelectionType>? = null
         private set
     var showSelectedTextValue = false
         protected set
@@ -449,7 +449,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     }
 
     interface TriggerAttachedCallback<SelectionType> {
-        fun onAttached(triggerView: DialogTriggerView, pickerView: BaseDialogPickerView<SelectionType>)
+        fun onAttached(triggerView: DialogTriggerView<SelectionType>, pickerView: BaseDialogPickerView<SelectionType>)
     }
 
     private class SavedState : BaseSavedState {

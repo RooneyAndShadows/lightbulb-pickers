@@ -24,9 +24,8 @@ import com.google.android.material.textfield.TextInputLayout
 class InputTriggerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-    defStyleRes: Int = 0,
-) : DialogTriggerView(context, attrs, defStyleAttr, defStyleRes) {
+    defStyleAttr: Int = 0
+) : DialogTriggerView(context, attrs, defStyleAttr) {
     private lateinit var textInputLayout: TextInputLayout
     private lateinit var textInputEditText: TextInputEditText
     private lateinit var inputType: InputTypes
