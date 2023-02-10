@@ -115,24 +115,39 @@ object MenuConfigurations {
                 slider.closeSlider()
                 route().toDemoDateRange().replace()
             }
+        ).addMenuItem(
+            PrimaryMenuItem(
+                -1,
+                ResourceUtils.getPhrase(context, R.string.time_picker_demo_text),
+                null,
+                AppIconUtils.getIconWithAttributeColor(
+                    context,
+                    DemoIconsUi.ICON_MENU_TIME_PICKER,
+                    R.attr.colorOnBackground,
+                    R.dimen.ICON_SIZE_MENU
+                ),
+                1
+            ) { slider: SliderMenu ->
+                slider.closeSlider()
+                route().toDemoTime().replace()
+            }
+        ).addMenuItem(
+            PrimaryMenuItem(
+                -1,
+                ResourceUtils.getPhrase(context, R.string.chips_picker_demo_text),
+                null,
+                AppIconUtils.getIconWithAttributeColor(
+                    context,
+                    DemoIconsUi.ICON_MENU_TIME_PICKER,
+                    R.attr.colorOnBackground,
+                    R.dimen.ICON_SIZE_MENU
+                ),
+                1
+            ) { slider: SliderMenu ->
+                slider.closeSlider()
+                route().toDemoChips().replace()
+            }
         )
-            .addMenuItem(
-                PrimaryMenuItem(
-                    -1,
-                    ResourceUtils.getPhrase(context, R.string.time_picker_demo_text),
-                    null,
-                    AppIconUtils.getIconWithAttributeColor(
-                        context,
-                        DemoIconsUi.ICON_MENU_TIME_PICKER,
-                        R.attr.colorOnBackground,
-                        R.dimen.ICON_SIZE_MENU
-                    ),
-                    1
-                ) { slider: SliderMenu ->
-                    slider.closeSlider()
-                    route().toDemoTime().replace()
-                }
-            )
         return configuration
     }
 }

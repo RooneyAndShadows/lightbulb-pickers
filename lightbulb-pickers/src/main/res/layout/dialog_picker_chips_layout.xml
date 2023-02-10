@@ -1,0 +1,22 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:parentTag="androidx.appcompat.widget.LinearLayoutCompat">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <com.nex3z.flowlayout.FlowLayout
+            android:id="@+id/chipsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:flMaxRows="2" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/picker_view_error_text_view"
+        style="@style/PickerViewErrorTextView" />
+</merge>

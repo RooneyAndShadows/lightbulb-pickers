@@ -346,7 +346,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
     }
 
     private fun renderLayout() {
-        inflate(context, R.layout.chips_picker_layout, this) as LinearLayoutCompat
+        inflate(context, R.layout.inline_chips_picker_layout, this) as LinearLayoutCompat
         flowLayout = findViewById(R.id.picker_flow_layout)
         filterInput = findViewById(R.id.picker_filter_input_view)
     }
@@ -434,7 +434,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
     private fun buildChip(targetItem: ModelType): View {
         val itemName = targetItem.itemName
         val layoutInflater = LayoutInflater.from(context)
-        val layoutId = R.layout.chips_picker_chip
+        val layoutId = R.layout.inline_chips_picker_chip
         return layoutInflater.inflate(layoutId, null, false).apply {
             background = ResourceUtils.getDrawable(context, R.drawable.bg_chip_picker_item)
             findViewById<AppCompatImageButton>(R.id.picker_chip_item_remove_button).apply {
@@ -445,7 +445,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
                 setImageDrawable(chipRemoveIcon)
                 setOnClickListener { adapter.selectItem(targetItem, false) }
             }
-            findViewById<TextView>(R.id.picker_chip_item_text_view).apply {
+            findViewById<TextView>(R.id.chip_item_text_view).apply {
                 text = itemName
                 setTextColor(ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface))
                 compoundDrawablePadding = ResourceUtils.getDimenPxById(context, R.dimen.chips_picker_spacing_size)

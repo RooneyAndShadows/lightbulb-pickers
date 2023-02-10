@@ -29,8 +29,7 @@ class DialogColorPickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    defStyleRes: Int = 0,
-) : DialogAdapterPickerView<ColorModel>(context, attrs, defStyleAttr, defStyleRes) {
+) : DialogAdapterPickerView<ColorModel>(context, attrs, defStyleAttr) {
     override val adapter: ColorPickerAdapter
         get() {
             val dialog = (pickerDialog as ColorPickerDialog)

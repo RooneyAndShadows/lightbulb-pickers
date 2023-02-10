@@ -7,7 +7,7 @@
     android:paddingEnd="@dimen/chips_picker_spacing_size">
 
     <TextView
-        android:id="@+id/picker_chip_item_text_view"
+        android:id="@+id/chip_item_text_view"
         android:layout_width="0dp"
         android:layout_height="@dimen/chips_picker_chip_height"
         android:layout_weight="1"

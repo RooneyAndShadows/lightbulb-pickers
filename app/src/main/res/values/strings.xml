@@ -35,4 +35,6 @@
     <string name="date_range_picker_demo_text">Date range picker demo</string>
     <!-- TIME PICKER DEMO STRINGS -->
     <string name="time_picker_demo_text">Time picker demo</string>
+    <!-- CHIPS PICKER DEMO STRINGS -->
+    <string name="chips_picker_demo_text">Chips picker demo</string>
 </resources>

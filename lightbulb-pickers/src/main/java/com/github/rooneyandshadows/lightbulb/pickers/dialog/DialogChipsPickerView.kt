@@ -6,30 +6,24 @@ import android.os.Parcelable
 import android.os.Parcelable.Creator
 import android.util.AttributeSet
 import android.util.SparseArray
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
-import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerAdapter
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerAdapter.ChipModel
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerDialog
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter.IconModel
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
 
 @Suppress("unused")
-class ChipsPickerView @JvmOverloads constructor(
+class DialogChipsPickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ) : DialogAdapterPickerView<ChipModel>(context, attrs, defStyleAttr) {
-    var selectedIconSize = 0
-        private set
     override val adapter: ChipsPickerAdapter
         get() {
             val dialog = (pickerDialog as ChipsPickerDialog)
@@ -44,11 +38,7 @@ class ChipsPickerView @JvmOverloads constructor(
     override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
         super.onDialogInitialized(dialog)
         dialog.apply {
-            addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
-                override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
-                    updatePickerIcon(newSelection)
-                }
-            })
+
         }
     }
 
@@ -62,7 +52,7 @@ class ChipsPickerView @JvmOverloads constructor(
         fragmentManager: FragmentManager,
         fragmentTag: String,
     ): BaseDialogBuilder<out BasePickerDialogFragment<IntArray>> {
-        return IconPickerDialogBuilder(null, fragmentManager, fragmentTag)
+        return ChipsPickerDialogBuilder(null, fragmentManager, fragmentTag)
     }
 
     @Override
@@ -79,7 +69,6 @@ class ChipsPickerView @JvmOverloads constructor(
     override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val myState = SavedState(superState)
-        myState.selectedIconSize = selectedIconSize
         return myState
     }
 
@@ -87,51 +76,31 @@ class ChipsPickerView @JvmOverloads constructor(
     override fun onRestoreInstanceState(state: Parcelable) {
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
-        selectedIconSize = savedState.selectedIconSize
-        updatePickerIcon(selection)
-    }
 
-    fun setSelectedIconSize(size: Int) {
-        this.selectedIconSize = size
-        updatePickerIcon(selection)
-    }
-
-    private fun updatePickerIcon(selection: IntArray?) {
-        val icon = if (selection != null && selection.isNotEmpty()) {
-            val firstSelectedPosition = selection[0]
-            val selectedModel: IconModel = adapter.getItem(firstSelectedPosition)!!
-            val drawable = adapter.getDrawable(context, selectedModel, selectedIconSize)
-            drawable
-        } else null
-        setPickerIcon(icon)
     }
 
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogIconPickerView, 0, 0)
         try {
             attrTypedArray.apply {
-                val default = ResourceUtils.getDimenPxById(context, R.dimen.icon_picker_selected_size)
-                selectedIconSize = getDimensionPixelSize(R.styleable.DialogIconPickerView_ipv_selected_icon_size, default)
+
             }
-            showSelectedTextValue = false
+            showSelectedTextValue = true
         } finally {
             attrTypedArray.recycle()
         }
     }
 
     private class SavedState : BaseSavedState {
-        var selectedIconSize = 0
 
         constructor(superState: Parcelable?) : super(superState)
 
         private constructor(parcel: Parcel) : super(parcel) {
-            selectedIconSize = parcel.readInt()
         }
 
         @Override
         override fun writeToParcel(out: Parcel, flags: Int) {
             super.writeToParcel(out, flags)
-            out.writeInt(selectedIconSize)
         }
 
         @Override
@@ -151,7 +120,7 @@ class ChipsPickerView @JvmOverloads constructor(
     }
 
     object Databinding {
-        @BindingAdapter(value = ["iconPickerSelection"])
+        /*@BindingAdapter(value = ["iconPickerSelection"])
         @JvmStatic
         fun setIcon(view: ChipsPickerView, newIconName: String?) {
             if (newIconName.isNullOrBlank()) {
@@ -185,6 +154,6 @@ class ChipsPickerView @JvmOverloads constructor(
                     bindingListener.onChange()
                 }
             }
-        }
+        }*/
     }
 }

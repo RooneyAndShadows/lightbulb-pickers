@@ -1,5 +1,6 @@
 package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -8,36 +9,40 @@ import android.os.Parcelable
 import android.os.Parcelable.Creator
 import android.util.AttributeSet
 import android.util.SparseArray
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.LinearLayoutCompat
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 import com.google.android.material.button.MaterialButton
+import com.nex3z.flowlayout.FlowLayout
 
 @Suppress("MemberVisibilityCanBePrivate")
 class ChipsTriggerView @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null
-) : DialogTriggerView<SelectionType>(context, attrs, defStyleAttr) {
-    private lateinit var buttonView: MaterialButton
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+) : DialogTriggerView(context, attrs, defStyleAttr) {
+    private lateinit var flowLayout: FlowLayout
     private lateinit var errorTextView: AppCompatTextView
-    var buttonBackgroundColor: Int = -1
-        private set
-    var buttonTextColor: Int = -1
-        private set
-    var buttonBackgroundCornerRadius = 0
-        private set
 
     init {
+        orientation = VERTICAL
+        isClickable = true
         isSaveEnabled = true
         readAttributes(context, attrs)
         inflateView()
-        setupBackground()
-        setupCornerRadius()
-        setupButtonTextColor()
+    }
+
+    @Override
+    override fun isClickable(): Boolean {
+        return true
     }
 
     @Override
@@ -50,20 +55,12 @@ class ChipsTriggerView @JvmOverloads constructor(
 
     @Override
     override fun onIconChange() {
-        buttonView.apply {
-            iconTint = ColorStateList(arrayOf(intArrayOf()), intArrayOf(iconColor))
-            icon = this@ChipsTriggerView.icon
-        }
+        //Not supported
     }
 
     @Override
     override fun onIconColorChange() {
-        iconColor.apply color@{
-            buttonView.apply {
-                val colorToSet = if (this@color == -1) defaultIconColor else this@color
-                iconTint = ColorStateList(arrayOf(intArrayOf()), intArrayOf(colorToSet))
-            }
-        }
+        //Not supported
     }
 
     @Override
@@ -75,16 +72,15 @@ class ChipsTriggerView @JvmOverloads constructor(
 
     @Override
     override fun onTextChange() {
-        buttonView.apply {
-            text = this@ChipsTriggerView.text
-        }
+        println(text)
+        updateChips()
     }
 
     @Override
     override fun onHintTextChange() {
-        buttonView.apply {
-            text = hintText
-        }
+        //buttonView.apply {
+        //    text = hintText
+        //}
     }
 
     @Override
@@ -108,13 +104,16 @@ class ChipsTriggerView @JvmOverloads constructor(
 
     @Override
     override fun onEnabledChange() {
-        buttonView.isEnabled = isEnabled
+        // buttonView.isEnabled = isEnabled
     }
 
     @Override
     override fun attachTo(pickerView: BaseDialogPickerView<*>) {
         this.pickerView = pickerView
-        buttonView.setOnClickListener { requirePickerView().showPickerDialog() }
+        setOnClickListener {
+            println("sssssssssssss")
+            requirePickerView().showPickerDialog()
+        }
     }
 
     @Override
@@ -131,9 +130,6 @@ class ChipsTriggerView @JvmOverloads constructor(
     override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val myState = SavedState(superState)
-        myState.buttonBackgroundColor = buttonBackgroundColor
-        myState.buttonTextColor = buttonTextColor
-        myState.buttonBackgroundCornerRadius = buttonBackgroundCornerRadius
         return myState
     }
 
@@ -141,46 +137,11 @@ class ChipsTriggerView @JvmOverloads constructor(
     override fun onRestoreInstanceState(state: Parcelable) {
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
-        setButtonBackgroundColor(savedState.buttonBackgroundColor)
-        setButtonBackgroundCornerRadius(savedState.buttonBackgroundCornerRadius)
-        setButtonTextColor(savedState.buttonTextColor)
-    }
-
-    fun setButtonBackgroundColor(backgroundColor: Int) {
-        buttonBackgroundColor = backgroundColor
-        setupBackground()
-    }
-
-    fun setButtonTextColor(textColor: Int) {
-        this.buttonTextColor = textColor
-        setupButtonTextColor()
-    }
-
-    fun setButtonBackgroundCornerRadius(cornerRadius: Int) {
-        this.buttonBackgroundCornerRadius = cornerRadius
-        setupCornerRadius()
-    }
-
-    private fun setupBackground() {
-        buttonView.apply {
-            if (buttonBackgroundColor == -1) setBackgroundColor(Color.TRANSPARENT)
-            else setBackgroundColor(buttonBackgroundColor)
-        }
-    }
-
-    private fun setupButtonTextColor() {
-        buttonView.apply {
-            setTextColor(buttonTextColor)
-        }
-    }
-
-    private fun setupCornerRadius() {
-        buttonView.cornerRadius = buttonBackgroundCornerRadius
     }
 
     private fun inflateView() {
-        inflate(context, R.layout.dialog_picker_button_layout, this) as LinearLayout
-        buttonView = findViewById(R.id.picker_view_button)
+        inflate(context, R.layout.dialog_picker_chips_layout, this) as LinearLayoutCompat
+        flowLayout = findViewById(R.id.chipsContainer)
         errorTextView = findViewById(R.id.picker_view_error_text_view)
     }
 
@@ -188,20 +149,29 @@ class ChipsTriggerView @JvmOverloads constructor(
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ButtonTriggerView, 0, 0)
         try {
             attrTypedArray.apply {
-                val defBackgroundColor = ResourceUtils.getColorByAttribute(context, R.attr.colorPrimary)
-                val defTextColor = ResourceUtils.getColorByAttribute(context, R.attr.colorOnPrimary)
-                getColor(R.styleable.ButtonTriggerView_btv_background_color, defBackgroundColor).apply {
-                    buttonBackgroundColor = this
-                }
-                getColor(R.styleable.ButtonTriggerView_btv_text_color, defBackgroundColor).apply {
-                    buttonTextColor = defTextColor
-                }
-                getInt(R.styleable.ButtonTriggerView_btv_background_corner_radius, 5).apply {
-                    buttonBackgroundCornerRadius = ResourceUtils.dpToPx(this)
-                }
+
             }
         } finally {
             attrTypedArray.recycle()
+        }
+    }
+
+    private fun updateChips() {
+        flowLayout.apply {
+            removeAllViews()
+            text?.apply {
+                split(",").forEach { chipTitle ->
+                    addView(inflateChip(chipTitle))
+                }
+            }
+        }
+    }
+
+    @SuppressLint("InflateParams")
+    fun inflateChip(title: String): View {
+        return LayoutInflater.from(context).inflate(R.layout.dialog_picker_chip_item, null).apply {
+            val titleTextView: TextView = findViewById(R.id.chip_item_text_view)
+            titleTextView.text = title
         }
     }
 

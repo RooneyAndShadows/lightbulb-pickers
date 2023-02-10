@@ -10,6 +10,7 @@ import android.util.SparseArray
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.LinearLayoutCompat
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
@@ -20,8 +21,8 @@ import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogT
 class ImageButtonTriggerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : DialogTriggerView<SelectionType>(context, attrs, defStyleAttr) {
+    defStyleAttr: Int = 0,
+) : DialogTriggerView(context, attrs, defStyleAttr) {
     private lateinit var iconButtonView: AppCompatImageButton
     private lateinit var errorTextView: AppCompatTextView
     var buttonBackgroundColor: Int = -1
@@ -143,7 +144,7 @@ class ImageButtonTriggerView @JvmOverloads constructor(
     }
 
     private fun inflateView() {
-        inflate(context, R.layout.dialog_picker_image_button_layout, this) as LinearLayout
+        inflate(context, R.layout.dialog_picker_image_button_layout, this) as LinearLayoutCompat
         iconButtonView = findViewById(R.id.picker_view_image_button)
         errorTextView = findViewById(R.id.picker_view_error_text_view)
     }

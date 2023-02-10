@@ -46,7 +46,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     protected lateinit var pickerDialog: BasePickerDialogFragment<SelectionType>
         private set
     protected var dataBindingListener: SelectionChangedListener<SelectionType>? = null
-    protected var triggerView: DialogTriggerView<SelectionType>? = null
+    protected var triggerView: DialogTriggerView? = null
         private set
     var showSelectedTextValue = false
         protected set
@@ -449,7 +449,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     }
 
     interface TriggerAttachedCallback<SelectionType> {
-        fun onAttached(triggerView: DialogTriggerView<SelectionType>, pickerView: BaseDialogPickerView<SelectionType>)
+        fun onAttached(triggerView: DialogTriggerView, pickerView: BaseDialogPickerView<SelectionType>)
     }
 
     private class SavedState : BaseSavedState {

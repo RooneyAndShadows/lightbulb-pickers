@@ -26,8 +26,7 @@ class DialogDateTimePickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    defStyleRes: Int = 0,
-) : BaseDialogPickerView<OffsetDateTime>(context, attrs, defStyleAttr, defStyleRes) {
+) : BaseDialogPickerView<OffsetDateTime>(context, attrs, defStyleAttr) {
     private val dialog: DateTimePickerDialog
         get() = pickerDialog as DateTimePickerDialog
     var datePickerFormat: String = DEFAULT_DATE_FORMAT

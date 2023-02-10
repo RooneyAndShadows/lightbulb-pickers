@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.LinearLayoutCompat
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
@@ -181,7 +182,7 @@ class ButtonTriggerView @JvmOverloads constructor(
     }
 
     private fun inflateView() {
-        inflate(context, R.layout.dialog_picker_button_layout, this) as LinearLayout
+        inflate(context, R.layout.dialog_picker_button_layout, this) as LinearLayoutCompat
         buttonView = findViewById(R.id.picker_view_button)
         errorTextView = findViewById(R.id.picker_view_error_text_view)
     }

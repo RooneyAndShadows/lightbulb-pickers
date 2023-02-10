@@ -9,6 +9,7 @@ import android.os.Parcelable.Creator
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.widget.LinearLayout
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.graphics.ColorUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
@@ -183,8 +184,8 @@ class InputTriggerView @JvmOverloads constructor(
 
     private fun inflateView() {
         when (inputType) {
-            BOXED -> inflate(context, R.layout.dialog_picker_boxed_layout, this) as LinearLayout
-            OUTLINED -> inflate(context, R.layout.dialog_picker_outlined_layout, this) as LinearLayout
+            BOXED -> inflate(context, R.layout.dialog_picker_boxed_layout, this) as LinearLayoutCompat
+            OUTLINED -> inflate(context, R.layout.dialog_picker_outlined_layout, this) as LinearLayoutCompat
         }
         textInputLayout = findViewById(R.id.picker_view_input_layout_view)
         textInputEditText = findViewById(R.id.picker_view_input_edit_text_view)

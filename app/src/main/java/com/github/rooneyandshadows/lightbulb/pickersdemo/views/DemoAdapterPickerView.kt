@@ -28,8 +28,7 @@ class DemoAdapterPickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    defStyleRes: Int = 0,
-) : DialogAdapterPickerView<DemoModel>(context, attrs, defStyleAttr, defStyleRes) {
+) : DialogAdapterPickerView<DemoModel>(context, attrs, defStyleAttr) {
 
     init {
         readAttributes(context, attrs)

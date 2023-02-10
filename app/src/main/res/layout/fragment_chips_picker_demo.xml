@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.chips_picker.VMChipsPickerDemo" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?colorActionBarBackground"
+            app:contentInsetStart="0dp">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/app_bar_layout"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:padding="15dp">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+
+                    <include
+                        layout="@layout/layout_option_title"
+                        app:optionTitle="@{@string/picker_trigger_input_boxed_text}" />
+
+                    <com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogChipsPickerView
+                        android:id="@+id/pickerViewChips"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:pv_dialog_animation="transition_from_left_to_right"
+                        app:pv_dialog_button_negative_text="@string/picker_cancel_text"
+                        app:pv_dialog_button_positive_text="@string/picker_ok_text"
+                        app:pv_dialog_message="@string/icon_picker_dialog_subtitle_text"
+                        app:pv_dialog_tag="DEMO_PICKER_TAG_BOXED"
+                        app:pv_dialog_title="@string/icon_picker_dialog_title_text"
+                        app:pv_required="true"
+                        app:pv_required_text="@string/icon_picker_required_text">
+
+                        <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ChipsTriggerView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:dtv_hint_text="@string/adapter_picker_pick_item_text"
+                            app:itv_icon_use_alpha="false" />
+                    </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogChipsPickerView>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.core.widget.NestedScrollView>
+    </RelativeLayout>
+</layout>

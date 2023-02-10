@@ -26,8 +26,7 @@ class DialogIconPickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    defStyleRes: Int = 0,
-) : DialogAdapterPickerView<IconModel>(context, attrs, defStyleAttr, defStyleRes) {
+) : DialogAdapterPickerView<IconModel>(context, attrs, defStyleAttr) {
     var selectedIconSize = 0
         private set
     override val adapter: IconPickerAdapter
