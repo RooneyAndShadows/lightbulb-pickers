@@ -113,12 +113,14 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         dialog.apply {
             addOnPositiveClickListener(object : DialogButtonClickListener {
                 override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
-                    updateTextAndValidate()
+                    validate()
+                    //updateTextAndValidate()
                 }
             })
             addOnNegativeClickListeners(object : DialogButtonClickListener {
                 override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
-                    updateTextAndValidate()
+                    validate()
+                    //updateTextAndValidate()
                 }
             })
             addOnCancelListener(object : DialogCancelListener {

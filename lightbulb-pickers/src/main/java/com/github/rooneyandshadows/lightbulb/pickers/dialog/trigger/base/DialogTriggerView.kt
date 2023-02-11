@@ -17,18 +17,18 @@ import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPicke
 abstract class DialogTriggerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ) : LinearLayoutCompat(context, attrs, defStyleAttr) {
     protected lateinit var pickerView: BaseDialogPickerView<*>
     var icon: Drawable? = null
         private set
     var errorEnabled: Boolean = false
         private set
-    var text: String? = null
+    var text: String? = ""
         private set
-    var hintText: String? = null
+    var hintText: String? = ""
         private set
-    var errorText: String? = null
+    var errorText: String? = ""
         private set
     var iconColor: Int = -1
         private set
@@ -76,6 +76,7 @@ abstract class DialogTriggerView @JvmOverloads constructor(
 
     @Override
     override fun setEnabled(enabled: Boolean) {
+        if (this.isEnabled == enabled) return
         super.setEnabled(enabled)
         onEnabledChange()
     }
@@ -91,36 +92,44 @@ abstract class DialogTriggerView @JvmOverloads constructor(
     }
 
     fun setErrorEnabled(errorEnabled: Boolean) {
+        if (this.errorEnabled == errorEnabled) return
         this.errorEnabled = errorEnabled
         onErrorEnabledChange()
     }
 
     fun setText(text: String?) {
+        if (this.text == text)
+            return
         this.text = text
         onTextChange()
     }
 
     fun setHintText(hintText: String?) {
+        if (this.hintText == hintText) return
         this.hintText = hintText
         onHintTextChange()
     }
 
     fun setErrorText(errorText: String?) {
+        if (this.errorText == errorText) return
         this.errorText = errorText
         onErrorTextChange()
     }
 
     fun setIconColor(iconColor: Int) {
+        if (this.iconColor == iconColor) return
         this.iconColor = iconColor
         onIconColorChange()
     }
 
     fun setErrorTextAppearance(errorTextAppearance: Int) {
+        if (this.errorTextAppearance == errorTextAppearance) return
         this.errorTextAppearance = errorTextAppearance
         onErrorTextAppearanceChange()
     }
 
     fun setHintTextAppearance(hintTextAppearance: Int) {
+        if (this.hintTextAppearance == hintTextAppearance) return
         this.hintTextAppearance = hintTextAppearance
         onHintTextAppearanceChange()
     }
