@@ -22,6 +22,7 @@ import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 import com.nex3z.flowlayout.FlowLayout
+import kotlin.math.ceil
 
 @Suppress("MemberVisibilityCanBePrivate")
 class ChipsTriggerView @JvmOverloads constructor(
@@ -196,21 +197,23 @@ class ChipsTriggerView @JvmOverloads constructor(
                     return@chipTitle
                 }
                 flowLayoutContainer.layoutParams.height = WRAP_CONTENT
-                split(",").forEach { chipTitle ->
-                    hintTextView.visibility = GONE
-                    addView(inflateChip(chipTitle.trim()))
+                hintTextView.visibility = GONE
+                split(",").apply {
+                    generateViewsForFlowLayout(this).forEach {
+                        addView(it)
+                    }
                 }
             }
         }
     }
 
-    private fun generateViewsForFlowLayout(elements: Array<String>): List<View> {
+    private fun generateViewsForFlowLayout(elements: List<String>): List<View> {
         val result = mutableListOf<View>()
         var requiredWidth = 0
         val widthMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
         val heightMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
         val chipSpacing = ResourceUtils.getDimenPxById(context, R.dimen.trigger_view_chips_items_spacing)
-        val maxWidth = layoutParams.width
+        val maxWidth = flowLayout.measuredWidth - flowLayout.paddingStart - paddingEnd
         var fitElements = 0
         elements.apply {
             for (i in 0 until size) {
@@ -218,7 +221,7 @@ class ChipsTriggerView @JvmOverloads constructor(
                 val chipView = inflateChip(chipTitle)
                 chipView.measure(widthMeasureSpec, heightMeasureSpec)
                 val widthToAdd = (chipView.measuredWidth + chipSpacing)
-                val requiredRows = (requiredWidth + widthToAdd) / maxWidth
+                val requiredRows = ceil((requiredWidth.toDouble() + widthToAdd) / maxWidth).toInt()
                 val chipWillFit = requiredRows <= maxRows
                 if (chipWillFit) {
                     result.add(chipView)
@@ -241,23 +244,30 @@ class ChipsTriggerView @JvmOverloads constructor(
         maxWidth: Int,
         spacing: Int,
     ) {
+        val widthMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
+        val heightMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
         val nHiddenViewsLayout = TextView(context).apply {
             val padding = ResourceUtils.getDimenPxById(context, R.dimen.trigger_view_chips_items_spacing)
             val nMoreItemsText = nMoreItemsFormat.format(hiddenItemsCount)
             setPadding(padding)
             text = nMoreItemsText
-            val widthMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
-            val heightMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
             measure(widthMeasureSpec, heightMeasureSpec)
         }
         val requiredWidth = nHiddenViewsLayout.measuredWidth + spacing
-        var willViewFit = ((currentRequiredWidth + requiredWidth) / maxWidth) <= maxRows
+        var willViewFit = ceil((currentRequiredWidth.toDouble() + requiredWidth) / maxWidth) <= maxRows
         var newRequiredWidth = currentRequiredWidth
+        var newHiddenViewsCount = hiddenItemsCount
         while (!willViewFit && flowLayoutViews.isNotEmpty()) {
             val viewToRemove = flowLayoutViews.removeLast()
             val widthToRemove = viewToRemove.measuredWidth + spacing
+            newHiddenViewsCount++
+            nHiddenViewsLayout.apply {
+                val nMoreItemsText = nMoreItemsFormat.format(newHiddenViewsCount)
+                text = nMoreItemsText
+                measure(widthMeasureSpec, heightMeasureSpec)
+            }
             newRequiredWidth -= widthToRemove
-            willViewFit = ((newRequiredWidth + requiredWidth) / maxWidth) <= maxRows
+            willViewFit = ceil((newRequiredWidth.toDouble() + requiredWidth) / maxWidth) <= maxRows
         }
         flowLayoutViews.add(nHiddenViewsLayout)
     }
