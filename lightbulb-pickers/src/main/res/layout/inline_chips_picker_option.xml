@@ -7,15 +7,15 @@
     <TextView
         android:id="@+id/chipOptionTextView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/chips_picker_chip_option_height"
+        android:layout_height="@dimen/inline_chips_picker_chip_option_height"
         android:layout_alignParentTop="true"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:ellipsize="marquee"
         android:focusable="true"
         android:gravity="center_vertical"
-        android:paddingStart="@dimen/chips_picker_spacing_size"
-        android:paddingEnd="@dimen/chips_picker_spacing_size"
+        android:paddingStart="@dimen/inline_chips_picker_spacing_size"
+        android:paddingEnd="@dimen/inline_chips_picker_spacing_size"
         android:textAppearance="@android:style/TextAppearance"
         tools:text="Option" />
 

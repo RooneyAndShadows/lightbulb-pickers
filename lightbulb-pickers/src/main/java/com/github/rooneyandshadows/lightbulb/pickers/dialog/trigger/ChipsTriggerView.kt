@@ -2,8 +2,6 @@ package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Parcel
 import android.os.Parcelable
 import android.os.Parcelable.Creator
@@ -11,16 +9,16 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.graphics.ColorUtils
+import androidx.core.view.setPadding
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
-import com.google.android.material.button.MaterialButton
 import com.nex3z.flowlayout.FlowLayout
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -33,11 +31,10 @@ class ChipsTriggerView @JvmOverloads constructor(
     private lateinit var errorTextView: AppCompatTextView
 
     init {
-        orientation = VERTICAL
-        isClickable = true
         isSaveEnabled = true
         readAttributes(context, attrs)
         inflateView()
+        setupView()
     }
 
     @Override
@@ -143,6 +140,14 @@ class ChipsTriggerView @JvmOverloads constructor(
         inflate(context, R.layout.dialog_picker_chips_layout, this) as LinearLayoutCompat
         flowLayout = findViewById(R.id.chipsContainer)
         errorTextView = findViewById(R.id.picker_view_error_text_view)
+    }
+
+    private fun setupView() {
+        val padding = ResourceUtils.getDimenPxById(context, R.dimen.trigger_view_chips_items_spacing)
+        orientation = VERTICAL
+        isClickable = true
+        background = ResourceUtils.getDrawable(context, R.drawable.dialog_chips_trigger_bg)
+        setPadding(padding)
     }
 
     private fun readAttributes(context: Context, attrs: AttributeSet?) {

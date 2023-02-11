@@ -18,7 +18,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:padding">@dimen/trigger_view_padding</item>
-        <item name="android:background">@drawable/picker_view_icon_button_background</item>
+        <item name="android:background">@drawable/picker_view_icon_button_bg</item>
     </style>
 
 

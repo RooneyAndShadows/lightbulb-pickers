@@ -13,7 +13,9 @@
             android:id="@+id/chipsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:flMaxRows="2" />
+            app:flChildSpacing="@dimen/spacing_size_small"
+            app:flMaxRows="2"
+            app:flRowSpacing="@dimen/spacing_size_small" />
     </RelativeLayout>
 
     <TextView

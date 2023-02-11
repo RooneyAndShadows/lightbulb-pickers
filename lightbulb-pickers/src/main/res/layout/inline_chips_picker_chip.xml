@@ -3,13 +3,13 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingStart="@dimen/chips_picker_spacing_size"
-    android:paddingEnd="@dimen/chips_picker_spacing_size">
+    android:paddingStart="@dimen/inline_chips_picker_spacing_size"
+    android:paddingEnd="@dimen/inline_chips_picker_spacing_size">
 
     <TextView
         android:id="@+id/chip_item_text_view"
         android:layout_width="0dp"
-        android:layout_height="@dimen/chips_picker_chip_height"
+        android:layout_height="@dimen/inline_chips_picker_chip_height"
         android:layout_weight="1"
         android:ellipsize="marquee"
         android:gravity="center_vertical"
@@ -19,10 +19,10 @@
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/picker_chip_item_remove_button"
-        android:layout_width="@dimen/chips_picker_chip_remove_button_size"
-        android:layout_height="@dimen/chips_picker_chip_remove_button_size"
+        android:layout_width="@dimen/inline_chips_picker_chip_remove_button_size"
+        android:layout_height="@dimen/inline_chips_picker_chip_remove_button_size"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="@dimen/chips_picker_spacing_size"
-        tools:src="@drawable/chip_picker_remove_icon" />
+        android:layout_marginStart="@dimen/inline_chips_picker_spacing_size"
+        tools:src="@drawable/inline_chip_picker_remove_icon" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

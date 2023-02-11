@@ -8,8 +8,8 @@
         android:id="@+id/picker_flow_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:flChildSpacing="@dimen/chips_picker_spacing_size"
-        app:flRowSpacing="@dimen/chips_picker_spacing_size">
+        app:flChildSpacing="@dimen/inline_chips_picker_spacing_size"
+        app:flRowSpacing="@dimen/inline_chips_picker_spacing_size">
 
     </com.nex3z.flowlayout.FlowLayout>
 
@@ -24,7 +24,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/picker_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/chips_picker_recycler_height"
+        android:layout_height="@dimen/inline_chips_picker_recycler_height"
         android:overScrollMode="never"
         android:visibility="gone">
 

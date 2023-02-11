@@ -293,7 +293,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
                 )
                 val defaultChipGroupPadding = ResourceUtils.getDimenPxById(
                     getContext(),
-                    R.dimen.chips_picker_chip_group_padding
+                    R.dimen.inline_chips_picker_chip_group_padding
                 )
                 getString(R.styleable.ChipsPickerView_cpv_hint_text).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_chips_default_hint)
@@ -373,7 +373,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
     }
 
     private fun setupAddButton() {
-        val icon = ResourceUtils.getDrawable(context, R.drawable.chip_picker_add_icon)
+        val icon = ResourceUtils.getDrawable(context, R.drawable.inline_chip_picker_add_icon)
         icon!!.setTint(ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface))
         filterInput?.setEndIcon(icon) {
             if (!pickerAllowOptionAddition) return@setEndIcon
@@ -423,7 +423,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
             flowLayout!!.setPadding(0)
             return
         }
-        val bottomPadding = ResourceUtils.getDimenPxById(context, R.dimen.chips_picker_spacing_size)
+        val bottomPadding = ResourceUtils.getDimenPxById(context, R.dimen.inline_chips_picker_spacing_size)
         flowLayout!!.setPadding(pickerGroupPadding, pickerGroupPadding, pickerGroupPadding, bottomPadding)
         selection.forEach {
             val chipView = buildChip(it)
@@ -436,19 +436,19 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
         val layoutInflater = LayoutInflater.from(context)
         val layoutId = R.layout.inline_chips_picker_chip
         return layoutInflater.inflate(layoutId, null, false).apply {
-            background = ResourceUtils.getDrawable(context, R.drawable.bg_chip_picker_item)
+            background = ResourceUtils.getDrawable(context, R.drawable.inline_chip_picker_item_bg)
             findViewById<AppCompatImageButton>(R.id.picker_chip_item_remove_button).apply {
-                val chipRemoveIcon = ResourceUtils.getDrawable(context, R.drawable.chip_picker_remove_icon).apply {
+                val chipRemoveIcon = ResourceUtils.getDrawable(context, R.drawable.inline_chip_picker_remove_icon).apply {
                     this!!.setTint(ResourceUtils.getColorByAttribute(context, R.attr.colorPrimary))
                 }
-                background = ResourceUtils.getDrawable(context, R.drawable.bg_chip_picker_remove_icon)
+                background = ResourceUtils.getDrawable(context, R.drawable.inline_chip_picker_remove_icon_bg)
                 setImageDrawable(chipRemoveIcon)
                 setOnClickListener { adapter.selectItem(targetItem, false) }
             }
             findViewById<TextView>(R.id.chip_item_text_view).apply {
                 text = itemName
                 setTextColor(ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface))
-                compoundDrawablePadding = ResourceUtils.getDimenPxById(context, R.dimen.chips_picker_spacing_size)
+                compoundDrawablePadding = ResourceUtils.getDimenPxById(context, R.dimen.inline_chips_picker_spacing_size)
             }
         }
     }

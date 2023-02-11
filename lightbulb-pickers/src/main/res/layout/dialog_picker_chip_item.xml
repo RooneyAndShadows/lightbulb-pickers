@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_dialog_picker_chip_item"
+    android:background="@drawable/dialog_picker_chip_item_bg"
     android:orientation="horizontal"
     android:paddingStart="@dimen/spacing_size_small"
     android:paddingTop="@dimen/spacing_size_tiny"
