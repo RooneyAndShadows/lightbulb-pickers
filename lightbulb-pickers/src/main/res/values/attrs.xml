@@ -28,6 +28,11 @@
         <attr name="ibtv_background_color" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="ChipsTriggerView">
+        <attr name="cpv_max_rows" format="integer" />
+        <attr name="cpv_hidden_items_format_text" format="string" />
+    </declare-styleable>
+
     <declare-styleable name="BaseDialogPickerView">
         <attr name="pv_dialog_tag" format="string" />
         <attr name="pv_dialog_cancelable" format="boolean" />

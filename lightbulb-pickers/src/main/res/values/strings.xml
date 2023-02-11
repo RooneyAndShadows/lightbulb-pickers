@@ -8,4 +8,5 @@
     <item name="picker_default_date_from_text" type="string">FROM</item>
     <item name="picker_default_date_to_text" type="string">TO</item>
     <item name="picker_chips_default_hint" type="string">...</item>
+    <item name="picker_chips_n_more_items_format_text" type="string">+%d more</item>
 </resources>
