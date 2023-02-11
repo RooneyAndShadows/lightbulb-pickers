@@ -39,8 +39,8 @@ class ChipsTriggerView @JvmOverloads constructor(
         return@lazy inflateChip("Chip").let {
             val widthMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
             val heightMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
-            measure(widthMeasureSpec, heightMeasureSpec)
-            return@let measuredHeight + flowLayout.paddingTop + flowLayout.paddingBottom
+            it.measure(widthMeasureSpec, heightMeasureSpec)
+            return@let it.measuredHeight + flowLayout.paddingTop + flowLayout.paddingBottom
         }
     }
 
@@ -52,7 +52,6 @@ class ChipsTriggerView @JvmOverloads constructor(
         isSaveEnabled = true
         readAttributes(context, attrs)
         inflateView()
-        setupView()
     }
 
     @Override
@@ -157,15 +156,12 @@ class ChipsTriggerView @JvmOverloads constructor(
     }
 
     private fun inflateView() {
+        orientation = VERTICAL
         inflate(context, R.layout.dialog_picker_chips_layout, this) as LinearLayoutCompat
         flowLayoutContainer = findViewById(R.id.flowLayoutContainer)
         flowLayout = findViewById(R.id.chipsContainer)
         errorTextView = findViewById(R.id.picker_view_error_text_view)
         hintTextView = findViewById(R.id.picker_view_hint_text_view)
-    }
-
-    private fun setupView() {
-        orientation = VERTICAL
     }
 
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
@@ -199,7 +195,7 @@ class ChipsTriggerView @JvmOverloads constructor(
                 hintTextView.visibility = GONE
                 split(",").apply {
                     generateViewsForFlowLayout(this).forEach {
-                        addView(it)
+                        flowLayout.addView(it)
                     }
                 }
             }
@@ -209,22 +205,30 @@ class ChipsTriggerView @JvmOverloads constructor(
     private fun generateViewsForFlowLayout(elements: List<String>): List<View> {
         val result = mutableListOf<View>()
         var requiredWidth = 0
-        val widthMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
-        val heightMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
         val chipSpacing = ResourceUtils.getDimenPxById(context, R.dimen.trigger_view_chips_items_spacing)
         val maxWidth = flowLayout.measuredWidth - flowLayout.paddingStart - paddingEnd
+        println(maxWidth)
         var fitElements = 0
+        var currentRow = 1
+        var currentRowWidth = 0
         elements.apply {
             for (i in 0 until size) {
                 val chipTitle = this[i].trim()
                 val chipView = inflateChip(chipTitle)
-                chipView.measure(widthMeasureSpec, heightMeasureSpec)
-                val widthToAdd = (chipView.measuredWidth + chipSpacing)
+                var widthToAdd = (chipView.measuredWidth + chipSpacing)
                 val requiredRows = ceil((requiredWidth.toDouble() + widthToAdd) / maxWidth).toInt()
+                if (currentRow < requiredRows) {
+                    //new line
+                    currentRow++
+                    widthToAdd += maxWidth - currentRowWidth
+                    currentRowWidth = 0
+                } else {
+                    currentRowWidth += widthToAdd
+                }
                 val chipWillFit = requiredRows <= maxRows
                 if (chipWillFit) {
                     result.add(chipView)
-                    requiredWidth += (chipView.measuredWidth + chipSpacing)
+                    requiredWidth += widthToAdd
                     fitElements++
                 } else {
                     val hiddenItemsCount = size - fitElements
@@ -235,6 +239,7 @@ class ChipsTriggerView @JvmOverloads constructor(
         }
         return result
     }
+
 
     fun inflateHiddenItemsView(
         flowLayoutViews: MutableList<View>,
@@ -262,8 +267,11 @@ class ChipsTriggerView @JvmOverloads constructor(
     @SuppressLint("InflateParams")
     private fun inflateChip(title: String): View {
         return LayoutInflater.from(context).inflate(R.layout.dialog_picker_chip_item, null).apply {
+            val widthMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
+            val heightMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
             val titleTextView: TextView = findViewById(R.id.chip_item_text_view)
             titleTextView.text = title
+            measure(widthMeasureSpec, heightMeasureSpec)
         }
     }
 

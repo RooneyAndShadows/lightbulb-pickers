@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.widget.LinearLayout
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.view.postDelayed
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
@@ -20,6 +21,7 @@ abstract class DialogTriggerView @JvmOverloads constructor(
     defStyleAttr: Int = 0,
 ) : LinearLayoutCompat(context, attrs, defStyleAttr) {
     protected lateinit var pickerView: BaseDialogPickerView<*>
+    private var needToSyncUiAfterRestore = false
     var icon: Drawable? = null
         private set
     var errorEnabled: Boolean = false
@@ -211,14 +213,24 @@ abstract class DialogTriggerView @JvmOverloads constructor(
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
         savedState.apply {
+            needToSyncUiAfterRestore = true
             val view = this@DialogTriggerView
-            view.setErrorEnabled(errorEnabled)
-            view.setText(text)
-            view.setHintText(hintText)
-            view.setErrorText(errorText)
-            view.setErrorTextAppearance(errorTextAppearance)
-            view.setHintTextAppearance(hintTextAppearance)
-            view.setIconColor(iconColor)
+            view.errorEnabled = errorEnabled
+            view.text = text
+            view.hintText = hintText
+            view.errorText = errorText
+            view.errorTextAppearance = errorTextAppearance
+            view.hintTextAppearance = hintTextAppearance
+            view.iconColor = iconColor
+        }
+    }
+
+    @Override
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        if (needToSyncUiAfterRestore) {
+            needToSyncUiAfterRestore = false
+            syncUserInterface()
         }
     }
 
