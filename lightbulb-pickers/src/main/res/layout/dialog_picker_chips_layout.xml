@@ -5,20 +5,37 @@
     tools:parentTag="androidx.appcompat.widget.LinearLayoutCompat">
 
     <RelativeLayout
+        android:id="@+id/flowLayoutContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@drawable/dialog_chips_trigger_bg"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/picker_view_hint_text_view"
+            style="@style/PickerViewHintTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingStart="@dimen/spacing_size_small"
+            android:paddingTop="@dimen/spacing_size_tiny"
+            android:paddingEnd="@dimen/spacing_size_small"
+            android:paddingBottom="@dimen/spacing_size_tiny" />
 
         <com.nex3z.flowlayout.FlowLayout
             android:id="@+id/chipsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:flChildSpacing="@dimen/spacing_size_small"
+            android:padding="@dimen/trigger_view_chips_items_spacing"
+            app:flChildSpacing="@dimen/trigger_view_chips_items_spacing"
             app:flMaxRows="2"
-            app:flRowSpacing="@dimen/spacing_size_small" />
+            app:flRowSpacing="@dimen/trigger_view_chips_items_spacing" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/picker_view_error_text_view"
-        style="@style/PickerViewErrorTextView" />
+        style="@style/PickerViewErrorTextView"
+        android:layout_marginTop="@dimen/spacing_size_tiny" />
 </merge>

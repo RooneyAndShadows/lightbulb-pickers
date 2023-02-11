@@ -9,11 +9,13 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.MeasureSpec.*
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.core.graphics.ColorUtils
-import androidx.core.view.setPadding
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
@@ -27,8 +29,18 @@ class ChipsTriggerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : DialogTriggerView(context, attrs, defStyleAttr) {
+    private lateinit var flowLayoutContainer: RelativeLayout
     private lateinit var flowLayout: FlowLayout
     private lateinit var errorTextView: AppCompatTextView
+    private lateinit var hintTextView: AppCompatTextView
+    private val emptyLayoutHeight by lazy {
+        return@lazy inflateChip("Chip").let {
+            val widthMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
+            val heightMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
+            measure(widthMeasureSpec, heightMeasureSpec)
+            return@let measuredHeight + flowLayout.paddingTop + flowLayout.paddingBottom
+        }
+    }
 
     init {
         isSaveEnabled = true
@@ -69,15 +81,14 @@ class ChipsTriggerView @JvmOverloads constructor(
 
     @Override
     override fun onTextChange() {
-        println(text)
-        updateChips()
+        syncChips()
     }
 
     @Override
     override fun onHintTextChange() {
-        //buttonView.apply {
-        //    text = hintText
-        //}
+        hintTextView.apply {
+            text = hintText
+        }
     }
 
     @Override
@@ -96,7 +107,9 @@ class ChipsTriggerView @JvmOverloads constructor(
 
     @Override
     override fun onHintTextAppearanceChange() {
-        //NOT SUPPORTED
+        hintTextView.apply {
+            setTextAppearance(hintTextAppearance)
+        }
     }
 
     @Override
@@ -107,9 +120,10 @@ class ChipsTriggerView @JvmOverloads constructor(
     @Override
     override fun attachTo(pickerView: BaseDialogPickerView<*>) {
         this.pickerView = pickerView
-        setOnClickListener {
-            println("sssssssssssss")
-            requirePickerView().showPickerDialog()
+        flowLayoutContainer.apply {
+            setOnClickListener {
+                requirePickerView().showPickerDialog()
+            }
         }
     }
 
@@ -138,16 +152,14 @@ class ChipsTriggerView @JvmOverloads constructor(
 
     private fun inflateView() {
         inflate(context, R.layout.dialog_picker_chips_layout, this) as LinearLayoutCompat
+        flowLayoutContainer = findViewById(R.id.flowLayoutContainer)
         flowLayout = findViewById(R.id.chipsContainer)
         errorTextView = findViewById(R.id.picker_view_error_text_view)
+        hintTextView = findViewById(R.id.picker_view_hint_text_view)
     }
 
     private fun setupView() {
-        val padding = ResourceUtils.getDimenPxById(context, R.dimen.trigger_view_chips_items_spacing)
         orientation = VERTICAL
-        isClickable = true
-        background = ResourceUtils.getDrawable(context, R.drawable.dialog_chips_trigger_bg)
-        setPadding(padding)
     }
 
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
@@ -161,12 +173,19 @@ class ChipsTriggerView @JvmOverloads constructor(
         }
     }
 
-    private fun updateChips() {
-        flowLayout.apply {
+    private fun syncChips() {
+        flowLayout.apply flowLayout@{
             removeAllViews()
-            text?.apply {
+            text.apply chipTitle@{
+                if (isNullOrBlank()) {
+                    hintTextView.visibility = VISIBLE
+                    flowLayoutContainer.layoutParams.height = emptyLayoutHeight
+                    return@chipTitle
+                }
+                flowLayoutContainer.layoutParams.height = WRAP_CONTENT
                 split(",").forEach { chipTitle ->
-                    addView(inflateChip(chipTitle))
+                    hintTextView.visibility = GONE
+                    addView(inflateChip(chipTitle.trim()))
                 }
             }
         }

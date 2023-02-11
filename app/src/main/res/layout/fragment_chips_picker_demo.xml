@@ -65,7 +65,8 @@
                         app:pv_dialog_tag="DEMO_PICKER_TAG_BOXED"
                         app:pv_dialog_title="@string/icon_picker_dialog_title_text"
                         app:pv_required="true"
-                        app:pv_required_text="@string/icon_picker_required_text">
+                        app:pv_required_text="@string/icon_picker_required_text"
+                        app:pv_validation_enabled="true">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ChipsTriggerView
                             android:layout_width="match_parent"
@@ -73,9 +74,7 @@
                             app:dtv_hint_text="@string/adapter_picker_pick_item_text"
                             app:itv_icon_use_alpha="false" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogChipsPickerView>
-
                 </androidx.appcompat.widget.LinearLayoutCompat>
-
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.core.widget.NestedScrollView>
     </RelativeLayout>
