@@ -194,20 +194,16 @@ class ChipsTriggerView @JvmOverloads constructor(
                 flowLayoutContainer.layoutParams.height = WRAP_CONTENT
                 hintTextView.visibility = GONE
                 split(",").apply {
-                    generateViewsForFlowLayout(this).forEach {
-                        flowLayout.addView(it)
-                    }
+                    generateViewsForFlowLayout(this)
                 }
             }
         }
     }
 
-    private fun generateViewsForFlowLayout(elements: List<String>): List<View> {
-        val result = mutableListOf<View>()
+    private fun generateViewsForFlowLayout(elements: List<String>) {
         var requiredWidth = 0
         val chipSpacing = ResourceUtils.getDimenPxById(context, R.dimen.trigger_view_chips_items_spacing)
         val maxWidth = flowLayout.measuredWidth - flowLayout.paddingStart - paddingEnd
-        println(maxWidth)
         var fitElements = 0
         var currentRow = 1
         var currentRowWidth = 0
@@ -221,47 +217,49 @@ class ChipsTriggerView @JvmOverloads constructor(
                     //new line
                     currentRow++
                     widthToAdd += maxWidth - currentRowWidth
-                    currentRowWidth = 0
-                } else {
-                    currentRowWidth += widthToAdd
+                    if (currentRow <= maxRows)
+                        currentRowWidth = 0
                 }
                 val chipWillFit = requiredRows <= maxRows
                 if (chipWillFit) {
-                    result.add(chipView)
+                    flowLayout.addView(chipView)
                     requiredWidth += widthToAdd
+                    currentRowWidth += widthToAdd
                     fitElements++
                 } else {
                     val hiddenItemsCount = size - fitElements
-                    inflateHiddenItemsView(result, hiddenItemsCount, requiredWidth, maxWidth, chipSpacing)
+                    inflateHiddenItemsView(currentRowWidth, hiddenItemsCount, maxWidth, chipSpacing)
                     break
                 }
             }
         }
-        return result
     }
 
 
     fun inflateHiddenItemsView(
-        flowLayoutViews: MutableList<View>,
+        lastRowWidth: Int,
         hiddenItemsCount: Int,
-        currentRequiredWidth: Int,
         maxWidth: Int,
         spacing: Int,
     ) {
+        var remainingWidth = maxWidth - lastRowWidth
         var nHiddenViewsLayout = inflateNMoreItemsView(hiddenItemsCount)
         val requiredWidth = nHiddenViewsLayout.measuredWidth + spacing
-        var willViewFit = ceil((currentRequiredWidth.toDouble() + requiredWidth) / maxWidth) <= maxRows
-        var newRequiredWidth = currentRequiredWidth
-        var newHiddenViewsCount = hiddenItemsCount
-        while (!willViewFit && flowLayoutViews.isNotEmpty()) {
-            val viewToRemove = flowLayoutViews.removeLast()
-            val widthToRemove = viewToRemove.measuredWidth + spacing
-            newHiddenViewsCount++
-            nHiddenViewsLayout = inflateNMoreItemsView(newHiddenViewsCount)
-            newRequiredWidth -= widthToRemove
-            willViewFit = ceil((newRequiredWidth.toDouble() + requiredWidth) / maxWidth) <= maxRows
+        if (flowLayout.childCount <= 0) {
+            flowLayout.addView(nHiddenViewsLayout)
+        } else {
+            var willViewFit = remainingWidth > requiredWidth
+            var newHiddenViewsCount = hiddenItemsCount
+            while (!willViewFit && flowLayout.childCount > 0) {
+                val lastVisibleChip = flowLayout.getChildAt(flowLayout.childCount - 1)
+                flowLayout.removeViewAt(flowLayout.childCount - 1)
+                remainingWidth += lastVisibleChip.measuredWidth + spacing
+                willViewFit = remainingWidth > requiredWidth
+                newHiddenViewsCount++
+                nHiddenViewsLayout = inflateNMoreItemsView(newHiddenViewsCount)
+            }
+            flowLayout.addView(nHiddenViewsLayout)
         }
-        flowLayoutViews.add(nHiddenViewsLayout)
     }
 
     @SuppressLint("InflateParams")
@@ -282,7 +280,7 @@ class ChipsTriggerView @JvmOverloads constructor(
             val paddingHor = ResourceUtils.getDimenPxById(context, R.dimen.spacing_size_small)
             val paddingVer = ResourceUtils.getDimenPxById(context, R.dimen.spacing_size_tiny)
             val nMoreItemsText = nMoreItemsFormat.format(hiddenItemsCount)
-            setPadding(paddingHor, paddingVer, paddingHor, paddingVer)
+            setPadding(0, paddingVer, 0, paddingVer)
             text = nMoreItemsText
             measure(widthMeasureSpec, heightMeasureSpec)
         }
