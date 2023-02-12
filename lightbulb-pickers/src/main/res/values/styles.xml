@@ -21,6 +21,13 @@
         <item name="android:background">@drawable/picker_view_icon_button_bg</item>
     </style>
 
+    <style name="PickerViewTitleTextView">
+        <item name="android:visibility">gone</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingBottom">@dimen/spacing_size_tiny</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/PickerViewTitleTextAppearance</item>
+    </style>
 
     <style name="PickerViewHintTextView">
         <item name="android:visibility">gone</item>
@@ -40,6 +47,8 @@
         <item name="android:inputType">textVisiblePassword</item>
         <item name="android:imeOptions">flagNoExtractUi</item>
     </style>
+
+    <style name="PickerViewTitleTextAppearance" parent="@android:style/TextAppearance" />
 
     <style name="PickerViewErrorTextAppearance" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">14sp</item>

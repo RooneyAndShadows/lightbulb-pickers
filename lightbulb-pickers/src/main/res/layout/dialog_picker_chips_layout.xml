@@ -4,6 +4,10 @@
     android:orientation="vertical"
     tools:parentTag="androidx.appcompat.widget.LinearLayoutCompat">
 
+    <TextView
+        android:id="@+id/picker_view_title_text_view"
+        style="@style/PickerViewTitleTextView" />
+
     <RelativeLayout
         android:id="@+id/flowLayoutContainer"
         android:layout_width="match_parent"

@@ -29,6 +29,8 @@
 
     <declare-styleable name="ChipsTriggerView">
         <attr name="cpv_max_rows" format="integer" />
+        <attr name="cpv_title_text" format="string" />
+        <attr name="cpv_title_text_appearance" format="string" />
         <attr name="cpv_hidden_items_format_text" format="string" />
     </declare-styleable>
 

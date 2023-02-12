@@ -72,6 +72,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             app:dtv_hint_text="@string/adapter_picker_pick_item_text"
+                            app:cpv_title_text="Ne vijdash li..."
                             app:itv_icon_use_alpha="false" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogChipsPickerView>
                 </androidx.appcompat.widget.LinearLayoutCompat>

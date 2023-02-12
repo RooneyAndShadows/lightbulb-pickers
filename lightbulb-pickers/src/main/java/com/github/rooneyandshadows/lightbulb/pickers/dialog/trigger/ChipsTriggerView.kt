@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.*
 import android.view.View.MeasureSpec.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.RelativeLayout
@@ -33,7 +34,10 @@ class ChipsTriggerView @JvmOverloads constructor(
     private lateinit var flowLayout: FlowLayout
     private lateinit var errorTextView: AppCompatTextView
     private lateinit var hintTextView: AppCompatTextView
+    private lateinit var titleTextView: AppCompatTextView
     private var nMoreItemsFormat: String = ""
+    private var titleTextAppearance: Int = -1
+    private var title: String = ""
     private var maxRows = DEFAULT_MAX_ROWS
     private val emptyLayoutHeight by lazy {
         return@lazy inflateChip("Chip").let {
@@ -52,6 +56,7 @@ class ChipsTriggerView @JvmOverloads constructor(
         isSaveEnabled = true
         readAttributes(context, attrs)
         inflateView()
+        initView()
     }
 
     @Override
@@ -146,6 +151,10 @@ class ChipsTriggerView @JvmOverloads constructor(
     override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val myState = SavedState(superState)
+        myState.title = title
+        myState.nMoreFormat = nMoreItemsFormat
+        myState.titleTextAppearance = titleTextAppearance
+        myState.maxRows = maxRows
         return myState
     }
 
@@ -153,6 +162,25 @@ class ChipsTriggerView @JvmOverloads constructor(
     override fun onRestoreInstanceState(state: Parcelable) {
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
+        title = savedState.title
+        nMoreItemsFormat = savedState.nMoreFormat
+        titleTextAppearance = savedState.titleTextAppearance
+        maxRows = savedState.maxRows
+        initView()
+    }
+
+    fun setTitleTextAppearance(textAppearance: Int) {
+        this.titleTextAppearance = textAppearance
+        this.titleTextView.setTextAppearance(textAppearance)
+    }
+
+    fun setTitle(title: String?) {
+        this.title = title ?: ""
+        if (this.title.isBlank()) {
+            titleTextView.visibility = GONE
+            return
+        }
+        titleTextView.text = this.title
     }
 
     private fun inflateView() {
@@ -162,6 +190,12 @@ class ChipsTriggerView @JvmOverloads constructor(
         flowLayout = findViewById(R.id.chipsContainer)
         errorTextView = findViewById(R.id.picker_view_error_text_view)
         hintTextView = findViewById(R.id.picker_view_hint_text_view)
+        titleTextView = findViewById(R.id.picker_view_title_text_view)
+    }
+
+    private fun initView() {
+        titleTextView.visibility = if (title.isBlank()) GONE else VISIBLE
+        titleTextView.text = title
     }
 
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
@@ -171,10 +205,20 @@ class ChipsTriggerView @JvmOverloads constructor(
                 getInt(R.styleable.ChipsTriggerView_cpv_max_rows, DEFAULT_MAX_ROWS).apply {
                     maxRows = this
                 }
+                getResourceId(
+                    R.styleable.ChipsTriggerView_cpv_title_text_appearance,
+                    R.style.PickerViewTitleTextAppearance
+                ).apply {
+                    titleTextAppearance = this
+                }
                 getString(R.styleable.ChipsTriggerView_cpv_hidden_items_format_text).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_chips_n_more_items_format_text)
                     nMoreItemsFormat = if (isNullOrBlank()) default
                     else this
+                }
+                getString(R.styleable.ChipsTriggerView_cpv_title_text).apply {
+                    val default = ResourceUtils.getPhrase(context, R.string.picker_chips_title_text)
+                    title = this ?: default
                 }
             }
         } finally {
@@ -253,17 +297,19 @@ class ChipsTriggerView @JvmOverloads constructor(
     }
 
     private class SavedState : BaseSavedState {
-        var buttonTextColor = -1
-        var buttonBackgroundColor = -1
-        var buttonBackgroundCornerRadius = -1
+        var nMoreFormat = ""
+        var title = ""
+        var titleTextAppearance = -1
+        var maxRows = -1
 
         constructor(superState: Parcelable?) : super(superState)
 
         private constructor(parcel: Parcel) : super(parcel) {
             parcel.apply {
-                buttonTextColor = ParcelUtils.readInt(this)!!
-                buttonBackgroundColor = ParcelUtils.readInt(this)!!
-                buttonBackgroundCornerRadius = ParcelUtils.readInt(this)!!
+                nMoreFormat = ParcelUtils.readString(this)!!
+                title = ParcelUtils.readString(this)!!
+                titleTextAppearance = ParcelUtils.readInt(this)!!
+                maxRows = ParcelUtils.readInt(this)!!
             }
         }
 
@@ -271,9 +317,10 @@ class ChipsTriggerView @JvmOverloads constructor(
         override fun writeToParcel(out: Parcel, flags: Int) {
             super.writeToParcel(out, flags)
             out.apply {
-                ParcelUtils.writeInt(this, buttonTextColor)
-                ParcelUtils.writeInt(this, buttonBackgroundColor)
-                ParcelUtils.writeInt(this, buttonBackgroundCornerRadius)
+                ParcelUtils.writeString(this, nMoreFormat)
+                ParcelUtils.writeString(this, title)
+                ParcelUtils.writeInt(this, titleTextAppearance)
+                ParcelUtils.writeInt(this, maxRows)
             }
         }
 
