@@ -47,6 +47,7 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
         }
 
     init {
+        isSaveEnabled = true
         readAttributes(context, attrs)
     }
 

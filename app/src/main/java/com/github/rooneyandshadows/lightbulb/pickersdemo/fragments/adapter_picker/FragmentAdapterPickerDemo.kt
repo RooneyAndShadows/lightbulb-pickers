@@ -34,7 +34,7 @@ class FragmentAdapterPickerDemo :
     override fun doOnViewBound(
         viewBinding: FragmentAdapterPickerDemoBinding,
         viewModel: VMAdapterPickerDemo,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ) {
         if (savedInstanceState == null) {
             viewBinding.pickerViewBoxed.data = viewModel.dataSet
