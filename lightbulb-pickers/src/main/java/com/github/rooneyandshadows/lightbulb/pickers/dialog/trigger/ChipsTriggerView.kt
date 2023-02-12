@@ -21,7 +21,7 @@ import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 import com.nex3z.flowlayout.FlowLayout
-import kotlin.math.ceil
+import kotlin.math.min
 
 @Suppress("MemberVisibilityCanBePrivate")
 class ChipsTriggerView @JvmOverloads constructor(
@@ -201,65 +201,32 @@ class ChipsTriggerView @JvmOverloads constructor(
     }
 
     private fun generateViewsForFlowLayout(elements: List<String>) {
-        var requiredWidth = 0
-        val chipSpacing = ResourceUtils.getDimenPxById(context, R.dimen.trigger_view_chips_items_spacing)
-        val maxWidth = flowLayout.measuredWidth - flowLayout.paddingStart - paddingEnd
-        var fitElements = 0
+        val maxWidth = flowLayout.measuredWidth - flowLayout.paddingStart - flowLayout.paddingEnd
+        val spacing = ResourceUtils.getDimenPxById(context, R.dimen.trigger_view_chips_items_spacing)
         var currentRow = 1
         var currentRowWidth = 0
+        var fitChildren = 0
         elements.apply {
             for (i in 0 until size) {
                 val chipTitle = this[i].trim()
                 val chipView = inflateChip(chipTitle)
-                var widthToAdd = (chipView.measuredWidth + chipSpacing)
-                val requiredRows = ceil((requiredWidth.toDouble() + widthToAdd) / maxWidth).toInt()
-                if (currentRow < requiredRows) {
-                    //new line
+                val nHiddenChipsView = inflateNMoreItemsView(size - i + 1)
+                val requiredWidthForChip = min((chipView.measuredWidth + spacing), maxWidth)
+                val requiredWidthForNview = min((nHiddenChipsView.measuredWidth + spacing), maxWidth)
+                if (currentRowWidth + requiredWidthForChip > maxWidth) {
                     currentRow++
-                    widthToAdd += maxWidth - currentRowWidth
-                    if (currentRow <= maxRows)
-                        currentRowWidth = 0
+                    currentRowWidth = 0
                 }
-                val chipWillFit = requiredRows <= maxRows
-                if (chipWillFit) {
-                    flowLayout.addView(chipView)
-                    requiredWidth += widthToAdd
-                    currentRowWidth += widthToAdd
-                    fitElements++
-                } else {
-                    val hiddenItemsCount = size - fitElements
-                    inflateHiddenItemsView(currentRowWidth, hiddenItemsCount, maxWidth, chipSpacing)
+                currentRowWidth += requiredWidthForChip
+                if ((i + 1 < size && currentRow == maxRows && (currentRowWidth + requiredWidthForNview) > maxWidth) || currentRow > maxRows) {
                     break
                 }
+                flowLayout.addView(chipView)
+                fitChildren++
             }
         }
-    }
-
-
-    fun inflateHiddenItemsView(
-        lastRowWidth: Int,
-        hiddenItemsCount: Int,
-        maxWidth: Int,
-        spacing: Int,
-    ) {
-        var remainingWidth = maxWidth - lastRowWidth
-        var nHiddenViewsLayout = inflateNMoreItemsView(hiddenItemsCount)
-        val requiredWidth = nHiddenViewsLayout.measuredWidth + spacing
-        if (flowLayout.childCount <= 0) {
-            flowLayout.addView(nHiddenViewsLayout)
-        } else {
-            var willViewFit = remainingWidth > requiredWidth
-            var newHiddenViewsCount = hiddenItemsCount
-            while (!willViewFit && flowLayout.childCount > 0) {
-                val lastVisibleChip = flowLayout.getChildAt(flowLayout.childCount - 1)
-                flowLayout.removeViewAt(flowLayout.childCount - 1)
-                remainingWidth += lastVisibleChip.measuredWidth + spacing
-                willViewFit = remainingWidth > requiredWidth
-                newHiddenViewsCount++
-                nHiddenViewsLayout = inflateNMoreItemsView(newHiddenViewsCount)
-            }
-            flowLayout.addView(nHiddenViewsLayout)
-        }
+        val removeChildrenCount = elements.size - fitChildren
+        if (removeChildrenCount > 0) flowLayout.addView(inflateNMoreItemsView(removeChildrenCount))
     }
 
     @SuppressLint("InflateParams")
@@ -277,7 +244,6 @@ class ChipsTriggerView @JvmOverloads constructor(
         val widthMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
         val heightMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
         return TextView(context).apply {
-            val paddingHor = ResourceUtils.getDimenPxById(context, R.dimen.spacing_size_small)
             val paddingVer = ResourceUtils.getDimenPxById(context, R.dimen.spacing_size_tiny)
             val nMoreItemsText = nMoreItemsFormat.format(hiddenItemsCount)
             setPadding(0, paddingVer, 0, paddingVer)

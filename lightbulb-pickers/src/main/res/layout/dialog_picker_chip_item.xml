@@ -16,7 +16,7 @@
         android:ellipsize="marquee"
         android:gravity="center_vertical"
         android:singleLine="true"
-        android:textColor="?colorAccent"
+        android:textColor="?colorOnPrimary"
         android:textStyle="bold"
         tools:text="chip text" />
 
