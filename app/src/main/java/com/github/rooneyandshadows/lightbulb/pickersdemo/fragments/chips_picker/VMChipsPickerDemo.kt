@@ -11,7 +11,7 @@ import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.AppIconUtils
 
 class VMChipsPickerDemo : BaseObservableViewModel() {
     @get:Bindable
-    var currentSelection: MutableList<ChipModel>? = null
+    var currentSelection: MutableList<String>? = null
         set(value) {
             field = value
             notifyPropertyChanged(BR.currentSelection)
@@ -21,7 +21,9 @@ class VMChipsPickerDemo : BaseObservableViewModel() {
     init {
         generateChips().apply {
             dataSet.addAll(this)
-            currentSelection = dataSet.subList(0, 5)
+            currentSelection = dataSet.subList(0, 5).map {
+                return@map it.chipTitle
+            }.toMutableList()
         }
     }
 }

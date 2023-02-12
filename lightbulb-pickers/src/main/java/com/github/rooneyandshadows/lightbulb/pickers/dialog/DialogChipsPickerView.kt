@@ -13,6 +13,8 @@ import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsFilterView
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsFilterView.OnOptionCreatedListener
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerAdapter
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerAdapter.ChipModel
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerDialog
@@ -40,7 +42,6 @@ class DialogChipsPickerView @JvmOverloads constructor(
     override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
         super.onDialogInitialized(dialog)
         dialog.apply {
-
         }
     }
 
@@ -78,19 +79,35 @@ class DialogChipsPickerView @JvmOverloads constructor(
     override fun onRestoreInstanceState(state: Parcelable) {
         val savedState = state as SavedState
         super.onRestoreInstanceState(savedState.superState)
-
     }
 
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogIconPickerView, 0, 0)
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogChipsPickerView, 0, 0)
         try {
             attrTypedArray.apply {
-
+                getBoolean(R.styleable.DialogChipsPickerView_cpv_filterable, true).apply {
+                    (pickerDialog as (ChipsPickerDialog)).setFilterable(this)
+                }
+                getBoolean(R.styleable.DialogChipsPickerView_cpv_allow_add_new_options, true).apply {
+                    (pickerDialog as (ChipsPickerDialog)).setAllowAddNewOptions(this)
+                }
             }
             showSelectedTextValue = true
         } finally {
             attrTypedArray.recycle()
         }
+    }
+
+    fun setOnChipCreatedListener(listener: OnOptionCreatedListener?) {
+        (pickerDialog as (ChipsPickerDialog)).setOnNewOptionListener(listener)
+    }
+
+    fun setIsFilterable(isFilterable: Boolean) {
+        (pickerDialog as (ChipsPickerDialog)).setFilterable(isFilterable)
+    }
+
+    fun setAllowAddNewOptions(allowNewOptions: Boolean) {
+        (pickerDialog as (ChipsPickerDialog)).setAllowAddNewOptions(allowNewOptions)
     }
 
     private class SavedState : BaseSavedState {
@@ -124,7 +141,7 @@ class DialogChipsPickerView @JvmOverloads constructor(
     object Databinding {
         @BindingAdapter(value = ["chipsPickerSelection"])
         @JvmStatic
-        fun setChip(view: DialogChipsPickerView, chipsToSelect: List<ChipModel>?) {
+        fun setChip(view: DialogChipsPickerView, chipsToSelect: List<String>?) {
             if (chipsToSelect == null || chipsToSelect.isEmpty()) {
                 if (view.hasSelection) view.selection = null
                 return
@@ -138,9 +155,14 @@ class DialogChipsPickerView @JvmOverloads constructor(
 
         @InverseBindingAdapter(attribute = "chipsPickerSelection", event = "chipsPickerSelectionChanged")
         @JvmStatic
-        fun getChip(view: DialogChipsPickerView): List<ChipModel>? {
+        fun getChip(view: DialogChipsPickerView): List<String>? {
             return if (view.hasSelection) {
-                view.selectedItems
+                val result = mutableListOf<String>().apply {
+                    view.selectedItems.forEach {
+                        add(it.chipTitle)
+                    }
+                }
+                return result
             } else null
         }
 
@@ -155,9 +177,9 @@ class DialogChipsPickerView @JvmOverloads constructor(
             }
         }
 
-        private fun chipListContainsChip(targetList: List<ChipModel>, chipModel: ChipModel): Boolean {
+        private fun chipListContainsChip(targetList: List<String>, chipModel: ChipModel): Boolean {
             targetList.forEach {
-                if (it.id == chipModel.id) return true
+                if (it == chipModel.chipTitle) return true
             }
             return false
         }

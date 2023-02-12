@@ -67,6 +67,11 @@
         <attr name="ipv_selected_icon_size" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="DialogChipsPickerView">
+        <attr name="cpv_filterable" format="boolean" />
+        <attr name="cpv_allow_add_new_options" format="boolean" />
+    </declare-styleable>
+
     <declare-styleable name="DialogColorPickerView" />
 
     <declare-styleable name="DialogDatePickerView">

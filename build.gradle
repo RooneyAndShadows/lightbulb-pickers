@@ -24,7 +24,7 @@ buildscript {
                         commons              : "1.0.18",
                         textinputview        : "1.0.11",
                         recycleradapters     : "2.0.0-RC12",
-                        dialogs              : "2.0.0-RC17",
+                        dialogs              : "2.0.0-RC18",
                         annotation_processors: "1.0.6-RC2"
                 ],
                 flow_layout: "1.3.3",

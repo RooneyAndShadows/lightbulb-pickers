@@ -56,9 +56,10 @@
 
                     <com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogChipsPickerView
                         android:id="@+id/pickerViewChips"
-                        app:chipsPickerSelection="@={model.currentSelection}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:chipsPickerSelection="@={model.currentSelection}"
+                        app:cpv_allow_add_new_options="false"
                         app:pv_dialog_animation="transition_from_left_to_right"
                         app:pv_dialog_button_negative_text="@string/picker_cancel_text"
                         app:pv_dialog_button_positive_text="@string/picker_ok_text"
