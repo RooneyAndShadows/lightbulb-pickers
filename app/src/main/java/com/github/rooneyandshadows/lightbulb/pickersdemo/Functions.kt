@@ -22,7 +22,7 @@ fun getMenuBackDrawable(context: Context): Drawable {
 
 fun generateChips(): List<ChipsPickerAdapter.ChipModel> {
     val models: MutableList<ChipsPickerAdapter.ChipModel> = mutableListOf()
-    models.add(ChipsPickerAdapter.ChipModel("Starssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"))
+    models.add(ChipsPickerAdapter.ChipModel("Star"))
     models.add(ChipsPickerAdapter.ChipModel("Tag"))
     models.add(ChipsPickerAdapter.ChipModel("Search"))
     models.add(ChipsPickerAdapter.ChipModel("Block"))

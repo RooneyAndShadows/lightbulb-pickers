@@ -6,6 +6,9 @@ import android.os.Parcelable
 import android.os.Parcelable.Creator
 import android.util.AttributeSet
 import android.util.SparseArray
+import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
@@ -14,7 +17,6 @@ import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPi
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerAdapter.ChipModel
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerDialogBuilder
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
 
@@ -120,40 +122,44 @@ class DialogChipsPickerView @JvmOverloads constructor(
     }
 
     object Databinding {
-        /*@BindingAdapter(value = ["iconPickerSelection"])
+        @BindingAdapter(value = ["chipsPickerSelection"])
         @JvmStatic
-        fun setIcon(view: ChipsPickerView, newIconName: String?) {
-            if (newIconName.isNullOrBlank()) {
+        fun setChip(view: DialogChipsPickerView, chipsToSelect: List<ChipModel>?) {
+            if (chipsToSelect == null || chipsToSelect.isEmpty()) {
                 if (view.hasSelection) view.selection = null
                 return
             }
-            if (view.hasSelection) {
-                val currentSelection: IconModel = view.selectedItems[0]
-                if (currentSelection.iconName == newIconName) return
-            }
-            for (iconModel in view.data) if (newIconName == iconModel.iconName) {
-                view.selectItem(iconModel)
-                break
-            }
+            println()
+            val itemsToSelect = view.data.filter {
+                return@filter chipListContainsChip(chipsToSelect, it)
+            }.toList()
+            view.setSelection(itemsToSelect)
         }
 
-        @InverseBindingAdapter(attribute = "iconPickerSelection", event = "iconPickerSelectionChanged")
+        @InverseBindingAdapter(attribute = "chipsPickerSelection", event = "chipsPickerSelectionChanged")
         @JvmStatic
-        fun getIcon(view: ChipsPickerView): String? {
+        fun getChip(view: DialogChipsPickerView): List<ChipModel>? {
             return if (view.hasSelection) {
-                view.selectedItems[0].iconName
+                view.selectedItems
             } else null
         }
 
-        @BindingAdapter(value = ["iconPickerSelectionChanged"], requireAll = false)
+        @BindingAdapter(value = ["chipsPickerSelectionChanged"], requireAll = false)
         @JvmStatic
-        fun bindPickerEvent(view: ChipsPickerView, bindingListener: InverseBindingListener) {
+        fun bindPickerEvent(view: DialogChipsPickerView, bindingListener: InverseBindingListener) {
             if (view.hasSelection) bindingListener.onChange()
             view.dataBindingListener = object : SelectionChangedListener<IntArray> {
                 override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
                     bindingListener.onChange()
                 }
             }
-        }*/
+        }
+
+        private fun chipListContainsChip(targetList: List<ChipModel>, chipModel: ChipModel): Boolean {
+            targetList.forEach {
+                if (it.id == chipModel.id) return true
+            }
+            return false
+        }
     }
 }

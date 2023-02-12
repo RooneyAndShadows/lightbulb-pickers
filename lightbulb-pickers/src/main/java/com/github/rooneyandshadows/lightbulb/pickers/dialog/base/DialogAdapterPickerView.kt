@@ -25,7 +25,7 @@ import java.util.*
 abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ) : BaseDialogPickerView<IntArray>(context, attrs, defStyleAttr) {
     private val dialog: AdapterPickerDialog<ItemType>
         get() = (pickerDialog as AdapterPickerDialog<ItemType>)
@@ -101,14 +101,26 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
         dialog.setItemDecoration(itemDecoration)
     }
 
-    fun selectItemAt(position: Int) {
+    fun setSelection(items: List<ItemType>?) {
+        if (items == null || items.isEmpty()) {
+            selection = null
+            return
+        }
+        val itemPositions = adapter.getPositions(items)
+        selection = itemPositions
+    }
+
+    fun setSelection(position: Int) {
         selection = intArrayOf(position)
     }
 
-    fun selectItem(item: ItemType?) {
-        if (item == null) return
+    fun setSelection(item: ItemType?) {
+        if (item == null) {
+            selection = null
+            return
+        }
         val position = adapter.getPosition(item)
-        if (position != -1) selectItemAt(position)
+        if (position != -1) setSelection(position)
     }
 
     @SuppressLint("NotifyDataSetChanged")

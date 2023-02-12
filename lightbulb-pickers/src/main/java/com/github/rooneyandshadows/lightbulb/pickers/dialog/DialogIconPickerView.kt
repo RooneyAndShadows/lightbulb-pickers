@@ -162,7 +162,7 @@ class DialogIconPickerView @JvmOverloads constructor(
                 if (currentSelection.iconName == newIconName) return
             }
             for (iconModel in view.data) if (newIconName == iconModel.iconName) {
-                view.selectItem(iconModel)
+                view.setSelection(iconModel)
                 break
             }
         }

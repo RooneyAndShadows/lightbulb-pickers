@@ -9,12 +9,14 @@
     <string name="picker_trigger_input_outlined_text">OUTLINED</string>
     <string name="picker_trigger_input_button_text">BUTTON</string>
     <string name="picker_trigger_input_image_button_text">IMAGE BUTTON</string>
+    <string name="picker_trigger_input_chips_text">CHIPS</string>
     <!-- ADAPTER PICKER DEMO STRINGS -->
     <string name="adapter_picker_demo_text">Adapter picker demo</string>
     <string name="adapter_picker_dialog_title_text">Select an item</string>
     <string name="adapter_picker_dialog_subtitle_text">for the picker</string>
     <string name="adapter_picker_pick_item_text">Pick an item</string>
     <string name="adapter_picker_required_text">Field can not be empty!</string>
+    <string name="adapter_picker_chips_title_text">Choose options</string>
     <!-- COLOR PICKER DEMO STRINGS -->
     <string name="color_picker_demo_text">Color picker demo</string>
     <string name="color_picker_dialog_title_text">Select color</string>

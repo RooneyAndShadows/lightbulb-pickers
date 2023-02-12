@@ -155,7 +155,7 @@ class DialogColorPickerView @JvmOverloads constructor(
             }
             for (colorModel in view.data)
                 if (newColorName == colorModel.externalName) {
-                    view.selectItem(colorModel)
+                    view.setSelection(colorModel)
                     break
                 }
         }

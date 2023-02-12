@@ -52,10 +52,11 @@
 
                     <include
                         layout="@layout/layout_option_title"
-                        app:optionTitle="@{@string/picker_trigger_input_boxed_text}" />
+                        app:optionTitle="@{@string/picker_trigger_input_chips_text}" />
 
                     <com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogChipsPickerView
                         android:id="@+id/pickerViewChips"
+                        app:chipsPickerSelection="@={model.currentSelection}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:pv_dialog_animation="transition_from_left_to_right"
@@ -71,8 +72,8 @@
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ChipsTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            app:cpv_title_text="@string/adapter_picker_chips_title_text"
                             app:dtv_hint_text="@string/adapter_picker_pick_item_text"
-                            app:cpv_title_text="Ne vijdash li..."
                             app:itv_icon_use_alpha="false" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogChipsPickerView>
                 </androidx.appcompat.widget.LinearLayoutCompat>

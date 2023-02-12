@@ -122,7 +122,7 @@ class DemoAdapterPickerView @JvmOverloads constructor(
                 if (currentSelection.id == newSelection) return
             }
             for (selectableTransactionTypeModel in view.data) if (newSelection == selectableTransactionTypeModel.id) {
-                view.selectItem(selectableTransactionTypeModel)
+                view.setSelection(selectableTransactionTypeModel)
                 break
             }
         }
