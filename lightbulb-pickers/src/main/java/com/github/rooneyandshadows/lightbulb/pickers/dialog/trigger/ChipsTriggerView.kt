@@ -2,6 +2,7 @@ package com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.os.Parcel
 import android.os.Parcelable
 import android.os.Parcelable.Creator
@@ -16,15 +17,18 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.graphics.ColorUtils
+import com.github.rooneyandshadows.lightbulb.commons.utils.DrawableUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
+import com.google.android.material.color.MaterialColors
 import com.nex3z.flowlayout.FlowLayout
 import kotlin.math.min
 
-@Suppress("MemberVisibilityCanBePrivate")
+@Suppress("MemberVisibilityCanBePrivate", "unused")
 class ChipsTriggerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -194,8 +198,44 @@ class ChipsTriggerView @JvmOverloads constructor(
     }
 
     private fun initView() {
+        setupTextView()
+        setupFlowLayoutContainer()
+    }
+
+    private fun setupTextView() {
         titleTextView.visibility = if (title.isBlank()) GONE else VISIBLE
         titleTextView.text = title
+    }
+
+    private fun setupFlowLayoutContainer() {
+        val boxBackgroundColor = ColorUtils.setAlphaComponent(
+            ResourceUtils.getColorByAttribute(
+                context,
+                com.github.rooneyandshadows.lightbulb.textinputview.R.attr.colorOnSurface
+            ), 30
+        )
+        val surfaceLayerColor = MaterialColors.getColor(this, R.attr.colorSurface, Color.TRANSPARENT)
+        val fgColor = MaterialColors.layer(surfaceLayerColor, boxBackgroundColor)
+        val radius = ResourceUtils.getDimenPxById(context, R.dimen.trigger_view_chips_corner_radius)
+        val strokeWidth = ResourceUtils.dpToPx(1)
+        val strokeColor = ColorUtils.setAlphaComponent(
+            ResourceUtils.getColorByAttribute(
+                context,
+                com.github.rooneyandshadows.lightbulb.textinputview.R.attr.colorOnSurface
+            ), 140
+        )
+        flowLayoutContainer.background = DrawableUtils.getRoundedBorderedShape(
+            fgColor,
+            strokeColor,
+            0,
+            0,
+            0,
+            strokeWidth,
+            radius.toFloat(),
+            0F,
+            radius.toFloat(),
+            0F
+        )
     }
 
     private fun readAttributes(context: Context, attrs: AttributeSet?) {

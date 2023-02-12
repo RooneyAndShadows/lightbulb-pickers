@@ -11,5 +11,5 @@
     <!-- TRIGGER VIEWS -->
     <dimen name="trigger_view_padding">10dp</dimen>
     <dimen name="trigger_view_chips_items_spacing">10dp</dimen>
-    <dimen name="trigger_view_chips_corner_radius">6dp</dimen>
+    <dimen name="trigger_view_chips_corner_radius">4dp</dimen>
 </resources>

@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@drawable/dialog_chips_trigger_bg"
         android:clickable="true"
         android:focusable="true">
 
