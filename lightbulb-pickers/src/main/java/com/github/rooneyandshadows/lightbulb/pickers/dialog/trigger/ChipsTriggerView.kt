@@ -274,7 +274,7 @@ class ChipsTriggerView @JvmOverloads constructor(
                 }
                 getResourceId(
                     R.styleable.ChipsTriggerView_cpv_hint_text_appearance,
-                    R.style.PickerViewHintTextAppearance
+                    R.style.PickerViewChipsHintTextAppearance
                 ).apply {
                     hintTextAppearance = this
                 }
