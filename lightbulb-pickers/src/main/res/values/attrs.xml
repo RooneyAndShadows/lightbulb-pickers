@@ -2,14 +2,15 @@
 <resources>
     <declare-styleable name="DialogTriggerView">
         <attr name="dtv_error_enabled" format="boolean" />
-        <attr name="dtv_hint_text" format="string" />
         <attr name="dtv_error_text_appearance" format="reference" />
-        <attr name="dtv_hint_text_appearance" format="reference" />
+
     </declare-styleable>
 
     <declare-styleable name="InputTriggerView">
         <attr name="itv_background_color" format="color" />
         <attr name="itv_stroke_color" format="color" />
+        <attr name="itv_hint_text_appearance" format="reference" />
+        <attr name="itv_hint_text" format="string" />
         <attr name="itv_icon_use_alpha" format="boolean" />
         <attr name="itv_layout_type" format="enum">
             <enum name="BOXED" value="1" />
@@ -20,6 +21,7 @@
     <declare-styleable name="ButtonTriggerView">
         <attr name="btv_background_color" format="color" />
         <attr name="btv_text_color" format="color" />
+        <attr name="btv_hint_text" format="string" />
         <attr name="btv_background_corner_radius" format="integer" />
     </declare-styleable>
 
@@ -30,6 +32,8 @@
     <declare-styleable name="ChipsTriggerView">
         <attr name="cpv_max_rows" format="integer" />
         <attr name="cpv_title_text" format="string" />
+        <attr name="cpv_hint_text_appearance" format="reference" />
+        <attr name="cpv_hint_text" format="string" />
         <attr name="cpv_title_text_appearance" format="string" />
         <attr name="cpv_hidden_items_format_text" format="string" />
     </declare-styleable>
@@ -94,13 +98,13 @@
         <attr name="tpv_time_format" format="string" />
     </declare-styleable>
 
-    <declare-styleable name="ChipsPickerView">
-        <attr name="cpv_required" format="boolean" />
-        <attr name="cpv_allow_to_add_new_options" format="boolean" />
-        <attr name="cpv_hint_text" format="string" />
-        <attr name="cpv_required_text" format="string" />
-        <attr name="cpv_background_color" format="color" />
-        <attr name="cpv_background_corner_radius" format="dimension" />
+    <declare-styleable name="InlineChipsPickerView">
+        <attr name="icpv_required" format="boolean" />
+        <attr name="icpv_allow_to_add_new_options" format="boolean" />
+        <attr name="icpv_hint_text" format="string" />
+        <attr name="icpv_required_text" format="string" />
+        <attr name="icpv_background_color" format="color" />
+        <attr name="icpv_background_corner_radius" format="dimension" />
         <attr name="cpv_chip_group_padding" format="dimension" />
     </declare-styleable>
 </resources>

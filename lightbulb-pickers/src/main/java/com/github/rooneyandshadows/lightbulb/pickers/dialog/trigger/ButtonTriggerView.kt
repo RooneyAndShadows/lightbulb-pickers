@@ -8,7 +8,6 @@ import android.os.Parcelable
 import android.os.Parcelable.Creator
 import android.util.AttributeSet
 import android.util.SparseArray
-import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
@@ -22,10 +21,12 @@ import com.google.android.material.button.MaterialButton
 class ButtonTriggerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ) : DialogTriggerView(context, attrs, defStyleAttr) {
     private lateinit var buttonView: MaterialButton
     private lateinit var errorTextView: AppCompatTextView
+    var hintText: String? = ""
+        private set
     var buttonBackgroundColor: Int = -1
         private set
     var buttonTextColor: Int = -1
@@ -40,6 +41,7 @@ class ButtonTriggerView @JvmOverloads constructor(
         setupBackground()
         setupCornerRadius()
         setupButtonTextColor()
+        setupHintText()
     }
 
     @Override
@@ -84,13 +86,6 @@ class ButtonTriggerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun onHintTextChange() {
-        buttonView.apply {
-            text = hintText
-        }
-    }
-
-    @Override
     override fun onErrorTextChange() {
         errorTextView.apply {
             text = errorText
@@ -102,11 +97,6 @@ class ButtonTriggerView @JvmOverloads constructor(
         errorTextView.apply {
             setTextAppearance(errorTextAppearance)
         }
-    }
-
-    @Override
-    override fun onHintTextAppearanceChange() {
-        //NOT SUPPORTED
     }
 
     @Override
@@ -137,6 +127,7 @@ class ButtonTriggerView @JvmOverloads constructor(
         myState.buttonBackgroundColor = buttonBackgroundColor
         myState.buttonTextColor = buttonTextColor
         myState.buttonBackgroundCornerRadius = buttonBackgroundCornerRadius
+        myState.hintText = hintText
         return myState
     }
 
@@ -147,6 +138,13 @@ class ButtonTriggerView @JvmOverloads constructor(
         setButtonBackgroundColor(savedState.buttonBackgroundColor)
         setButtonBackgroundCornerRadius(savedState.buttonBackgroundCornerRadius)
         setButtonTextColor(savedState.buttonTextColor)
+        setHintText(savedState.hintText)
+    }
+
+    fun setHintText(hintText: String?) {
+        if (this.hintText == hintText) return
+        this.hintText = hintText
+        setupHintText()
     }
 
     fun setButtonBackgroundColor(backgroundColor: Int) {
@@ -181,6 +179,12 @@ class ButtonTriggerView @JvmOverloads constructor(
         buttonView.cornerRadius = buttonBackgroundCornerRadius
     }
 
+    private fun setupHintText() {
+        buttonView.apply {
+            text = hintText
+        }
+    }
+
     private fun inflateView() {
         inflate(context, R.layout.dialog_picker_button_layout, this) as LinearLayoutCompat
         buttonView = findViewById(R.id.picker_view_button)
@@ -193,6 +197,10 @@ class ButtonTriggerView @JvmOverloads constructor(
             attrTypedArray.apply {
                 val defBackgroundColor = ResourceUtils.getColorByAttribute(context, R.attr.colorPrimary)
                 val defTextColor = ResourceUtils.getColorByAttribute(context, R.attr.colorOnPrimary)
+                getString(R.styleable.ButtonTriggerView_btv_hint_text).apply {
+                    val default = ""
+                    hintText = this ?: default
+                }
                 getColor(R.styleable.ButtonTriggerView_btv_background_color, defBackgroundColor).apply {
                     buttonBackgroundColor = this
                 }
@@ -209,6 +217,7 @@ class ButtonTriggerView @JvmOverloads constructor(
     }
 
     private class SavedState : BaseSavedState {
+        var hintText: String? = null
         var buttonTextColor = -1
         var buttonBackgroundColor = -1
         var buttonBackgroundCornerRadius = -1
@@ -217,6 +226,7 @@ class ButtonTriggerView @JvmOverloads constructor(
 
         private constructor(parcel: Parcel) : super(parcel) {
             parcel.apply {
+                hintText = ParcelUtils.readString(this)
                 buttonTextColor = ParcelUtils.readInt(this)!!
                 buttonBackgroundColor = ParcelUtils.readInt(this)!!
                 buttonBackgroundCornerRadius = ParcelUtils.readInt(this)!!
@@ -227,6 +237,7 @@ class ButtonTriggerView @JvmOverloads constructor(
         override fun writeToParcel(out: Parcel, flags: Int) {
             super.writeToParcel(out, flags)
             out.apply {
+                ParcelUtils.writeString(this, hintText)
                 ParcelUtils.writeInt(this, buttonTextColor)
                 ParcelUtils.writeInt(this, buttonBackgroundColor)
                 ParcelUtils.writeInt(this, buttonBackgroundCornerRadius)

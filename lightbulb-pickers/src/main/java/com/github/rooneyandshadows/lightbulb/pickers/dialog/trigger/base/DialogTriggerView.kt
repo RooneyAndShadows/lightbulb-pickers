@@ -6,15 +6,13 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.SparseArray
-import android.widget.LinearLayout
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.core.view.postDelayed
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 
-@Suppress("MemberVisibilityCanBePrivate")
+@Suppress("MemberVisibilityCanBePrivate", "unused")
 abstract class DialogTriggerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -28,15 +26,11 @@ abstract class DialogTriggerView @JvmOverloads constructor(
         private set
     var text: String? = ""
         private set
-    var hintText: String? = ""
-        private set
     var errorText: String? = ""
         private set
     var iconColor: Int = -1
         private set
     var errorTextAppearance = 0
-        private set
-    var hintTextAppearance = 0
         private set
     protected val defaultIconColor: Int by lazy {
         initializeDefaultIconColor()
@@ -46,10 +40,8 @@ abstract class DialogTriggerView @JvmOverloads constructor(
     protected abstract fun onIconColorChange()
     protected abstract fun onErrorEnabledChange()
     protected abstract fun onTextChange()
-    protected abstract fun onHintTextChange()
     protected abstract fun onErrorTextChange()
     protected abstract fun onErrorTextAppearanceChange()
-    protected abstract fun onHintTextAppearanceChange()
     protected abstract fun onEnabledChange()
     abstract fun attachTo(pickerView: BaseDialogPickerView<*>)
 
@@ -106,11 +98,6 @@ abstract class DialogTriggerView @JvmOverloads constructor(
         onTextChange()
     }
 
-    fun setHintText(hintText: String?) {
-        if (this.hintText == hintText) return
-        this.hintText = hintText
-        onHintTextChange()
-    }
 
     fun setErrorText(errorText: String?) {
         if (this.errorText == errorText) return
@@ -130,12 +117,6 @@ abstract class DialogTriggerView @JvmOverloads constructor(
         onErrorTextAppearanceChange()
     }
 
-    fun setHintTextAppearance(hintTextAppearance: Int) {
-        if (this.hintTextAppearance == hintTextAppearance) return
-        this.hintTextAppearance = hintTextAppearance
-        onHintTextAppearanceChange()
-    }
-
     fun requirePickerView(): BaseDialogPickerView<*> {
         if (!this::pickerView.isInitialized)
             throw Exception("ButtonTriggerView is not attached to picker.")
@@ -147,10 +128,8 @@ abstract class DialogTriggerView @JvmOverloads constructor(
         onIconColorChange()
         onErrorEnabledChange()
         onTextChange()
-        onHintTextChange()
         onErrorTextChange()
         onErrorTextAppearanceChange()
-        onHintTextAppearanceChange()
         onEnabledChange()
     }
 
@@ -159,22 +138,14 @@ abstract class DialogTriggerView @JvmOverloads constructor(
         try {
             attrTypedArray.apply {
                 errorEnabled = getBoolean(R.styleable.DialogTriggerView_dtv_error_enabled, false)
-                getString(R.styleable.DialogTriggerView_dtv_hint_text).apply {
-                    val default = ""
-                    hintText = this ?: default
-                }
+
                 getResourceId(
                     R.styleable.DialogTriggerView_dtv_error_text_appearance,
                     R.style.PickerViewErrorTextAppearance
                 ).apply {
                     errorTextAppearance = this
                 }
-                getResourceId(
-                    R.styleable.DialogTriggerView_dtv_hint_text_appearance,
-                    R.style.PickerViewHintTextAppearance
-                ).apply {
-                    hintTextAppearance = this
-                }
+
             }
         } finally {
             attrTypedArray.recycle()
@@ -199,10 +170,8 @@ abstract class DialogTriggerView @JvmOverloads constructor(
             val view = this@DialogTriggerView
             errorEnabled = view.errorEnabled
             text = view.text
-            hintText = view.hintText
             errorText = view.errorText
             errorTextAppearance = view.errorTextAppearance
-            hintTextAppearance = view.hintTextAppearance
             iconColor = view.iconColor
         }
         return myState
@@ -217,10 +186,8 @@ abstract class DialogTriggerView @JvmOverloads constructor(
             val view = this@DialogTriggerView
             view.errorEnabled = errorEnabled
             view.text = text
-            view.hintText = hintText
             view.errorText = errorText
             view.errorTextAppearance = errorTextAppearance
-            view.hintTextAppearance = hintTextAppearance
             view.iconColor = iconColor
         }
     }
@@ -237,10 +204,8 @@ abstract class DialogTriggerView @JvmOverloads constructor(
     private class SavedState : BaseSavedState {
         var errorEnabled: Boolean = false
         var text: String? = null
-        var hintText: String? = null
         var errorText: String? = null
         var errorTextAppearance: Int = -1
-        var hintTextAppearance: Int = -1
         var iconColor: Int = -1
 
         constructor(superState: Parcelable?) : super(superState)
@@ -249,10 +214,8 @@ abstract class DialogTriggerView @JvmOverloads constructor(
             parcel.apply {
                 errorEnabled = ParcelUtils.readBoolean(this)!!
                 text = ParcelUtils.readString(this)
-                hintText = ParcelUtils.readString(this)
                 errorText = ParcelUtils.readString(this)
                 errorTextAppearance = ParcelUtils.readInt(this)!!
-                hintTextAppearance = ParcelUtils.readInt(this)!!
                 iconColor = ParcelUtils.readInt(this)!!
             }
         }
@@ -263,10 +226,8 @@ abstract class DialogTriggerView @JvmOverloads constructor(
             out.apply {
                 ParcelUtils.writeBoolean(this, errorEnabled)
                     .writeString(this, text)
-                    .writeString(this, hintText)
                     .writeString(this, errorText)
                     .writeInt(this, errorTextAppearance)
-                    .writeInt(this, hintTextAppearance)
                     .writeInt(this, iconColor)
             }
         }

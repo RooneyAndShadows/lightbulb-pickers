@@ -262,10 +262,6 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         return triggerView?.errorEnabled ?: false
     }
 
-    fun getHintText(): String? {
-        return triggerView?.hintText
-    }
-
     fun getErrorText(): String? {
         return triggerView?.errorText
     }

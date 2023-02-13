@@ -8,7 +8,6 @@ import android.os.Parcelable
 import android.os.Parcelable.Creator
 import android.util.AttributeSet
 import android.util.SparseArray
-import android.widget.LinearLayout
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.graphics.ColorUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
@@ -30,6 +29,10 @@ class InputTriggerView @JvmOverloads constructor(
     private lateinit var textInputLayout: TextInputLayout
     private lateinit var textInputEditText: TextInputEditText
     private lateinit var inputType: InputTypes
+    var hintText: String? = ""
+        private set
+    var hintTextAppearance = 0
+        private set
     var inputBackgroundColor: Int = -1
         private set
     var startIconUseAlpha = false
@@ -44,6 +47,9 @@ class InputTriggerView @JvmOverloads constructor(
         setupBackground()
         setupStroke()
         setupEndIcon()
+        setupHintTextAppearance()
+        setupHintText()
+
     }
 
     @Override
@@ -78,23 +84,6 @@ class InputTriggerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun onHintTextChange() {
-        val hasHint = !hintText.isNullOrBlank()
-        textInputLayout.isHintEnabled = hasHint
-        textInputLayout.hint = hintText
-        textInputEditText.hint = null
-        /*int paddingTop = (int) (textInputEditText.getPaddingTop() * 1.1);
-        if (textInputLayout.getBoxBackgroundMode() == TextInputLayout.BOX_BACKGROUND_FILLED) {
-            if (hasHint)
-                textInputEditText.setPadding(textInputEditText.getPaddingLeft(), paddingTop, textInputEditText.getPaddingRight(), textInputEditText.getPaddingBottom());
-            else {
-                int paddingVertical = (paddingTop + textInputEditText.getPaddingBottom()) / 2;
-                textInputEditText.setPadding(textInputEditText.getPaddingLeft(), paddingVertical, textInputEditText.getPaddingRight(), paddingVertical);
-            }
-        }*/
-    }
-
-    @Override
     override fun onErrorTextChange() {
         textInputLayout.apply {
             error = errorText
@@ -104,11 +93,6 @@ class InputTriggerView @JvmOverloads constructor(
     @Override
     override fun onErrorTextAppearanceChange() {
         textInputLayout.setErrorTextAppearance(errorTextAppearance)
-    }
-
-    @Override
-    override fun onHintTextAppearanceChange() {
-        textInputLayout.setHintTextAppearance(hintTextAppearance)
     }
 
     @Override
@@ -150,6 +134,8 @@ class InputTriggerView @JvmOverloads constructor(
             pickerInputBoxStrokeColor = view.pickerInputBoxStrokeColor
             startIconUseAlpha = view.startIconUseAlpha
             editTextSavedState = textInputEditText.onSaveInstanceState()
+            hintText = view.hintText
+            hintTextAppearance = view.hintTextAppearance
         }
 
         return myState
@@ -163,8 +149,22 @@ class InputTriggerView @JvmOverloads constructor(
             setInputBackgroundColor(savedState.inputBackgroundColor)
             setInputBoxStrokeColor(savedState.pickerInputBoxStrokeColor)
             setStartIconUseAlpha(savedState.startIconUseAlpha)
+            setHintTextAppearance(savedState.hintTextAppearance)
+            setHintText(savedState.hintText)
             textInputEditText.onRestoreInstanceState(savedState.editTextSavedState)
         }
+    }
+
+    fun setHintTextAppearance(hintTextAppearance: Int) {
+        if (this.hintTextAppearance == hintTextAppearance) return
+        this.hintTextAppearance = hintTextAppearance
+        setupHintTextAppearance()
+    }
+
+    fun setHintText(hintText: String?) {
+        if (this.hintText == hintText) return
+        this.hintText = hintText
+        setupHintText()
     }
 
     fun setInputBackgroundColor(inputBackgroundColor: Int) {
@@ -197,6 +197,10 @@ class InputTriggerView @JvmOverloads constructor(
             attrTypedArray.apply {
                 val defaultStrokeColor = ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface)
                 val defaultBackgroundColor = ResourceUtils.getColorByAttribute(getContext(), R.attr.colorOnSurface)
+                getString(R.styleable.InputTriggerView_itv_hint_text).apply {
+                    val default = ""
+                    hintText = this ?: default
+                }
                 getColor(R.styleable.InputTriggerView_itv_stroke_color, defaultStrokeColor).apply {
                     pickerInputBoxStrokeColor = this.let {
                         return@let ColorUtils.setAlphaComponent(this, 140)
@@ -209,6 +213,12 @@ class InputTriggerView @JvmOverloads constructor(
                 }
                 getInt(R.styleable.InputTriggerView_itv_layout_type, BOXED.value).apply {
                     inputType = InputTypes.valueOf(this)
+                }
+                getResourceId(
+                    R.styleable.InputTriggerView_itv_hint_text_appearance,
+                    R.style.PickerViewHintTextAppearance
+                ).apply {
+                    hintTextAppearance = this
                 }
                 startIconUseAlpha = getBoolean(R.styleable.InputTriggerView_itv_icon_use_alpha, true)
             }
@@ -274,9 +284,31 @@ class InputTriggerView @JvmOverloads constructor(
         textInputLayout.errorIconDrawable = null
     }
 
+    private fun setupHintTextAppearance() {
+        textInputLayout.setHintTextAppearance(hintTextAppearance)
+    }
+
+    private fun setupHintText() {
+        val hasHint = !hintText.isNullOrBlank()
+        textInputLayout.isHintEnabled = hasHint
+        textInputLayout.hint = hintText
+        textInputEditText.hint = null
+        /*int paddingTop = (int) (textInputEditText.getPaddingTop() * 1.1);
+        if (textInputLayout.getBoxBackgroundMode() == TextInputLayout.BOX_BACKGROUND_FILLED) {
+            if (hasHint)
+                textInputEditText.setPadding(textInputEditText.getPaddingLeft(), paddingTop, textInputEditText.getPaddingRight(), textInputEditText.getPaddingBottom());
+            else {
+                int paddingVertical = (paddingTop + textInputEditText.getPaddingBottom()) / 2;
+                textInputEditText.setPadding(textInputEditText.getPaddingLeft(), paddingVertical, textInputEditText.getPaddingRight(), paddingVertical);
+            }
+        }*/
+    }
+
     private class SavedState : BaseSavedState {
+        var hintText: String? = null
         var inputBackgroundColor = 0
         var pickerInputBoxStrokeColor = 0
+        var hintTextAppearance: Int = 0
         var startIconUseAlpha = false
         var editTextSavedState: Parcelable? = null
 
@@ -284,8 +316,10 @@ class InputTriggerView @JvmOverloads constructor(
 
         private constructor(parcel: Parcel) : super(parcel) {
             parcel.apply {
+                hintText = ParcelUtils.readString(this)
                 inputBackgroundColor = ParcelUtils.readInt(this)!!
                 pickerInputBoxStrokeColor = ParcelUtils.readInt(this)!!
+                hintTextAppearance = ParcelUtils.readInt(this)!!
                 startIconUseAlpha = ParcelUtils.readBoolean(this)!!
                 editTextSavedState = ParcelUtils.readParcelable(this, Bundle::class.java)
             }
@@ -295,8 +329,10 @@ class InputTriggerView @JvmOverloads constructor(
         override fun writeToParcel(out: Parcel, flags: Int) {
             super.writeToParcel(out, flags)
             out.apply {
+                ParcelUtils.writeString(this, hintText)
                 ParcelUtils.writeInt(this, inputBackgroundColor)
                 ParcelUtils.writeInt(this, pickerInputBoxStrokeColor)
+                ParcelUtils.writeInt(this, hintTextAppearance)
                 ParcelUtils.writeBoolean(this, startIconUseAlpha)
                 ParcelUtils.writeParcelable(this, editTextSavedState)
             }

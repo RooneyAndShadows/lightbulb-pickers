@@ -69,7 +69,7 @@
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:dtv_hint_text="@string/adapter_picker_pick_item_text"
+                            app:itv_hint_text="@string/adapter_picker_pick_item_text"
                             app:itv_icon_use_alpha="false" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateRangePickerView>
 
@@ -100,7 +100,7 @@
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:dtv_hint_text="@string/adapter_picker_pick_item_text"
+                            app:itv_hint_text="@string/adapter_picker_pick_item_text"
                             app:itv_icon_use_alpha="false"
                             app:itv_layout_type="OUTLINED" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateRangePickerView>
@@ -131,7 +131,7 @@
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ButtonTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:dtv_hint_text="@string/adapter_picker_pick_item_text" />
+                            app:btv_hint_text="@string/adapter_picker_pick_item_text" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateRangePickerView>
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -164,8 +164,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/bg_button_round_corners"
-                            android:elevation="@dimen/system_elevation"
-                            app:dtv_hint_text="@string/adapter_picker_pick_item_text" />
+                            android:elevation="@dimen/system_elevation" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateRangePickerView>
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>

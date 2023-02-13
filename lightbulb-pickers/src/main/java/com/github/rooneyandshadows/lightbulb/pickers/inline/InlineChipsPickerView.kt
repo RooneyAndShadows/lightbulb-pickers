@@ -33,7 +33,7 @@ import com.nex3z.flowlayout.FlowLayout
 import java.util.*
 
 @Suppress("MemberVisibilityCanBePrivate", "unused", "ObjectLiteralToLambda")
-abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructor(
+abstract class InlineChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
@@ -209,7 +209,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
             }
             else -> {
                 Log.w(
-                    ChipsPickerView::class.java.name, "Scrolling parent ignored. Parent type must be one of " +
+                    InlineChipsPickerView::class.java.name, "Scrolling parent ignored. Parent type must be one of " +
                             "ScrollView|NestedScrollView"
                 )
             }
@@ -283,7 +283,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
     }
 
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ChipsPickerView, 0, 0)
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.InlineChipsPickerView, 0, 0)
         try {
             attrTypedArray.apply {
                 val defaultColorBackground = ResourceUtils.getColorByAttribute(getContext(), R.attr.colorOnSurface)
@@ -295,26 +295,26 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
                     getContext(),
                     R.dimen.inline_chips_picker_chip_group_padding
                 )
-                getString(R.styleable.ChipsPickerView_cpv_hint_text).apply {
+                getString(R.styleable.InlineChipsPickerView_icpv_hint_text).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_chips_default_hint)
                     pickerHintText = this ?: default
                 }
-                getString(R.styleable.ChipsPickerView_cpv_required_text).apply {
+                getString(R.styleable.InlineChipsPickerView_icpv_required_text).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_required_text)
                     pickerRequiredText = this ?: default
                 }
-                getColor(R.styleable.ChipsPickerView_cpv_background_color, defaultColorBackground).apply {
+                getColor(R.styleable.InlineChipsPickerView_icpv_background_color, defaultColorBackground).apply {
                     val withAlpha = ColorUtils.setAlphaComponent(this, 30)
                     pickerBackgroundColor = withAlpha
                 }
-                getDimensionPixelSize(R.styleable.ChipsPickerView_cpv_background_corner_radius, defaultCornerRadius).apply {
+                getDimensionPixelSize(R.styleable.InlineChipsPickerView_icpv_background_corner_radius, defaultCornerRadius).apply {
                     pickerCornerRadius = this
                 }
-                getDimensionPixelSize(R.styleable.ChipsPickerView_cpv_chip_group_padding, defaultChipGroupPadding).apply {
+                getDimensionPixelSize(R.styleable.InlineChipsPickerView_cpv_chip_group_padding, defaultChipGroupPadding).apply {
                     pickerGroupPadding = this
                 }
-                isPickerRequired = getBoolean(R.styleable.ChipsPickerView_cpv_required, false)
-                pickerAllowOptionAddition = getBoolean(R.styleable.ChipsPickerView_cpv_allow_to_add_new_options, true)
+                isPickerRequired = getBoolean(R.styleable.InlineChipsPickerView_icpv_required, false)
+                pickerAllowOptionAddition = getBoolean(R.styleable.InlineChipsPickerView_icpv_allow_to_add_new_options, true)
                 ResourceUtils.getColorByAttribute(context, R.attr.colorOnSurface).apply {
                     pickerDefaultIconColor = ColorUtils.setAlphaComponent(this, 140)
                 }
@@ -368,7 +368,7 @@ abstract class ChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverloads c
             setPadding(pickerGroupPadding)
             itemAnimator = null
             layoutManager = LinearLayoutManager(context)
-            adapter = this@ChipsPickerView.adapter
+            adapter = this@InlineChipsPickerView.adapter
         }
     }
 

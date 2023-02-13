@@ -73,9 +73,8 @@
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ChipsTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:cpv_title_text="@string/adapter_picker_chips_title_text"
-                            app:dtv_hint_text="@string/adapter_picker_pick_item_text"
-                            app:itv_icon_use_alpha="false" />
+                            app:cpv_hint_text="@string/adapter_picker_pick_item_text"
+                            app:cpv_title_text="@string/adapter_picker_chips_title_text" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogChipsPickerView>
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>

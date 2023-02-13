@@ -63,13 +63,13 @@
                         app:pv_dialog_button_negative_text="@string/picker_cancel_text"
                         app:pv_dialog_button_positive_text="@string/picker_ok_text"
                         app:pv_dialog_tag="DEMO_PICKER_TAG_BOXED"
-                        app:pv_required_text="@string/icon_picker_required_text"
-                        app:pv_required="true">
+                        app:pv_required="true"
+                        app:pv_required_text="@string/icon_picker_required_text">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:dtv_hint_text="@string/adapter_picker_pick_item_text"
+                            app:itv_hint_text="@string/adapter_picker_pick_item_text"
                             app:itv_icon_use_alpha="false" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateTimePickerView>
 
@@ -94,13 +94,13 @@
                         app:pv_dialog_button_negative_text="@string/picker_cancel_text"
                         app:pv_dialog_button_positive_text="@string/picker_ok_text"
                         app:pv_dialog_tag="DEMO_PICKER_TAG_OUTLINED"
-                        app:pv_required_text="@string/icon_picker_required_text"
-                        app:pv_required="true">
+                        app:pv_required="true"
+                        app:pv_required_text="@string/icon_picker_required_text">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:dtv_hint_text="@string/adapter_picker_pick_item_text"
+                            app:itv_hint_text="@string/adapter_picker_pick_item_text"
                             app:itv_icon_use_alpha="false"
                             app:itv_layout_type="OUTLINED" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateTimePickerView>
@@ -125,13 +125,13 @@
                         app:pv_dialog_button_negative_text="@string/picker_cancel_text"
                         app:pv_dialog_button_positive_text="@string/picker_ok_text"
                         app:pv_dialog_tag="DEMO_PICKER_TAG_BUTTON"
-                        app:pv_required_text="@string/icon_picker_required_text"
-                        app:pv_required="true">
+                        app:pv_required="true"
+                        app:pv_required_text="@string/icon_picker_required_text">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ButtonTriggerView
                             android:layout_width="match_parent"
-                            app:dtv_hint_text="@string/adapter_picker_pick_item_text"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            app:btv_hint_text="@string/adapter_picker_pick_item_text" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateTimePickerView>
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -157,13 +157,12 @@
                         app:pv_dialog_button_negative_text="@string/picker_cancel_text"
                         app:pv_dialog_button_positive_text="@string/picker_ok_text"
                         app:pv_dialog_tag="DEMO_PICKER_TAG_IMAGE_BUTTON"
-                        app:pv_required_text="@string/icon_picker_required_text"
-                        app:pv_required="true">
+                        app:pv_required="true"
+                        app:pv_required_text="@string/icon_picker_required_text">
 
                         <com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.ImageButtonTriggerView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:dtv_hint_text="@string/adapter_picker_pick_item_text"
                             android:background="@drawable/bg_button_round_corners"
                             android:elevation="@dimen/system_elevation" />
                     </com.github.rooneyandshadows.lightbulb.pickers.dialog.DialogDateTimePickerView>

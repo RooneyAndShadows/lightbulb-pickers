@@ -72,11 +72,6 @@ class ImageButtonTriggerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun onHintTextChange() {
-        // NOT SUPPORTED
-    }
-
-    @Override
     override fun onErrorTextChange() {
         errorTextView.apply {
             text = errorText
@@ -88,11 +83,6 @@ class ImageButtonTriggerView @JvmOverloads constructor(
         errorTextView.apply {
             setTextAppearance(errorTextAppearance)
         }
-    }
-
-    @Override
-    override fun onHintTextAppearanceChange() {
-        // NOT SUPPORTED
     }
 
     @Override

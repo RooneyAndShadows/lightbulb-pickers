@@ -51,6 +51,10 @@ class ChipsTriggerView @JvmOverloads constructor(
             return@let it.measuredHeight + flowLayout.paddingTop + flowLayout.paddingBottom
         }
     }
+    var hintText: String? = ""
+        private set
+    var hintTextAppearance = 0
+        private set
 
     companion object {
         private const val DEFAULT_MAX_ROWS = 2
@@ -61,6 +65,8 @@ class ChipsTriggerView @JvmOverloads constructor(
         readAttributes(context, attrs)
         inflateView()
         initView()
+        setupHintTextAppearance()
+        setupHintText()
     }
 
     @Override
@@ -99,13 +105,6 @@ class ChipsTriggerView @JvmOverloads constructor(
     }
 
     @Override
-    override fun onHintTextChange() {
-        hintTextView.apply {
-            text = hintText
-        }
-    }
-
-    @Override
     override fun onErrorTextChange() {
         errorTextView.apply {
             text = errorText
@@ -116,13 +115,6 @@ class ChipsTriggerView @JvmOverloads constructor(
     override fun onErrorTextAppearanceChange() {
         errorTextView.apply {
             setTextAppearance(errorTextAppearance)
-        }
-    }
-
-    @Override
-    override fun onHintTextAppearanceChange() {
-        hintTextView.apply {
-            setTextAppearance(hintTextAppearance)
         }
     }
 
@@ -159,6 +151,8 @@ class ChipsTriggerView @JvmOverloads constructor(
         myState.nMoreFormat = nMoreItemsFormat
         myState.titleTextAppearance = titleTextAppearance
         myState.maxRows = maxRows
+        myState.hintText = hintText
+        myState.hintTextAppearance = hintTextAppearance
         return myState
     }
 
@@ -170,7 +164,21 @@ class ChipsTriggerView @JvmOverloads constructor(
         nMoreItemsFormat = savedState.nMoreFormat
         titleTextAppearance = savedState.titleTextAppearance
         maxRows = savedState.maxRows
+        setHintTextAppearance(savedState.hintTextAppearance)
+        setHintText(savedState.hintText)
         initView()
+    }
+
+    fun setHintTextAppearance(hintTextAppearance: Int) {
+        if (this.hintTextAppearance == hintTextAppearance) return
+        this.hintTextAppearance = hintTextAppearance
+        setupHintTextAppearance()
+    }
+
+    fun setHintText(hintText: String?) {
+        if (this.hintText == hintText) return
+        this.hintText = hintText
+        setupHintText()
     }
 
     fun setTitleTextAppearance(textAppearance: Int) {
@@ -242,6 +250,10 @@ class ChipsTriggerView @JvmOverloads constructor(
         val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.ChipsTriggerView, 0, 0)
         try {
             attrTypedArray.apply {
+                getString(R.styleable.ChipsTriggerView_cpv_hint_text).apply {
+                    val default = ""
+                    hintText = this ?: default
+                }
                 getInt(R.styleable.ChipsTriggerView_cpv_max_rows, DEFAULT_MAX_ROWS).apply {
                     maxRows = this
                 }
@@ -259,6 +271,12 @@ class ChipsTriggerView @JvmOverloads constructor(
                 getString(R.styleable.ChipsTriggerView_cpv_title_text).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_chips_title_text)
                     title = this ?: default
+                }
+                getResourceId(
+                    R.styleable.ChipsTriggerView_cpv_hint_text_appearance,
+                    R.style.PickerViewHintTextAppearance
+                ).apply {
+                    hintTextAppearance = this
                 }
             }
         } finally {
@@ -281,6 +299,19 @@ class ChipsTriggerView @JvmOverloads constructor(
                     generateViewsForFlowLayout(this)
                 }
             }
+        }
+    }
+
+
+    private fun setupHintTextAppearance() {
+        hintTextView.apply {
+            setTextAppearance(hintTextAppearance)
+        }
+    }
+
+    private fun setupHintText() {
+        hintTextView.apply {
+            text = hintText
         }
     }
 
@@ -337,18 +368,22 @@ class ChipsTriggerView @JvmOverloads constructor(
     }
 
     private class SavedState : BaseSavedState {
+        var hintText: String? = null
         var nMoreFormat = ""
         var title = ""
         var titleTextAppearance = -1
         var maxRows = -1
+        var hintTextAppearance: Int = 0
 
         constructor(superState: Parcelable?) : super(superState)
 
         private constructor(parcel: Parcel) : super(parcel) {
             parcel.apply {
+                hintText = ParcelUtils.readString(this)
                 nMoreFormat = ParcelUtils.readString(this)!!
                 title = ParcelUtils.readString(this)!!
                 titleTextAppearance = ParcelUtils.readInt(this)!!
+                hintTextAppearance = ParcelUtils.readInt(this)!!
                 maxRows = ParcelUtils.readInt(this)!!
             }
         }
@@ -357,9 +392,11 @@ class ChipsTriggerView @JvmOverloads constructor(
         override fun writeToParcel(out: Parcel, flags: Int) {
             super.writeToParcel(out, flags)
             out.apply {
+                ParcelUtils.writeString(this, hintText)
                 ParcelUtils.writeString(this, nMoreFormat)
                 ParcelUtils.writeString(this, title)
                 ParcelUtils.writeInt(this, titleTextAppearance)
+                ParcelUtils.writeInt(this, hintTextAppearance)
                 ParcelUtils.writeInt(this, maxRows)
             }
         }
