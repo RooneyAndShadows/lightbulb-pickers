@@ -31,11 +31,15 @@
             android:id="@+id/chipsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/dialog_chips_flow_layout_background_bg"
             android:padding="@dimen/trigger_view_chips_items_spacing"
             app:flChildSpacing="@dimen/trigger_view_chips_items_spacing"
             app:flMaxRows="2"
             app:flRowSpacing="@dimen/trigger_view_chips_items_spacing" />
     </RelativeLayout>
+
+    <!--android:foreground="?android:attr/selectableItemBackground" ripple
+    clickable true-->
 
     <TextView
         android:id="@+id/picker_view_error_text_view"

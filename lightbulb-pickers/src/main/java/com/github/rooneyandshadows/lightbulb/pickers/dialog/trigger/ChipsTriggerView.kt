@@ -289,10 +289,16 @@ class ChipsTriggerView @JvmOverloads constructor(
             removeAllViews()
             text.apply chipTitle@{
                 if (isNullOrBlank()) {
+                    val widthMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
+                    val heightMeasureSpec = makeMeasureSpec(0, UNSPECIFIED)
+                    hintTextView.measure(widthMeasureSpec, heightMeasureSpec)
+                    val height = hintTextView.measuredHeight + flowLayout.paddingTop + flowLayout.paddingBottom
                     hintTextView.visibility = VISIBLE
-                    flowLayoutContainer.layoutParams.height = emptyLayoutHeight
+                    flowLayoutContainer.layoutParams.height = height
+                    flowLayout.layoutParams.height = height
                     return@chipTitle
                 }
+                flowLayout.layoutParams.height = WRAP_CONTENT
                 flowLayoutContainer.layoutParams.height = WRAP_CONTENT
                 hintTextView.visibility = GONE
                 split(",").apply {
