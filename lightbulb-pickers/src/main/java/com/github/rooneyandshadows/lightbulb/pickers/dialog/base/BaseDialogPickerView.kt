@@ -217,15 +217,6 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         pickerDialog.dialogAnimationType = dialogAnimationType
     }
 
-    fun setHintText(hintText: String?) {
-        if (!showSelectedTextValue) return
-        triggerView?.apply {
-            post {
-                setHintText(hintText)
-            }
-        }
-    }
-
     fun setErrorText(errorText: String?) {
         triggerView?.apply {
             post {

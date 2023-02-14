@@ -146,7 +146,6 @@ class DialogChipsPickerView @JvmOverloads constructor(
                 if (view.hasSelection) view.selection = null
                 return
             }
-            println()
             val itemsToSelect = view.data.filter {
                 return@filter chipListContainsChip(chipsToSelect, it)
             }.toList()
@@ -155,7 +154,7 @@ class DialogChipsPickerView @JvmOverloads constructor(
 
         @InverseBindingAdapter(attribute = "chipsPickerSelection", event = "chipsPickerSelectionChanged")
         @JvmStatic
-        fun getChip(view: DialogChipsPickerView): List<String>? {
+        fun getChip(view: DialogChipsPickerView): List<String> {
             return if (view.hasSelection) {
                 val result = mutableListOf<String>().apply {
                     view.selectedItems.forEach {
@@ -163,7 +162,7 @@ class DialogChipsPickerView @JvmOverloads constructor(
                     }
                 }
                 return result
-            } else null
+            } else emptyList()
         }
 
         @BindingAdapter(value = ["chipsPickerSelectionChanged"], requireAll = false)
