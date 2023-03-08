@@ -45,7 +45,6 @@ class DialogDateRangePickerView @JvmOverloads constructor(
         readAttributes(context, attrs)
     }
 
-
     @Override
     override fun getDialogBuilder(
         fragmentManager: FragmentManager,
@@ -123,15 +122,24 @@ class DialogDateRangePickerView @JvmOverloads constructor(
             attrTypedArray.apply {
                 getString(R.styleable.DialogDateRangePickerView_drpv_date_format).apply {
                     val default = DEFAULT_DATE_FORMAT
-                    dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
+                    whenDialogReady {
+                        val dialog = it as DateRangePickerDialog
+                        dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
+                    }
                 }
                 getString(R.styleable.DialogDateRangePickerView_drpv_text_from).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_date_from_text)
-                    dialog.setDialogTextFrom(if (isNullOrBlank()) default else this)
+                    whenDialogReady {
+                        val dialog = it as DateRangePickerDialog
+                        dialog.setDialogTextFrom(if (isNullOrBlank()) default else this)
+                    }
                 }
                 getString(R.styleable.DialogDateRangePickerView_drpv_text_to).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_date_to_text)
-                    dialog.setDialogTextFrom(if (isNullOrBlank()) default else this)
+                    whenDialogReady {
+                        val dialog = it as DateRangePickerDialog
+                        dialog.setDialogTextFrom(if (isNullOrBlank()) default else this)
+                    }
                 }
             }
         } finally {

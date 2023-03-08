@@ -14,7 +14,6 @@ import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.pickers.R
@@ -95,7 +94,10 @@ class DialogDateTimePickerView @JvmOverloads constructor(
             attrTypedArray.apply {
                 getString(R.styleable.DialogDatePickerView_dpv_date_format).apply {
                     val default = DEFAULT_DATE_FORMAT
-                    dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
+                    whenDialogReady{
+                        val dialog = it as DateTimePickerDialog
+                        dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
+                    }
                 }
             }
         } finally {

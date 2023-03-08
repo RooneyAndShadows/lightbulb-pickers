@@ -69,12 +69,6 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
             })
     }
 
-    @Suppress("UNCHECKED_CAST")
-    @Override
-    override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
-        super.onDialogInitialized(dialog)
-    }
-
     @Override
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {
         dispatchFreezeSelfOnly(container)

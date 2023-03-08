@@ -19,6 +19,7 @@ import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPi
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerAdapter.ChipModel
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerDialogBuilder
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
 
@@ -28,6 +29,8 @@ class DialogChipsPickerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : DialogAdapterPickerView<ChipModel>(context, attrs, defStyleAttr) {
+    private val dialog: ChipsPickerDialog
+        get() = pickerDialog as ChipsPickerDialog
     override val adapter: ChipsPickerAdapter
         get() {
             val dialog = (pickerDialog as ChipsPickerDialog)
@@ -36,13 +39,6 @@ class DialogChipsPickerView @JvmOverloads constructor(
 
     init {
         readAttributes(context, attrs)
-    }
-
-    @Override
-    override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
-        super.onDialogInitialized(dialog)
-        dialog.apply {
-        }
     }
 
     @Override
@@ -86,10 +82,16 @@ class DialogChipsPickerView @JvmOverloads constructor(
         try {
             attrTypedArray.apply {
                 getBoolean(R.styleable.DialogChipsPickerView_cpv_filterable, true).apply {
-                    (pickerDialog as (ChipsPickerDialog)).setFilterable(this)
+                    whenDialogReady {
+                        val dialog = (it as (ChipsPickerDialog))
+                        dialog.setFilterable(this)
+                    }
                 }
                 getBoolean(R.styleable.DialogChipsPickerView_cpv_allow_add_new_options, true).apply {
-                    (pickerDialog as (ChipsPickerDialog)).setAllowAddNewOptions(this)
+                    whenDialogReady {
+                        val dialog = (it as (ChipsPickerDialog))
+                        dialog.setAllowAddNewOptions(this)
+                    }
                 }
             }
             showSelectedTextValue = true
@@ -99,15 +101,15 @@ class DialogChipsPickerView @JvmOverloads constructor(
     }
 
     fun setOnChipCreatedListener(listener: OnOptionCreatedListener?) {
-        (pickerDialog as (ChipsPickerDialog)).setOnNewOptionListener(listener)
+        dialog.setOnNewOptionListener(listener)
     }
 
     fun setIsFilterable(isFilterable: Boolean) {
-        (pickerDialog as (ChipsPickerDialog)).setFilterable(isFilterable)
+        dialog.setFilterable(isFilterable)
     }
 
     fun setAllowAddNewOptions(allowNewOptions: Boolean) {
-        (pickerDialog as (ChipsPickerDialog)).setAllowAddNewOptions(allowNewOptions)
+        dialog.setAllowAddNewOptions(allowNewOptions)
     }
 
     private class SavedState : BaseSavedState {

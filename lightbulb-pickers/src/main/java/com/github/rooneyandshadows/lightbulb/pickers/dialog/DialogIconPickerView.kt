@@ -14,6 +14,7 @@ import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter.IconModel
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialog
@@ -27,28 +28,20 @@ class DialogIconPickerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : DialogAdapterPickerView<IconModel>(context, attrs, defStyleAttr) {
+    private val dialog: IconPickerDialog
+        get() = pickerDialog as IconPickerDialog
+    override val adapter: IconPickerAdapter
+        get() = dialog.adapter as IconPickerAdapter
     var selectedIconSize = 0
         private set
-    override val adapter: IconPickerAdapter
-        get() {
-            val dialog = (pickerDialog as IconPickerDialog)
-            return dialog.adapter as IconPickerAdapter
-        }
 
     init {
         readAttributes(context, attrs)
-    }
-
-    @Override
-    override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
-        super.onDialogInitialized(dialog)
-        dialog.apply {
-            addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
-                override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
-                    updatePickerIcon(newSelection)
-                }
-            })
-        }
+        addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
+            override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
+                updatePickerIcon(newSelection)
+            }
+        })
     }
 
     @Override

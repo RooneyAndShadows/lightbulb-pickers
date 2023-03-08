@@ -12,7 +12,6 @@ import android.util.SparseArray
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.FragmentManager
@@ -28,7 +27,6 @@ import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes.NORMAL
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogButtonClickListener
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogCancelListener
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 
@@ -40,11 +38,20 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     defStyleAttr: Int = 0,
 ) : LinearLayoutCompat(context, attrs, defStyleAttr) {
     private lateinit var fragmentManager: FragmentManager
+    private lateinit var dialogTag: String
     private val validationCallbacks: MutableList<ValidationCheck<SelectionType>> = mutableListOf()
     private val selectionChangedListeners: MutableList<SelectionChangedListener<SelectionType>> = mutableListOf()
     private val triggerAttachedCallback: MutableList<TriggerAttachedCallback<SelectionType>> = mutableListOf()
-    protected lateinit var pickerDialog: BasePickerDialogFragment<SelectionType>
-        private set
+    private val onDialogReadyListeners: MutableList<DialogReadyListener<SelectionType>> = mutableListOf()
+    private val dialogInitializer = lazy {
+        return@lazy getDialogBuilder(fragmentManager, dialogTag).buildDialog().apply dialog@{
+            onDialogReadyListeners.apply {
+                forEach { it.execute(this@dialog) }
+                clear()
+            }
+        }
+    }
+    protected val pickerDialog: BasePickerDialogFragment<SelectionType> by dialogInitializer
     protected var dataBindingListener: SelectionChangedListener<SelectionType>? = null
     protected var triggerView: DialogTriggerView? = null
         private set
@@ -78,6 +85,37 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         orientation = VERTICAL
         if (!isInEditMode) fragmentManager = getFragmentManager(context)!!
         readBaseAttributes(context, attrs)
+        whenDialogReady { dialog ->
+            dialog.apply {
+                addOnPositiveClickListener(object : DialogButtonClickListener {
+                    override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
+                        validate()
+                        //updateTextAndValidate()
+                    }
+                })
+                addOnNegativeClickListeners(object : DialogButtonClickListener {
+                    override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
+                        validate()
+                        //updateTextAndValidate()
+                    }
+                })
+                addOnCancelListener(object : DialogCancelListener {
+                    override fun doOnCancel(dialogFragment: BaseDialogFragment) {
+                        updateTextAndValidate()
+                    }
+                })
+                addOnSelectionChangedListener(object : BasePickerDialogFragment.SelectionChangedListener<SelectionType> {
+                    override fun onSelectionChanged(
+                        dialog: BasePickerDialogFragment<SelectionType>,
+                        newValue: SelectionType?,
+                        oldValue: SelectionType?,
+                    ) {
+                        updateTextAndValidate()
+                        dispatchSelectionChangedEvents(newValue, oldValue)
+                    }
+                })
+            }
+        }
     }
 
     fun validate(): Boolean {
@@ -109,36 +147,10 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         return triggerView?.errorEnabled ?: false
     }
 
-    protected open fun onDialogInitialized(dialog: BasePickerDialogFragment<SelectionType>) {
-        dialog.apply {
-            addOnPositiveClickListener(object : DialogButtonClickListener {
-                override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
-                    validate()
-                    //updateTextAndValidate()
-                }
-            })
-            addOnNegativeClickListeners(object : DialogButtonClickListener {
-                override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
-                    validate()
-                    //updateTextAndValidate()
-                }
-            })
-            addOnCancelListener(object : DialogCancelListener {
-                override fun doOnCancel(dialogFragment: BaseDialogFragment) {
-                    updateTextAndValidate()
-                }
-            })
-            addOnSelectionChangedListener(object : BasePickerDialogFragment.SelectionChangedListener<SelectionType> {
-                override fun onSelectionChanged(
-                    dialog: BasePickerDialogFragment<SelectionType>,
-                    newValue: SelectionType?,
-                    oldValue: SelectionType?,
-                ) {
-                    updateTextAndValidate()
-                    dispatchSelectionChangedEvents(newValue, oldValue)
-                }
-            })
-        }
+    @Override
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        pickerDialog.apply {}//init dialog
     }
 
     @Override
@@ -273,6 +285,14 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         triggerView?.setIcon(icon, color)
     }
 
+    protected fun whenDialogReady(action: DialogReadyListener<SelectionType>) {
+        if (dialogInitializer.isInitialized()) {
+            action.execute(pickerDialog)
+            return
+        }
+        onDialogReadyListeners.add(action)
+    }
+
     protected fun updateTextAndValidate() {
         updateText()
         validate()
@@ -328,20 +348,22 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         try {
             attrTypedArray.apply {
                 getString(R.styleable.BaseDialogPickerView_pv_dialog_tag).apply {
-                    val dialogTag = let {
+                    dialogTag = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_dialog_tag_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
-                    pickerDialog = getDialogBuilder(fragmentManager, dialogTag).buildDialog()
-                    onDialogInitialized(pickerDialog)
                 }
                 getString(R.styleable.BaseDialogPickerView_pv_dialog_title).apply {
                     val default = ""
-                    pickerDialog.setDialogTitle(this ?: default)
+                    whenDialogReady {
+                        it.setDialogTitle(this ?: default)
+                    }
                 }
                 getString(R.styleable.BaseDialogPickerView_pv_dialog_message).apply {
                     val default = ""
-                    pickerDialog.setDialogMessage(this ?: default)
+                    whenDialogReady {
+                        it.setDialogMessage(this ?: default)
+                    }
                 }
 
                 getString(R.styleable.BaseDialogPickerView_pv_required_text).apply {
@@ -353,22 +375,34 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_positive_button_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
-                    pickerDialog.setDialogPositiveButton(generateButtonConfig(positiveButtonText))
+                    whenDialogReady {
+                        it.setDialogPositiveButton(generateButtonConfig(positiveButtonText))
+                    }
                 }
                 getString(R.styleable.BaseDialogPickerView_pv_dialog_button_negative_text).apply {
                     val negativeButtonText = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_negative_button_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
-                    pickerDialog.setDialogNegativeButton(generateButtonConfig(negativeButtonText))
+                    whenDialogReady {
+                        it.setDialogNegativeButton(generateButtonConfig(negativeButtonText))
+                    }
                 }
                 getInt(R.styleable.BaseDialogPickerView_pv_dialog_type, NORMAL.value).apply {
-                    pickerDialog.dialogType = DialogTypes.valueOf(this)
+                    whenDialogReady {
+                        it.dialogType = DialogTypes.valueOf(this)
+                    }
                 }
                 getInt(R.styleable.BaseDialogPickerView_pv_dialog_animation, NO_ANIMATION.value).apply {
-                    pickerDialog.dialogAnimationType = DialogAnimationTypes.valueOf(this)
+                    whenDialogReady {
+                        it.dialogAnimationType = DialogAnimationTypes.valueOf(this)
+                    }
                 }
-                pickerDialog.isCancelable = getBoolean(R.styleable.BaseDialogPickerView_pv_dialog_cancelable, true)
+                getBoolean(R.styleable.BaseDialogPickerView_pv_dialog_cancelable, true).apply {
+                    whenDialogReady {
+                        it.isCancelable = this
+                    }
+                }
                 isRequired = getBoolean(R.styleable.BaseDialogPickerView_pv_required, false)
                 isValidationEnabled = getBoolean(R.styleable.BaseDialogPickerView_pv_validation_enabled, false)
                 showSelectedTextValue = getBoolean(R.styleable.BaseDialogPickerView_pv_show_selected_text, true)
@@ -492,5 +526,9 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
                 return arrayOfNulls(size)
             }
         }
+    }
+
+    fun interface DialogReadyListener<SelectionType> {
+        fun execute(dialog: BasePickerDialogFragment<SelectionType>)
     }
 }

@@ -9,7 +9,6 @@ import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.*
-import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogsdemo.dialogs.DemoSingleSelectionDialog
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
@@ -37,19 +36,16 @@ class DemoAdapterPickerView @JvmOverloads constructor(
                 setupIcon()
             }
         })
-    }
-
-    @Override
-    override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
-        super.onDialogInitialized(dialog)
-        val adapterDialog = dialog as DemoSingleSelectionDialog
         addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
             override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
                 setupIcon()
             }
         })
-        val newDecor = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        adapterDialog.setItemDecoration(newDecor)
+        whenDialogReady {
+            val adapterDialog = it as DemoSingleSelectionDialog
+            val newDecor = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+            adapterDialog.setItemDecoration(newDecor)
+        }
     }
 
     @Override

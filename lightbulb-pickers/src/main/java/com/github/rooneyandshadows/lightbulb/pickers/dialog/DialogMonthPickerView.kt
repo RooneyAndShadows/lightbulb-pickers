@@ -140,13 +140,22 @@ class DialogMonthPickerView @JvmOverloads constructor(
             attrTypedArray.apply {
                 attrTypedArray.getString(R.styleable.DialogMonthPickerView_mpv_date_format).apply {
                     val default = DEFAULT_DATE_FORMAT
-                    dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
+                    whenDialogReady {
+                        val dialog = it as MonthPickerDialog
+                        dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
+                    }
                 }
                 getInteger(R.styleable.DialogMonthPickerView_mpv_min_year, DEFAULT_MIN_YEAR).apply {
-                    dialog.setMinYear(this)
+                    whenDialogReady {
+                        val dialog = it as MonthPickerDialog
+                        dialog.setMinYear(this)
+                    }
                 }
                 getInteger(R.styleable.DialogMonthPickerView_mpv_max_year, DEFAULT_MAX_YEAR).apply {
-                    dialog.setMaxYear(this)
+                    whenDialogReady {
+                        val dialog = it as MonthPickerDialog
+                        dialog.setMaxYear(this)
+                    }
                 }
             }
         } finally {

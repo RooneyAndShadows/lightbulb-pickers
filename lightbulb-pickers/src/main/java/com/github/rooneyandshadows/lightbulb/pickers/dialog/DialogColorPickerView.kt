@@ -21,6 +21,7 @@ import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPi
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerDialog
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 
@@ -30,11 +31,10 @@ class DialogColorPickerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : DialogAdapterPickerView<ColorModel>(context, attrs, defStyleAttr) {
+    private val dialog: ColorPickerDialog
+        get() = pickerDialog as ColorPickerDialog
     override val adapter: ColorPickerAdapter
-        get() {
-            val dialog = (pickerDialog as ColorPickerDialog)
-            return dialog.adapter as ColorPickerAdapter
-        }
+        get() = dialog.adapter as ColorPickerAdapter
 
     init {
         readAttributes(context, attrs)
@@ -43,18 +43,11 @@ class DialogColorPickerView @JvmOverloads constructor(
                 updatePickerIcon(selection)
             }
         })
-    }
-
-    @Override
-    override fun onDialogInitialized(dialog: BasePickerDialogFragment<IntArray>) {
-        super.onDialogInitialized(dialog)
-        dialog.apply {
-            addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
-                override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
-                    updatePickerIcon(newSelection)
-                }
-            })
-        }
+        addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
+            override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
+                updatePickerIcon(newSelection)
+            }
+        })
     }
 
     @Override

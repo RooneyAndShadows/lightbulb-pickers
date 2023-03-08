@@ -1,6 +1,7 @@
 package com.github.rooneyandshadows.lightbulb.pickersdemo.fragments.adapter_picker
 
 import android.os.Bundle
+import android.view.View
 import com.github.rooneyandshadows.lightbulb.annotation_processors.annotations.FragmentConfiguration
 import com.github.rooneyandshadows.lightbulb.annotation_processors.annotations.FragmentScreen
 import com.github.rooneyandshadows.lightbulb.application.fragment.base.BaseFragmentWithViewModelAndViewBinding
@@ -9,6 +10,7 @@ import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R
 import com.github.rooneyandshadows.lightbulb.pickersdemo.databinding.FragmentAdapterPickerDemoBinding
 import com.github.rooneyandshadows.lightbulb.pickersdemo.getShowMenuDrawable
+import com.github.rooneyandshadows.lightbulb.pickersdemo.views.DemoAdapterPickerView
 
 @FragmentScreen(screenName = "Adapter", screenGroup = "Demo")
 @FragmentConfiguration(layoutName = "fragment_adapter_picker_demo", hasLeftDrawer = true)
