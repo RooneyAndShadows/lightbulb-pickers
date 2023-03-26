@@ -10,7 +10,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 33
         versionCode 2000
-        versionName "2.0.0-RC15"
+        versionName "2.0.0-RC16"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }

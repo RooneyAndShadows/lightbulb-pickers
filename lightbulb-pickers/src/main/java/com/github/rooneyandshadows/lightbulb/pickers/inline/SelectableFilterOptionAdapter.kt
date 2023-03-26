@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.RecyclerView.*
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel
 import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterSelectableModes.*
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerFilterableAdapter
 import java.util.*
 import java.util.function.Predicate
 
 @Suppress("UNCHECKED_CAST")
-class SelectableFilterOptionAdapter<ItemType : EasyAdapterDataModel> : EasyRecyclerAdapter<ItemType>(SELECT_MULTIPLE) {
+class SelectableFilterOptionAdapter<ItemType : EasyAdapterDataModel> :
+    EasyRecyclerFilterableAdapter<ItemType>(SELECT_MULTIPLE) {
 
     @Override
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
