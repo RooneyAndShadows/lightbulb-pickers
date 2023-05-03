@@ -51,7 +51,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             }
         }
     }
-    protected val pickerDialog: BasePickerDialogFragment<SelectionType> by dialogInitializer
+    private val pickerDialog: BasePickerDialogFragment<SelectionType> by dialogInitializer
     protected var dataBindingListener: SelectionChangedListener<SelectionType>? = null
     protected var triggerView: DialogTriggerView? = null
         private set
@@ -68,6 +68,8 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         get() = triggerView?.text ?: ""
     val hasSelection: Boolean
         get() = pickerDialog.hasSelection()
+    protected open val dialog: BasePickerDialogFragment<SelectionType>
+        get() = pickerDialog
     open var selection: SelectionType?
         set(value) = pickerDialog.setSelection(value)
         get() = pickerDialog.getSelection()

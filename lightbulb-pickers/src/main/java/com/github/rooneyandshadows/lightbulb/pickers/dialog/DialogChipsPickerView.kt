@@ -13,13 +13,11 @@ import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsFilterView
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsFilterView.OnOptionCreatedListener
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerAdapter
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerAdapter.ChipModel
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerDialogBuilder
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialog
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.adapter.ChipModel
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.adapter.ChipsPickerAdapter
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
 
@@ -29,13 +27,10 @@ class DialogChipsPickerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : DialogAdapterPickerView<ChipModel>(context, attrs, defStyleAttr) {
-    private val dialog: ChipsPickerDialog
-        get() = pickerDialog as ChipsPickerDialog
+    override val dialog: ChipsPickerDialog
+        get() = super.dialog as ChipsPickerDialog
     override val adapter: ChipsPickerAdapter
-        get() {
-            val dialog = (pickerDialog as ChipsPickerDialog)
-            return dialog.adapter as ChipsPickerAdapter
-        }
+        get() = dialog.adapter
 
     init {
         readAttributes(context, attrs)

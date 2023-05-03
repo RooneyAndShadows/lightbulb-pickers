@@ -12,8 +12,6 @@ import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerAdapter.ColorModel
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.ColorPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
@@ -21,7 +19,8 @@ import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPi
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerDialog
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.adapter.ColorModel
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_color.adapter.ColorPickerAdapter
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 
@@ -31,10 +30,10 @@ class DialogColorPickerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : DialogAdapterPickerView<ColorModel>(context, attrs, defStyleAttr) {
-    private val dialog: ColorPickerDialog
-        get() = pickerDialog as ColorPickerDialog
+    override val dialog: ColorPickerDialog
+        get() = super.dialog as ColorPickerDialog
     override val adapter: ColorPickerAdapter
-        get() = dialog.adapter as ColorPickerAdapter
+        get() = dialog.adapter
 
     init {
         readAttributes(context, attrs)
@@ -93,7 +92,7 @@ class DialogColorPickerView @JvmOverloads constructor(
             setPickerIcon(defaultDrawable)
         } else {
             val firstSelectedPosition = selection[0]
-            val selectedModel: ColorModel = adapter.getItem(firstSelectedPosition)!!
+            val selectedModel: ColorModel = adapter.collection.getItem(firstSelectedPosition)!!
             val drawable = adapter.getColorDrawable(context, selectedModel)
             val color = Color.parseColor(selectedModel.colorHex)
             setPickerIcon(drawable, color)

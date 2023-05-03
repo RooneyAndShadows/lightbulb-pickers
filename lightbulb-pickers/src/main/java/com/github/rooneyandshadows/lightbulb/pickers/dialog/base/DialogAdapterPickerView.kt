@@ -15,9 +15,9 @@ import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes.*
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialogBuilder
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.adapter.DialogPickerAdapter
 import com.github.rooneyandshadows.lightbulb.pickers.R
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.data.EasyAdapterDataModel
 import java.util.*
 
 @Suppress("UNCHECKED_CAST", "unused", "MemberVisibilityCanBePrivate", "UnnecessaryVariable")
@@ -27,22 +27,22 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : BaseDialogPickerView<IntArray>(context, attrs, defStyleAttr) {
-    private val dialog: AdapterPickerDialog<ItemType>
-        get() = (pickerDialog as AdapterPickerDialog<ItemType>)
-    protected open val adapter: EasyRecyclerAdapter<ItemType>
+    override val dialog: AdapterPickerDialog<ItemType>
+        get() = super.dialog as AdapterPickerDialog<ItemType>
+    protected open val adapter: DialogPickerAdapter<ItemType>
         get() = dialog.adapter
     var data: List<ItemType>
-        get() = adapter.getItems()
-        set(value) = adapter.setCollection(value)
+        get() = adapter.collection.getItems()
+        set(value) = adapter.collection.set(value)
     override var selection: IntArray?
         set(value) = dialog.setSelection(value)
-        get() = pickerDialog.getSelection()
+        get() = dialog.getSelection()
     val selectedItems: List<ItemType>
-        get() = adapter.getItems(selection)
+        get() = adapter.collection.getItems(selection ?: intArrayOf())
     override val viewText: String
         get() {
             return selection?.let {
-                return@let adapter.getPositionStrings(it)
+                return@let adapter.collection.getPositionStrings(it)
             } ?: ""
         }
 
@@ -101,7 +101,7 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
             selection = null
             return
         }
-        val itemPositions = adapter.getPositions(items)
+        val itemPositions = adapter.collection.getPositions(items)
         selection = itemPositions
     }
 
@@ -114,7 +114,7 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
             selection = null
             return
         }
-        val position = adapter.getPosition(item)
+        val position = adapter.collection.getPosition(item)
         if (position != -1) setSelection(position)
     }
 

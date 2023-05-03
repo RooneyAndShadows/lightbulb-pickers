@@ -6,7 +6,7 @@ import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils.Companion.writeString
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.color.colors.DemoColors
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIcons
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.data.EasyAdapterDataModel
 import java.util.*
 
 class DemoModel : EasyAdapterDataModel {

@@ -28,10 +28,8 @@ class DialogMonthPickerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : BaseDialogPickerView<Month>(context, attrs, defStyleAttr) {
-    private val dialog: MonthPickerDialog
-        get() {
-            return pickerDialog as MonthPickerDialog
-        }
+    override val dialog: MonthPickerDialog
+        get() = super.dialog as MonthPickerDialog
     val selectionAsDate: OffsetDateTime?
         get() = selection?.toDate()
     override val viewText: String

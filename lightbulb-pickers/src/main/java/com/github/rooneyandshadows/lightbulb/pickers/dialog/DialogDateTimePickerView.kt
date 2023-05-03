@@ -20,14 +20,14 @@ import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import java.time.OffsetDateTime
 
-@Suppress("RedundantOverride", "UnnecessaryVariable", "unused")
+@Suppress("RedundantOverride", "UnnecessaryVariable", "unused", "MemberVisibilityCanBePrivate")
 class DialogDateTimePickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : BaseDialogPickerView<OffsetDateTime>(context, attrs, defStyleAttr) {
-    private val dialog: DateTimePickerDialog
-        get() = pickerDialog as DateTimePickerDialog
+    override val dialog: DateTimePickerDialog
+        get() = super.dialog as DateTimePickerDialog
     var datePickerFormat: String = DEFAULT_DATE_FORMAT
         private set
         get() = dialog.dialogDateFormat

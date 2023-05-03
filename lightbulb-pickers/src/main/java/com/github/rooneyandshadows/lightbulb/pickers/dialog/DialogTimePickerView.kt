@@ -28,8 +28,8 @@ class DialogTimePickerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : BaseDialogPickerView<Time>(context, attrs, defStyleAttr) {
-    private val dialog: TimePickerDialog
-        get() = pickerDialog as TimePickerDialog
+    override val dialog: TimePickerDialog
+        get() = super.dialog as TimePickerDialog
     var timeFormat = DEFAULT_TIME_FORMAT
         private set
     private val selectionAsDate: OffsetDateTime?

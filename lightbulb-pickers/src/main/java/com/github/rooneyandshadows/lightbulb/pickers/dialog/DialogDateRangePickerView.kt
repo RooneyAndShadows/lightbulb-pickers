@@ -28,8 +28,8 @@ class DialogDateRangePickerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : BaseDialogPickerView<DateRange>(context, attrs, defStyleAttr) {
-    private val dialog: DateRangePickerDialog
-        get() = pickerDialog as DateRangePickerDialog
+    override val dialog: DateRangePickerDialog
+        get() = super.dialog as DateRangePickerDialog
     override val viewText: String
         get() {
             val default = ResourceUtils.getPhrase(context, R.string.dialog_date_picker_empty_text)

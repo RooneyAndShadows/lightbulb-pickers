@@ -25,8 +25,8 @@ import com.github.rooneyandshadows.lightbulb.commons.utils.DrawableUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickers.R
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.callbacks.EasyAdapterSelectionChangedListener
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.data.EasyAdapterDataModel
+import com.github.rooneyandshadows.lightbulb.recycleradapters.implementation.collection.ExtendedCollection
 import com.github.rooneyandshadows.lightbulb.textinputview.TextInputView
 import com.github.rooneyandshadows.lightbulb.textinputview.TextInputView.TextChangedCallback
 import com.nex3z.flowlayout.FlowLayout
@@ -83,30 +83,28 @@ abstract class InlineChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverl
         }
     var selection: List<ModelType>
         set(value) {
-            val positions = adapter.getPositions(value)
-            adapter.selectPositions(
+            val positions = adapter.collection.getPositions(value)
+            adapter.collection.selectPositions(
                 positions = positions,
                 newState = true,
                 incremental = false
             )
         }
-        get() = adapter.selectedItems
+        get() = adapter.collection.selectedItems
     var selectedPositions: IntArray
-        set(value) = adapter.selectPositions(
+        set(value) = adapter.collection.selectPositions(
             positions = value,
             newState = true,
             incremental = false
         )
-        get() = adapter.selectedPositionsAsArray
+        get() = adapter.collection.selectedPositionsAsArray
     var options: List<ModelType>
-        get() = adapter.getItems()
-        set(value) {
-            adapter.setCollection(value)
-        }
+        get() = adapter.collection.getItems()
+        set(value) = adapter.collection.set(value)
     val isPickerShowing: Boolean
         get() = recyclerView?.visibility == VISIBLE
     val hasSelection: Boolean
-        get() = adapter.hasSelection()
+        get() = adapter.collection.hasSelection
     abstract val optionCreator: AdapterOptionCreator<ModelType>
 
     init {
@@ -248,7 +246,7 @@ abstract class InlineChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverl
     }
 
     fun addOption(option: ModelType) {
-        adapter.addItem(option)
+        adapter.collection.add(option)
     }
 
     fun selectPositions(positions: List<Int>) {
@@ -264,7 +262,7 @@ abstract class InlineChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverl
     }
 
     fun selectItem(item: ModelType) {
-        val position = adapter.getPosition(item)
+        val position = adapter.collection.getPosition(item)
         if (position != -1) selectItemAt(position)
     }
 
@@ -307,10 +305,16 @@ abstract class InlineChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverl
                     val withAlpha = ColorUtils.setAlphaComponent(this, 30)
                     pickerBackgroundColor = withAlpha
                 }
-                getDimensionPixelSize(R.styleable.InlineChipsPickerView_icpv_background_corner_radius, defaultCornerRadius).apply {
+                getDimensionPixelSize(
+                    R.styleable.InlineChipsPickerView_icpv_background_corner_radius,
+                    defaultCornerRadius
+                ).apply {
                     pickerCornerRadius = this
                 }
-                getDimensionPixelSize(R.styleable.InlineChipsPickerView_cpv_chip_group_padding, defaultChipGroupPadding).apply {
+                getDimensionPixelSize(
+                    R.styleable.InlineChipsPickerView_cpv_chip_group_padding,
+                    defaultChipGroupPadding
+                ).apply {
                     pickerGroupPadding = this
                 }
                 isPickerRequired = getBoolean(R.styleable.InlineChipsPickerView_icpv_required, false)
@@ -326,7 +330,7 @@ abstract class InlineChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverl
 
     private fun initializeAdapter() {
         adapter = SelectableFilterOptionAdapter<ModelType>().apply {
-            addOnSelectionChangedListener(object : EasyAdapterSelectionChangedListener {
+            collection.addOnSelectionChangeListener(object : ExtendedCollection.SelectionChangeListener {
                 override fun onChanged(newSelection: IntArray?) {
                     setupChips()
                     validate()
@@ -379,7 +383,7 @@ abstract class InlineChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverl
             if (!pickerAllowOptionAddition) return@setEndIcon
             val newOptionName = filterInput!!.text
             val newOption = optionCreator.createOption(newOptionName)
-            adapter.addItem(newOption)
+            adapter.collection.add(newOption)
             filterInput?.text = ""
             dispatchOptionCreatedEvent(newOption)
         }
@@ -406,7 +410,7 @@ abstract class InlineChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverl
     }
 
     private fun filterOptions(queryText: String) {
-        adapter.filter.filter(queryText)
+        adapter.collection.filter.filter(queryText)
     }
 
     private fun setupChips() {
@@ -443,7 +447,7 @@ abstract class InlineChipsPickerView<ModelType : EasyAdapterDataModel> @JvmOverl
                 }
                 background = ResourceUtils.getDrawable(context, R.drawable.inline_chip_picker_remove_icon_bg)
                 setImageDrawable(chipRemoveIcon)
-                setOnClickListener { adapter.selectItem(targetItem, false) }
+                setOnClickListener { adapter.collection.selectItem(targetItem, false) }
             }
             findViewById<TextView>(R.id.chip_item_text_view).apply {
                 text = itemName

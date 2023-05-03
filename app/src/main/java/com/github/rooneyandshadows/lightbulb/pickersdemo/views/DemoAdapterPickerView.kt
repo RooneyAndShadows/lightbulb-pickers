@@ -10,7 +10,7 @@ import androidx.databinding.InverseBindingListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.*
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
-import com.github.rooneyandshadows.lightbulb.dialogsdemo.dialogs.DemoSingleSelectionDialog
+import com.github.rooneyandshadows.lightbulb.pickersdemo.views.dialogs.DemoSingleSelectionDialog
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
@@ -60,7 +60,7 @@ class DemoAdapterPickerView @JvmOverloads constructor(
     }
 
     private fun setupIcon() {
-        val selectedPositions = adapter.getPositions(selectedItems)
+        val selectedPositions = adapter.collection.getPositions(selectedItems)
         if (selectedPositions.isEmpty()) {
             val icon: Drawable = AppIconUtils.getIconWithAttributeColor(
                 context,
@@ -72,7 +72,7 @@ class DemoAdapterPickerView @JvmOverloads constructor(
             setPickerIcon(icon)
             return
         }
-        val selectedItem = adapter.getItem(selectedPositions[0])!!
+        val selectedItem = adapter.collection.getItem(selectedPositions[0])!!
         val iconType = selectedItem.icon
         val icon: Drawable = AppIconUtils.getIconWithAttributeColor(
             context,

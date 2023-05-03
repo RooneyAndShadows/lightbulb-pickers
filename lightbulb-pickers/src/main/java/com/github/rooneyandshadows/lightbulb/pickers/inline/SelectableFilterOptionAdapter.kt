@@ -8,15 +8,30 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.*
 import com.github.rooneyandshadows.lightbulb.pickers.R
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterDataModel
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyAdapterSelectableModes.*
-import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerFilterableAdapter
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.EasyRecyclerAdapter
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.collection.EasyRecyclerAdapterCollection
+import com.github.rooneyandshadows.lightbulb.recycleradapters.abstraction.data.EasyAdapterDataModel
+import com.github.rooneyandshadows.lightbulb.recycleradapters.implementation.collection.ExtendedCollection
+import com.github.rooneyandshadows.lightbulb.recycleradapters.implementation.collection.ExtendedCollection.SelectableModes.SELECT_MULTIPLE
 import java.util.*
-import java.util.function.Predicate
 
 @Suppress("UNCHECKED_CAST")
 class SelectableFilterOptionAdapter<ItemType : EasyAdapterDataModel> :
-    EasyRecyclerFilterableAdapter<ItemType>(SELECT_MULTIPLE) {
+    EasyRecyclerAdapter<ItemType>() {
+    override val collection: ExtendedCollection<ItemType>
+        get() = super.collection as ExtendedCollection<ItemType>
+
+    override fun createCollection(): EasyRecyclerAdapterCollection<ItemType> {
+        return object : ExtendedCollection<ItemType>(this@SelectableFilterOptionAdapter, SELECT_MULTIPLE) {
+            @Override
+            override fun filterItem(item: ItemType, filterQuery: String): Boolean {
+                val locale = Locale.getDefault()
+                val filterString = filterQuery.lowercase(locale)
+                val itemName = item.itemName.lowercase(locale)
+                return itemName.contains(filterString)
+            }
+        }
+    }
 
     @Override
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,28 +44,14 @@ class SelectableFilterOptionAdapter<ItemType : EasyAdapterDataModel> :
 
     @Override
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getFilteredItems()[position]
+        val item = collection.getFilteredItem(position) ?: return
         val vHolder: ChipVH = holder as SelectableFilterOptionAdapter<ItemType>.ChipVH
         vHolder.setItem(item)
     }
 
     fun hasItemWithName(name: String): Boolean {
         if (name.isBlank()) return false
-        return getItems(Predicate { item -> return@Predicate item.itemName == name })
-            .isNotEmpty()
-    }
-
-    @Override
-    override fun getItemName(item: ItemType): String {
-        return item.itemName
-    }
-
-    @Override
-    override fun filterItem(item: ItemType, filterQuery: String): Boolean {
-        val locale = Locale.getDefault()
-        val filterString = filterQuery.lowercase(locale)
-        val itemName = item.itemName.lowercase(locale)
-        return itemName.contains(filterString)
+        return collection.getItems().any { it.itemName == name }
     }
 
     inner class ChipVH internal constructor(itemBinding: RelativeLayout) : ViewHolder(itemBinding) {
@@ -58,7 +59,7 @@ class SelectableFilterOptionAdapter<ItemType : EasyAdapterDataModel> :
 
         fun setItem(item: ItemType) {
             itemView.apply {
-                val isVisible = !isItemSelected(item)
+                val isVisible = !collection.isItemSelected(item)
                 if (!isVisible) {
                     visibility = View.GONE
                     layoutParams = ViewGroup.LayoutParams(0, 0)
@@ -68,7 +69,7 @@ class SelectableFilterOptionAdapter<ItemType : EasyAdapterDataModel> :
                 }
                 chipOptionTextView.text = item.itemName
                 chipOptionTextView.setOnClickListener {
-                    selectItem(item, true)
+                    collection.selectItem(item, true)
                 }
             }
         }

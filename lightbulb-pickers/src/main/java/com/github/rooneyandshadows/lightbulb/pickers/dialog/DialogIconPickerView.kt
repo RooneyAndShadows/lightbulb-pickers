@@ -14,24 +14,23 @@ import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_datetime.DateTimePickerDialog
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerAdapter.IconModel
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.IconPickerDialogBuilder
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.adapter.IconModel
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_icon.adapter.IconPickerAdapter
 import com.github.rooneyandshadows.lightbulb.pickers.R
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
 
-@Suppress("unused")
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 class DialogIconPickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : DialogAdapterPickerView<IconModel>(context, attrs, defStyleAttr) {
-    private val dialog: IconPickerDialog
-        get() = pickerDialog as IconPickerDialog
+    override val dialog: IconPickerDialog
+        get() = super.dialog as IconPickerDialog
     override val adapter: IconPickerAdapter
-        get() = dialog.adapter as IconPickerAdapter
+        get() = dialog.adapter
     var selectedIconSize = 0
         private set
 
@@ -91,7 +90,7 @@ class DialogIconPickerView @JvmOverloads constructor(
     private fun updatePickerIcon(selection: IntArray?) {
         val icon = if (selection != null && selection.isNotEmpty()) {
             val firstSelectedPosition = selection[0]
-            val selectedModel: IconModel = adapter.getItem(firstSelectedPosition)!!
+            val selectedModel: IconModel = adapter.collection.getItem(firstSelectedPosition)!!
             val drawable = adapter.getDrawable(context, selectedModel, selectedIconSize)
             drawable
         } else null

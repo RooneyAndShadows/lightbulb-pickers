@@ -3,8 +3,7 @@ package com.github.rooneyandshadows.lightbulb.pickersdemo
 import android.content.Context
 import android.graphics.drawable.Drawable
 import com.github.rooneyandshadows.lightbulb.application.activity.slidermenu.drawable.ShowMenuDrawable
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerAdapter
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.ChipsPickerAdapter.*
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_chips.adapter.ChipModel
 
 
 fun getShowMenuDrawable(context: Context): Drawable {
