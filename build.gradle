@@ -17,7 +17,7 @@ buildscript {
                         material           : "1.8.0"
                 ],
                 java       : [
-                        commons: "1.0.6"
+                        commons: "[1.0.7,1.1.0["
                 ],
                 lightbulb  : [
                         commons              : "[1.1.1,1.2.0[",
