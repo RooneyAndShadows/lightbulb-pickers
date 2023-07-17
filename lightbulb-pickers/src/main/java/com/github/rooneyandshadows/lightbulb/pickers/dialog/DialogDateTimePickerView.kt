@@ -89,12 +89,12 @@ class DialogDateTimePickerView @JvmOverloads constructor(
     }
 
     private fun readAttributes(context: Context, attrs: AttributeSet?) {
-        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogDatePickerView, 0, 0)
+        val attrTypedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.DialogDateTimePickerView, 0, 0)
         try {
             attrTypedArray.apply {
-                getString(R.styleable.DialogDatePickerView_dpv_date_format).apply {
+                getString(R.styleable.DialogDateTimePickerView_dpv_date_format).apply {
                     val default = DEFAULT_DATE_FORMAT
-                    whenDialogReady{
+                    whenDialogReady {
                         val dialog = it as DateTimePickerDialog
                         dialog.setDialogDateFormat(if (isNullOrBlank()) default else this)
                     }

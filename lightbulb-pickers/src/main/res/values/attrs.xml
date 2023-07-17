@@ -78,7 +78,7 @@
 
     <declare-styleable name="DialogColorPickerView" />
 
-    <declare-styleable name="DialogDatePickerView">
+    <declare-styleable name="DialogDateTimePickerView">
         <attr name="dpv_date_format" format="string" />
     </declare-styleable>
 

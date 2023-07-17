@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import com.github.rooneyandshadows.lightbulb.application.activity.slidermenu.SliderMenu
 import com.github.rooneyandshadows.lightbulb.application.activity.slidermenu.config.SliderMenuConfiguration
+import com.github.rooneyandshadows.lightbulb.application.activity.slidermenu.config.SliderMenuConfiguration.HeaderConfiguration
 import com.github.rooneyandshadows.lightbulb.application.activity.slidermenu.items.PrimaryMenuItem
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R
@@ -15,7 +16,7 @@ import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIc
 @Suppress("unused")
 object MenuConfigurations {
     fun getConfiguration(context: Context): SliderMenuConfiguration {
-        return SliderMenuConfiguration(R.layout.demo_drawer_header_view).apply {
+        return SliderMenuConfiguration(HeaderConfiguration(R.layout.demo_drawer_header_view)).apply {
             itemsList.apply {
                 add(
                     PrimaryMenuItem(
