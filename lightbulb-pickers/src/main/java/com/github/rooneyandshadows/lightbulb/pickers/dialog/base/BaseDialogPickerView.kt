@@ -436,7 +436,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             isRequired = view.isRequired
             isValidationEnabled = view.isValidationEnabled
             showSelectedTextValue = view.showSelectedTextValue
-            // dialogState = pickerDialog.saveDialogState()
+            dialogState = pickerDialog.saveDialogState()
             triggerState = triggerView?.onSaveInstanceState()
         }
         return myState
@@ -452,7 +452,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             view.isRequired = isRequired
             view.isValidationEnabled = isValidationEnabled
             view.showSelectedTextValue = showSelectedTextValue
-            // view.pickerDialog.restoreDialogState(dialogState)
+            view.pickerDialog.restoreDialogState(dialogState)
             triggerState?.apply {
                 view.triggerView?.onRestoreInstanceState(this)
             }
