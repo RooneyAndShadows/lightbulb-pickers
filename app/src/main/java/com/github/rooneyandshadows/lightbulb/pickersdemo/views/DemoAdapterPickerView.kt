@@ -10,15 +10,14 @@ import androidx.databinding.InverseBindingListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.*
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
-import com.github.rooneyandshadows.lightbulb.pickersdemo.views.dialogs.DemoSingleSelectionDialog
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView
+import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.adapter.DialogPickerRadioButtonAdapter
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.DialogAdapterPickerView
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.InputTriggerView
-import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 import com.github.rooneyandshadows.lightbulb.pickersdemo.R
 import com.github.rooneyandshadows.lightbulb.pickersdemo.models.DemoModel
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.AppIconUtils
 import com.github.rooneyandshadows.lightbulb.pickersdemo.utils.icon.icons.DemoIconsUi
+import com.github.rooneyandshadows.lightbulb.pickersdemo.views.dialogs.DemoSingleSelectionDialog
 import java.util.*
 import java.util.stream.Collectors
 
@@ -28,19 +27,13 @@ class DemoAdapterPickerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : DialogAdapterPickerView<DemoModel>(context, attrs, defStyleAttr) {
+    override val adapter: DialogPickerRadioButtonAdapter<DemoModel>
+        get() = super.adapter as DialogPickerRadioButtonAdapter<DemoModel>
 
     init {
         readAttributes(context, attrs)
-        addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray> {
-            override fun onAttached(triggerView: DialogTriggerView, pickerView: BaseDialogPickerView<IntArray>) {
-                setupIcon()
-            }
-        })
-        addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
-            override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
-                setupIcon()
-            }
-        })
+        addOnTriggerAttachedListener { _, _ -> setupIcon() }
+        addSelectionChangedListener { _, _ -> setupIcon() }
         whenDialogReady {
             val adapterDialog = it as DemoSingleSelectionDialog
             val newDecor = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
@@ -96,14 +89,14 @@ class DemoAdapterPickerView @JvmOverloads constructor(
     object Databinding {
         @JvmStatic
         @InverseBindingAdapter(attribute = "pickerSelection", event = "pickerSelectionChanged")
-        fun getSingleSelection(view: DialogAdapterPickerView<DemoModel>): UUID? {
+        fun getSingleSelection(view: DemoAdapterPickerView): UUID? {
             return if (view.hasSelection) view.selectedItems[0].id else null
         }
 
         @JvmStatic
         @InverseBindingAdapter(attribute = "pickerSelection", event = "pickerSelectionChanged")
-        fun getMultipleSelection(view: DialogAdapterPickerView<DemoModel>): List<UUID?> {
-            return if (!view.hasSelection) ArrayList() else view.selectedItems
+        fun getMultipleSelection(view: DemoAdapterPickerView): List<UUID> {
+            return if (!view.hasSelection) listOf() else view.selectedItems
                 .stream()
                 .map { obj: DemoModel -> obj.id }
                 .collect(Collectors.toList())
@@ -111,7 +104,7 @@ class DemoAdapterPickerView @JvmOverloads constructor(
 
         @JvmStatic
         @BindingAdapter(value = ["pickerSelection"])
-        fun setSingleSelection(view: DialogAdapterPickerView<DemoModel>, newSelection: UUID?) {
+        fun setSingleSelection(view: DemoAdapterPickerView, newSelection: UUID?) {
             if (newSelection == null) return
             if (view.hasSelection) {
                 val currentSelection = view.selectedItems[0]
@@ -125,34 +118,34 @@ class DemoAdapterPickerView @JvmOverloads constructor(
 
         @JvmStatic
         @BindingAdapter(value = ["pickerSelection"])
-        fun setMultipleSelection(view: DialogAdapterPickerView<DemoModel>, newSelection: List<UUID?>?) {
-            if (newSelection == null) return
+        fun setMultipleSelection(view: DemoAdapterPickerView, newSelection: List<UUID>?) {
+            if (newSelection.isNullOrEmpty()) {
+                if (view.hasSelection) view.selection = null
+                return
+            }
             if (view.hasSelection) {
-                val currentSelection = view.selectedItems
-                    .stream()
-                    .map { obj: DemoModel -> obj.id }
-                    .collect(Collectors.toList())
+                val currentSelection = view.selectedItems.map { return@map it.id }
                 if (currentSelection.size == newSelection.size && currentSelection.containsAll(newSelection)) return
             }
-            val positionsToSelect: MutableList<Int> = ArrayList()
-            for (i in view.data.indices) {
-                val model = view.data[i]
-                if (newSelection.contains(model.id)) positionsToSelect.add(i)
+
+            val positionsToSelect: MutableList<Int> = mutableListOf()
+            view.data.map { return@map it.id }.forEachIndexed { index, uuid ->
+                if (newSelection.contains(uuid)) {
+                    positionsToSelect.add(index)
+                }
             }
-            val selection = IntArray(positionsToSelect.size)
-            for (i in positionsToSelect.indices) selection[i] = positionsToSelect[i]
+            val selection = positionsToSelect.toIntArray()
+            if (selection.isEmpty() && !view.hasSelection) return
             view.selection = selection
         }
 
         @JvmStatic
         @BindingAdapter(value = ["pickerSelectionChanged"], requireAll = false)
-        fun bindPickerEvent(view: DialogAdapterPickerView<DemoModel>, bindingListener: InverseBindingListener) {
+        fun bindPickerEvent(view: DemoAdapterPickerView, bindingListener: InverseBindingListener) {
             if (view.hasSelection) bindingListener.onChange()
-            view.addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
-                override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
-                    bindingListener.onChange()
-                }
-            })
+            view.dataBindingListener = SelectionChangedListener { _, _ ->
+                bindingListener.onChange()
+            }
         }
     }
 }

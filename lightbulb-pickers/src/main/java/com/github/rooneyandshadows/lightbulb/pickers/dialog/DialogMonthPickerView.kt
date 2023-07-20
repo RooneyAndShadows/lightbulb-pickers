@@ -46,16 +46,10 @@ class DialogMonthPickerView @JvmOverloads constructor(
     @Override
     override fun getDialogBuilder(
         fragmentManager: FragmentManager,
-        fragmentTag: String,
+        dialogTag: String,
     ): BaseDialogBuilder<out BasePickerDialogFragment<Month>> {
-        return MonthPickerDialogBuilder(null, fragmentManager, fragmentTag)
+        return MonthPickerDialogBuilder(dialogTag, fragmentManager)
     }
-
-    @Override
-    override fun initializeDialog(): BasePickerDialogFragment<Month> {
-        return MonthPickerDialog()
-    }
-
     @Override
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {
         dispatchFreezeSelfOnly(container)

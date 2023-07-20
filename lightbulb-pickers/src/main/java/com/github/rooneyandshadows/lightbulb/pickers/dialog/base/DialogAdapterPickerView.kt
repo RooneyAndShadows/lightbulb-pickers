@@ -10,9 +10,9 @@ import android.util.SparseArray
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView.*
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment.*
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes.*
-import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.AdapterPickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_adapter.adapter.DialogPickerAdapter
@@ -30,7 +30,7 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     override val dialog: AdapterPickerDialog<ItemType>
         get() = super.dialog as AdapterPickerDialog<ItemType>
     protected open val adapter: DialogPickerAdapter<ItemType>
-        get() = dialog.adapter
+        get() = dialog.adapter!!
     var data: List<ItemType>
         get() = adapter.collection.getItems()
         set(value) = adapter.collection.set(value)
@@ -52,21 +52,13 @@ abstract class DialogAdapterPickerView<ItemType : EasyAdapterDataModel> @JvmOver
     }
 
     @Override
-    abstract override fun initializeDialog(): AdapterPickerDialog<ItemType>
+    abstract fun initializeDialog(): AdapterPickerDialog<ItemType>
 
     override fun getDialogBuilder(
         fragmentManager: FragmentManager,
-        fragmentTag: String,
+        dialogTag: String,
     ): BaseDialogBuilder<out BasePickerDialogFragment<IntArray>> {
-        return AdapterPickerDialogBuilder(
-            null,
-            fragmentManager,
-            fragmentTag,
-            object : AdapterPickerDialogBuilder.AdapterPickerDialogInitializer<AdapterPickerDialog<ItemType>> {
-                override fun initialize(): AdapterPickerDialog<ItemType> {
-                    return initializeDialog()
-                }
-            })
+        return AdapterPickerDialogBuilder(dialogTag, fragmentManager, { initializeDialog() })
     }
 
     @Override

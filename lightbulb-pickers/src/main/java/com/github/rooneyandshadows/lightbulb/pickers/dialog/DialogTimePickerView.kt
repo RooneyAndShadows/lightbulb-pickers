@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.java.commons.date.DateUtilsOffsetDate
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
-import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_date_range.DateRangePickerDialogBuilder
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialog
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialog.*
 import com.github.rooneyandshadows.lightbulb.dialogs.picker_dialog_time.TimePickerDialogBuilder
@@ -50,16 +49,10 @@ class DialogTimePickerView @JvmOverloads constructor(
     @Override
     override fun getDialogBuilder(
         fragmentManager: FragmentManager,
-        fragmentTag: String,
+        dialogTag: String,
     ): BaseDialogBuilder<out BasePickerDialogFragment<Time>> {
-        return TimePickerDialogBuilder(null, fragmentManager, fragmentTag)
+        return TimePickerDialogBuilder(dialogTag, fragmentManager)
     }
-
-    @Override
-    override fun initializeDialog(): BasePickerDialogFragment<Time> {
-        return TimePickerDialog()
-    }
-
     @Override
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {
         dispatchFreezeSelfOnly(container)

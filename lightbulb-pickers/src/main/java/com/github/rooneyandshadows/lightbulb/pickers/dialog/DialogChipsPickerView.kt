@@ -44,9 +44,9 @@ class DialogChipsPickerView @JvmOverloads constructor(
     @Override
     override fun getDialogBuilder(
         fragmentManager: FragmentManager,
-        fragmentTag: String,
+        dialogTag: String,
     ): BaseDialogBuilder<out BasePickerDialogFragment<IntArray>> {
-        return ChipsPickerDialogBuilder(null, fragmentManager, fragmentTag)
+        return ChipsPickerDialogBuilder(dialogTag, fragmentManager)
     }
 
     @Override
@@ -166,11 +166,7 @@ class DialogChipsPickerView @JvmOverloads constructor(
         @JvmStatic
         fun bindPickerEvent(view: DialogChipsPickerView, bindingListener: InverseBindingListener) {
             if (view.hasSelection) bindingListener.onChange()
-            view.dataBindingListener = object : SelectionChangedListener<IntArray> {
-                override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
-                    bindingListener.onChange()
-                }
-            }
+            view.dataBindingListener = SelectionChangedListener { _, _ -> bindingListener.onChange() }
         }
 
         private fun chipListContainsChip(targetList: List<String>, chipModel: ChipModel): Boolean {

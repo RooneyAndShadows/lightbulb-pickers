@@ -36,11 +36,7 @@ class DialogIconPickerView @JvmOverloads constructor(
 
     init {
         readAttributes(context, attrs)
-        addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
-            override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
-                updatePickerIcon(newSelection)
-            }
-        })
+        addSelectionChangedListener { newSelection, _ -> updatePickerIcon(newSelection) }
     }
 
     @Override
@@ -51,9 +47,9 @@ class DialogIconPickerView @JvmOverloads constructor(
     @Override
     override fun getDialogBuilder(
         fragmentManager: FragmentManager,
-        fragmentTag: String,
+        dialogTag: String,
     ): BaseDialogBuilder<out BasePickerDialogFragment<IntArray>> {
-        return IconPickerDialogBuilder(null, fragmentManager, fragmentTag)
+        return IconPickerDialogBuilder(dialogTag, fragmentManager)
     }
 
     @Override
@@ -171,10 +167,8 @@ class DialogIconPickerView @JvmOverloads constructor(
         @JvmStatic
         fun bindPickerEvent(view: DialogIconPickerView, bindingListener: InverseBindingListener) {
             if (view.hasSelection) bindingListener.onChange()
-            view.dataBindingListener = object : SelectionChangedListener<IntArray> {
-                override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
-                    bindingListener.onChange()
-                }
+            view.dataBindingListener = SelectionChangedListener { _, _ ->
+                bindingListener.onChange()
             }
         }
     }

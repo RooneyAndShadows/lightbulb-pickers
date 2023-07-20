@@ -45,14 +45,9 @@ class DialogDateTimePickerView @JvmOverloads constructor(
     @Override
     override fun getDialogBuilder(
         fragmentManager: FragmentManager,
-        fragmentTag: String,
+        dialogTag: String,
     ): BaseDialogBuilder<out BasePickerDialogFragment<OffsetDateTime>> {
-        return DateTimePickerDialogBuilder(null, fragmentManager, fragmentTag)
-    }
-
-    @Override
-    override fun initializeDialog(): BasePickerDialogFragment<OffsetDateTime> {
-        return DateTimePickerDialog()
+        return DateTimePickerDialogBuilder(dialogTag, fragmentManager)
     }
 
     @Override
@@ -154,10 +149,9 @@ class DialogDateTimePickerView @JvmOverloads constructor(
         @JvmStatic
         fun setListeners(view: DialogDateTimePickerView, attrChange: InverseBindingListener) {
             if (view.hasSelection) attrChange.onChange()
-            view.dataBindingListener = object : SelectionChangedListener<OffsetDateTime> {
-                override fun execute(newSelection: OffsetDateTime?, oldSelection: OffsetDateTime?) {
-                    if (!view.compareValues(newSelection, oldSelection))
-                        attrChange.onChange()
+            view.dataBindingListener = SelectionChangedListener { newSelection, oldSelection ->
+                if (!view.compareValues(newSelection, oldSelection)) {
+                    attrChange.onChange()
                 }
             }
         }

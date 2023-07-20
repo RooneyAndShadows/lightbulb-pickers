@@ -18,19 +18,20 @@ import androidx.fragment.app.FragmentManager
 import com.github.rooneyandshadows.lightbulb.commons.utils.ParcelUtils
 import com.github.rooneyandshadows.lightbulb.commons.utils.ResourceUtils
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogBuilder
-import com.github.rooneyandshadows.lightbulb.dialogs.base.BaseDialogFragment
 import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment.Buttons.Companion.cancelSelectionButton
+import com.github.rooneyandshadows.lightbulb.dialogs.base.BasePickerDialogFragment.Buttons.Companion.confirmSelectionButton
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogAnimationTypes
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogAnimationTypes.NO_ANIMATION
-import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogButtonConfiguration
+import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogButton
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes
 import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.DialogTypes.NORMAL
-import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogButtonClickListener
-import com.github.rooneyandshadows.lightbulb.dialogs.base.internal.callbacks.DialogCancelListener
 import com.github.rooneyandshadows.lightbulb.pickers.R
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView.ButtonTypes.NEGATIVE
+import com.github.rooneyandshadows.lightbulb.pickers.dialog.base.BaseDialogPickerView.ButtonTypes.POSITIVE
 import com.github.rooneyandshadows.lightbulb.pickers.dialog.trigger.base.DialogTriggerView
 
-@Suppress("unused", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 @JvmSuppressWildcards
 abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     context: Context,
@@ -52,6 +53,8 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         }
     }
     private val pickerDialog: BasePickerDialogFragment<SelectionType> by dialogInitializer
+    private var positiveButtonText: String = ""
+    private var negativeButtonText: String = ""
     protected var dataBindingListener: SelectionChangedListener<SelectionType>? = null
     protected var triggerView: DialogTriggerView? = null
         private set
@@ -77,10 +80,8 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
 
     protected abstract fun getDialogBuilder(
         fragmentManager: FragmentManager,
-        fragmentTag: String,
+        dialogTag: String,
     ): BaseDialogBuilder<out BasePickerDialogFragment<SelectionType>>
-
-    protected abstract fun initializeDialog(): BasePickerDialogFragment<SelectionType>
 
     init {
         isSaveEnabled = true
@@ -89,23 +90,13 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         readBaseAttributes(context, attrs)
         whenDialogReady { dialog ->
             dialog.apply {
-                addOnPositiveClickListener(object : DialogButtonClickListener {
-                    override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
-                        validate()
-                        //updateTextAndValidate()
-                    }
-                })
-                addOnNegativeClickListeners(object : DialogButtonClickListener {
-                    override fun doOnClick(buttonView: View?, dialogFragment: BaseDialogFragment) {
-                        validate()
-                        //updateTextAndValidate()
-                    }
-                })
-                addOnCancelListener(object : DialogCancelListener {
-                    override fun doOnCancel(dialogFragment: BaseDialogFragment) {
-                        updateTextAndValidate()
-                    }
-                })
+                if (negativeButtonText.isNotBlank()) {
+                    addButton(generateButtonConfig(NEGATIVE))
+                }
+                if (positiveButtonText.isNotBlank()) {
+                    addButton(generateButtonConfig(POSITIVE))
+                }
+                addOnCancelListener { updateTextAndValidate() }
                 addOnSelectionChangedListener(object : BasePickerDialogFragment.SelectionChangedListener<SelectionType> {
                     override fun onSelectionChanged(
                         dialog: BasePickerDialogFragment<SelectionType>,
@@ -212,11 +203,19 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
     }
 
     fun setDialogPositiveButtonText(buttonText: String?) {
-        pickerDialog.setDialogPositiveButton(generateButtonConfig(buttonText))
+        val addButton: Boolean = !buttonText.isNullOrBlank()
+        positiveButtonText = buttonText ?: ""
+        val button = generateButtonConfig(POSITIVE)
+        if (addButton) pickerDialog.addButton(button)
+        else pickerDialog.removeButton(button)
     }
 
     fun setDialogNegativeButtonText(buttonText: String?) {
-        pickerDialog.setDialogNegativeButton(generateButtonConfig(buttonText))
+        val addButton: Boolean = !buttonText.isNullOrBlank()
+        negativeButtonText = buttonText ?: ""
+        val button = generateButtonConfig(NEGATIVE)
+        if (addButton) pickerDialog.addButton(button)
+        else pickerDialog.removeButton(button)
     }
 
     fun setDialogCancelable(isCancelable: Boolean) {
@@ -340,9 +339,11 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         }
     }
 
-    private fun generateButtonConfig(buttonText: String?): DialogButtonConfiguration? {
-        if (buttonText.isNullOrBlank()) return null
-        return DialogButtonConfiguration(buttonTitle = buttonText, buttonEnabled = true, closeDialogOnClick = true)
+    private fun generateButtonConfig(buttonType: ButtonTypes): DialogButton {
+        return when (buttonType) {
+            POSITIVE -> confirmSelectionButton(positiveButtonText) { _, _ -> validate() }
+            NEGATIVE -> cancelSelectionButton(negativeButtonText) { _, _ -> validate() }
+        }
     }
 
     private fun readBaseAttributes(context: Context, attrs: AttributeSet?) {
@@ -367,27 +368,20 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
                         it.setDialogMessage(this ?: default)
                     }
                 }
-
                 getString(R.styleable.BaseDialogPickerView_pv_required_text).apply {
                     val default = ResourceUtils.getPhrase(context, R.string.picker_default_required_text)
                     requiredText = this ?: default
                 }
                 getString(R.styleable.BaseDialogPickerView_pv_dialog_button_positive_text).apply {
-                    val positiveButtonText = let {
+                    positiveButtonText = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_positive_button_text)
                         return@let if (it.isNullOrBlank()) default else it
                     }
-                    whenDialogReady {
-                        it.setDialogPositiveButton(generateButtonConfig(positiveButtonText))
-                    }
                 }
                 getString(R.styleable.BaseDialogPickerView_pv_dialog_button_negative_text).apply {
-                    val negativeButtonText = let {
+                    negativeButtonText = let {
                         val default = ResourceUtils.getPhrase(context, R.string.picker_default_negative_button_text)
                         return@let if (it.isNullOrBlank()) default else it
-                    }
-                    whenDialogReady {
-                        it.setDialogNegativeButton(generateButtonConfig(negativeButtonText))
                     }
                 }
                 getInt(R.styleable.BaseDialogPickerView_pv_dialog_type, NORMAL.value).apply {
@@ -442,7 +436,7 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             isRequired = view.isRequired
             isValidationEnabled = view.isValidationEnabled
             showSelectedTextValue = view.showSelectedTextValue
-            dialogState = pickerDialog.saveDialogState()
+            // dialogState = pickerDialog.saveDialogState()
             triggerState = triggerView?.onSaveInstanceState()
         }
         return myState
@@ -458,26 +452,32 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             view.isRequired = isRequired
             view.isValidationEnabled = isValidationEnabled
             view.showSelectedTextValue = showSelectedTextValue
-            view.pickerDialog.restoreDialogState(dialogState)
+            // view.pickerDialog.restoreDialogState(dialogState)
             triggerState?.apply {
                 view.triggerView?.onRestoreInstanceState(this)
             }
         }
     }
 
-    interface SelectionChangedListener<SelectionType> {
+    fun interface SelectionChangedListener<SelectionType> {
         fun execute(newSelection: SelectionType?, oldSelection: SelectionType?)
     }
 
-    interface ValidationCheck<SelectionType> {
+    fun interface ValidationCheck<SelectionType> {
         fun validate(currentSelection: SelectionType?): Boolean
     }
 
-    interface TriggerAttachedCallback<SelectionType> {
+    fun interface TriggerAttachedCallback<SelectionType> {
         fun onAttached(triggerView: DialogTriggerView, pickerView: BaseDialogPickerView<SelectionType>)
     }
 
+    fun interface DialogReadyListener<SelectionType> {
+        fun execute(dialog: BasePickerDialogFragment<SelectionType>)
+    }
+
     private class SavedState : BaseSavedState {
+        var positiveButtonText: String = ""
+        var negativeButtonText: String = ""
         var isDialogShown = false
         var requiredText: String? = null
         var isRequired = false
@@ -490,6 +490,8 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
 
         private constructor(parcel: Parcel) : super(parcel) {
             parcel.apply {
+                positiveButtonText = ParcelUtils.readString(this)!!
+                negativeButtonText = ParcelUtils.readString(this)!!
                 isDialogShown = ParcelUtils.readBoolean(this)!!
                 isRequired = ParcelUtils.readBoolean(this)!!
                 isValidationEnabled = ParcelUtils.readBoolean(this)!!
@@ -505,6 +507,8 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
             super.writeToParcel(parcel, flags)
             parcel.apply {
                 ParcelUtils.writeBoolean(this, isDialogShown)
+                    .writeString(this, positiveButtonText)
+                    .writeString(this, negativeButtonText)
                     .writeBoolean(this, isRequired)
                     .writeBoolean(this, isValidationEnabled)
                     .writeBoolean(this, showSelectedTextValue)
@@ -530,7 +534,8 @@ abstract class BaseDialogPickerView<SelectionType> @JvmOverloads constructor(
         }
     }
 
-    fun interface DialogReadyListener<SelectionType> {
-        fun execute(dialog: BasePickerDialogFragment<SelectionType>)
+    private enum class ButtonTypes(val value: Int) {
+        POSITIVE(0),
+        NEGATIVE(1)
     }
 }

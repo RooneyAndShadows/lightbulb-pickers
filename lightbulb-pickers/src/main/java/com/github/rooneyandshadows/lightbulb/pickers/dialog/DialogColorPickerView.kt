@@ -37,24 +37,16 @@ class DialogColorPickerView @JvmOverloads constructor(
 
     init {
         readAttributes(context, attrs)
-        addOnTriggerAttachedListener(object : TriggerAttachedCallback<IntArray> {
-            override fun onAttached(triggerView: DialogTriggerView, pickerView: BaseDialogPickerView<IntArray>) {
-                updatePickerIcon(selection)
-            }
-        })
-        addSelectionChangedListener(object : SelectionChangedListener<IntArray> {
-            override fun execute(newSelection: IntArray?, oldSelection: IntArray?) {
-                updatePickerIcon(newSelection)
-            }
-        })
+        addOnTriggerAttachedListener { _, _ -> updatePickerIcon(selection) }
+        addSelectionChangedListener { newSelection, _ -> updatePickerIcon(newSelection) }
     }
 
     @Override
     override fun getDialogBuilder(
         fragmentManager: FragmentManager,
-        fragmentTag: String,
+        dialogTag: String
     ): BaseDialogBuilder<out BasePickerDialogFragment<IntArray>> {
-        return ColorPickerDialogBuilder(null, fragmentManager, fragmentTag)
+        return ColorPickerDialogBuilder(dialogTag, fragmentManager)
     }
 
     @Override

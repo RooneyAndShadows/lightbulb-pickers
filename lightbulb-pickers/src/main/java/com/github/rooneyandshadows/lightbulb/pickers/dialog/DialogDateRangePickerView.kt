@@ -48,14 +48,9 @@ class DialogDateRangePickerView @JvmOverloads constructor(
     @Override
     override fun getDialogBuilder(
         fragmentManager: FragmentManager,
-        fragmentTag: String,
+        dialogTag: String,
     ): BaseDialogBuilder<out BasePickerDialogFragment<DateRange>> {
-        return DateRangePickerDialogBuilder(null, fragmentManager, fragmentTag)
-    }
-
-    @Override
-    override fun initializeDialog(): BasePickerDialogFragment<DateRange> {
-        return DateRangePickerDialog()
+        return DateRangePickerDialogBuilder(dialogTag, fragmentManager)
     }
 
     @Override
@@ -196,9 +191,9 @@ class DialogDateRangePickerView @JvmOverloads constructor(
         @JvmStatic
         fun setListeners(view: DialogDateRangePickerView, attrChange: InverseBindingListener) {
             if (view.hasSelection) attrChange.onChange()
-            view.dataBindingListener = object : SelectionChangedListener<DateRange> {
-                override fun execute(newSelection: DateRange?, oldSelection: DateRange?) {
-                    if (!view.compareValues(newSelection, oldSelection)) attrChange.onChange()
+            view.dataBindingListener = SelectionChangedListener { newSelection, oldSelection ->
+                if (!view.compareValues(newSelection, oldSelection)) {
+                    attrChange.onChange()
                 }
             }
         }
