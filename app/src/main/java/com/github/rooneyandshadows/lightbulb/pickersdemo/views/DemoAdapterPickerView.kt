@@ -135,7 +135,6 @@ class DemoAdapterPickerView @JvmOverloads constructor(
                 }
             }
             val selection = positionsToSelect.toIntArray()
-            if (selection.isEmpty() && !view.hasSelection) return
             view.selection = selection
         }
 
